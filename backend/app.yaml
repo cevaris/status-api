@@ -5,3 +5,4 @@ includes:
   - .env.yaml
 instance_class: B1
 runtime: nodejs12
+entrypoint: node ./dist/index.js api

@@ -40,7 +40,7 @@ Development:
 
 Deploy:
 
-`gcloud app deploy`
+`gcloud app deploy runner.yaml`
 
 Logs
 

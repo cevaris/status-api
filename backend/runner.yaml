@@ -5,3 +5,4 @@ manual_scaling:
   instances: 1
 runtime: nodejs12
 service: runner
+entrypoint: node ./dist/index.js runner
