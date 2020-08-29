@@ -4,7 +4,7 @@ import { funcRunner } from "./reports/runner";
 import { reportFuncRunners } from "./runners";
 import { StatusReportStore } from "../common/storage/statusReport";
 import { StatusReportMetadata, StatusReportMetadataDB } from "../common/storage/statusReportMetadata";
-import { Config } from "../common/utils/config";
+import { Config } from "../common/config";
 
 
 const app = express();

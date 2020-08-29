@@ -1,5 +1,5 @@
 import express from 'express';
-import { renderJson } from '../../common/utils/renderer';
+import { renderJson } from '../../common/renderer';
 
 const router = express.Router();
 

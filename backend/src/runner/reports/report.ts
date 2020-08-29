@@ -1,4 +1,4 @@
-import { normalize } from "../../common/utils/string"
+import { normalize } from "../../common/string"
 
 export abstract class Report {
     readonly service: string

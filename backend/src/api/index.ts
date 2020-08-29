@@ -1,5 +1,5 @@
 import express from "express";
-import { Config } from '../common/utils/config';
+import { Config } from '../common/config';
 import * as sessionAuth from './middleware/auth';
 import * as cors from './middleware/cors';
 

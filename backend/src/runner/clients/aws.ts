@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { Config } from '../../common/utils/config';
+import { Config } from '../../common/config';
 import { Report } from '../reports/report';
 
 
