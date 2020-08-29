@@ -1,5 +1,5 @@
 import express from 'express';
-import { renderJson } from '../renderer';
+import { renderJson } from '../../common/utils/renderer';
 import { StatusReportStore, StatusReport } from '../../common/storage/statusReport';
 
 

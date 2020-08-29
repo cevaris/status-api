@@ -1,6 +1,6 @@
 import express from 'express';
 import { StatusReportMetadataCache } from '../cache/statusReportMetadataCache';
-import { renderJson } from '../renderer';
+import { renderJson } from '../../common/utils/renderer';
 import { StatusReportMetadata, StatusReportMetadataDB } from '../../common/storage/statusReportMetadata';
 import { StatusApiReportQueryDB } from '../storage/searchQueries';
 

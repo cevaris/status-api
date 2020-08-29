@@ -1,6 +1,6 @@
 import { StatusReport } from "../../common/storage/statusReport";
 import { Report } from "./report";
-import { Stopwatch } from "./stopwatch";
+import { Stopwatch } from "../../common/utils/stopwatch";
 
 export const REPORT_TIMEOUT_MS = 10 * 1000;
 
