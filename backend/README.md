@@ -17,16 +17,16 @@ Logs
 
 Web
 
-https://status-api-dev.wl.r.appspot.com
-https://status-api-dev.wl.r.appspot.com/reports/aws:us-east-2:s3:upload.json
+- https://status-api-dev.wl.r.appspot.com
+- https://status-api-dev.wl.r.appspot.com/reports/aws:us-east-2:s3:upload.json
 
 
 API
 
-http://localhost:8080/reports/aws:us-east-2:s3:upload.json
-http://localhost:8080/report_metadata.json
-http://localhost:8080/report_metadata.json?q=s3
-http://localhost:8080/report_metadata/aws:us-east-2:s3:upload.json
+- http://localhost:8080/reports/aws:us-east-2:s3:upload.json
+- http://localhost:8080/report_metadata.json
+- http://localhost:8080/report_metadata.json?q=s3
+- http://localhost:8080/report_metadata/aws:us-east-2:s3:upload.json
 
 ---
 ## Status Runner
