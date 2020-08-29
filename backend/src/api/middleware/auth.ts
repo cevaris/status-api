@@ -5,7 +5,7 @@ import { Config } from "../../common/config";
 
 export const register = (app: any) => {
     const session = {
-        secret: Config.AuthSessionSecret,
+        secret: Config.AUTH_SESSION_SECRET,
         cookie: { secure: false },
         resave: false,
         proxy: false,
@@ -22,10 +22,10 @@ export const register = (app: any) => {
     app.use(expressSession(session));
 
     const options: StrategyOption = {
-        domain: Config.Auth0Domain,
-        clientID: Config.Auth0ClientId,
-        clientSecret: Config.Auth0ClientSecret,
-        callbackURL: `${Config.HostURL}/auth/callback`
+        domain: Config.AUTH0_DOMAIN,
+        clientID: Config.AUTH0_CLIENT_ID,
+        clientSecret: Config.AUTH0_CLIENT_SECRET,
+        callbackURL: `${Config.HOST_URL}/auth/callback`
     };
 
     const strategy = new Auth0Strategy(

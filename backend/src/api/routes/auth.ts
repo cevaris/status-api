@@ -34,7 +34,7 @@ router.get('/auth/callback', function (req: any, res, next) {
 router.get('/logout', (req, res) => {
     req.logout();
 
-    const returnTo = Config.HostURL;
+    const returnTo = Config.HOST_URL;
     var logoutURL = new url.URL(
         util.format('https://%s/v2/logout', process.env.AUTH0_DOMAIN)
     );
