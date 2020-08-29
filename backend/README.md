@@ -4,14 +4,12 @@
 
 Local Dev
 
-`tsc --watch`
-`npm run dev`
-
+    tsc --watch -p backend
+    ./scripts/dev.sh api
 
 Deploy
 
-`npm run deploy`
-
+    ./scripts/deploy.sh api
 
 Logs
 
@@ -36,11 +34,12 @@ Runs status reports - Node/Typescript
 
 Development:
 
-`npm run dev`
+    tsc --watch -p backend
+    ./scripts/dev.sh runner
 
 Deploy:
 
-`gcloud app deploy runner.yaml`
+    ./scripts/deploy.sh runner
 
 Logs
 
