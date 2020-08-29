@@ -1,0 +1,8 @@
+indexes:
+
+- kind: StatusReportMinute
+  properties:
+  - name: name
+    direction: asc
+  - name: startDate
+    direction: asc

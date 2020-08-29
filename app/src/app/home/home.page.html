@@ -1,0 +1,122 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Status API
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-img src="https://via.placeholder.com/1000x300"></ion-img>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Trusted data</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-content>
+            This is content, without any paragraph or header tags,
+            within an ion-card-content element.
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col size="12" size-md>
+
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Granular API Health</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-content>
+            This is content, without any paragraph or header tags,
+            within an ion-card-content element.
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col size="12" size-md>
+
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Realtime data</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-content>
+            This is content, without any paragraph or header tags,
+            within an ion-card-content element.
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div style="text-align: center;">
+    <h2>Notable APIs</h2>
+  </div>
+  <div style="text-align: center;">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'aws'}">
+            Amazon Web Services
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'dropbox'}">
+            Dropbox
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'stripe'}">
+            Stripe
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div>
+    <br />
+    <br />
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4"></ion-col>
+        <ion-col>
+          <ion-button expand="block" [routerLink]="['/search']">
+            <ion-icon slot="start" name="search"></ion-icon>
+            Search for more APIs
+          </ion-button>
+        </ion-col>
+        <ion-col size="4"></ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+
+
+</ion-content>

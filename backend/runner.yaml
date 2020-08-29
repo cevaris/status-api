@@ -1,0 +1,7 @@
+includes:
+  - .env.yaml
+instance_class: B1
+manual_scaling:
+  instances: 1
+runtime: nodejs12
+service: runner

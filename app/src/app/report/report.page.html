@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title *ngIf="metadata">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div>
+              Service: {{metadata.service}}
+            </div>
+          </ion-col>
+
+          <ion-col>
+            <div>
+              Region: {{metadata.region}}
+            </div>
+          </ion-col>
+
+          <ion-col>
+            <div class="ion-text-right">
+              API: {{metadata.api}}
+            </div>
+          </ion-col>
+
+          <ion-col>
+            <div class="ion-text-right">
+              Action: {{metadata.action}}
+            </div>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+
+
+    </ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="metadata" class="ion-text-center">
+          {{metadata.description}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div>
+          <canvas #lineCanvasLatency></canvas>
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div>
+          <canvas #lineCanvasOk></canvas>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
