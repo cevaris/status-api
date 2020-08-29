@@ -3,7 +3,7 @@ import passport from 'passport';
 import querystring from 'querystring';
 import url from 'url';
 import util from 'util';
-import Config from '../config';
+import { Config } from '../../common/utils/config';
 
 
 const router = express.Router();

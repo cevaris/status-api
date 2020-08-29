@@ -1,7 +1,7 @@
 import expressSession from "express-session";
 import passport from "passport";
 import Auth0Strategy, { StrategyOption } from "passport-auth0";
-import Config from "../config";
+import { Config } from "../../common/utils/config";
 
 export const register = (app: any) => {
     const session = {

@@ -1,7 +1,5 @@
-require('dotenv').config();
-
 import express from "express";
-import Config from './config';
+import { Config } from '../common/utils/config';
 import * as sessionAuth from './middleware/auth';
 import * as cors from './middleware/cors';
 
@@ -21,6 +19,7 @@ app.get("/", (req, res) => {
     res.send("Status API");
 });
 
-app.listen(Config.Port, () => {
-    console.log(`server started at http://localhost:${Config.Port}`);
+const PORT = Config.port(8080);
+app.listen(PORT, () => {
+    console.log(`server started at http://localhost:${PORT}`);
 });

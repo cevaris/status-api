@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { Config } from '../config';
+import { Config } from '../../common/utils/config';
 import { Report } from '../reports/report';
 
 
@@ -9,8 +9,8 @@ import { Report } from '../reports/report';
 
 const config = {
     credentials: {
-        accessKeyId: Config.required('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: Config.required('AWS_SECRET_ACCESS_KEY')
+        accessKeyId: Config.AWS_ACCESS_KEY_ID,
+        secretAccessKey: Config.AWS_SECRET_ACCESS_KEY
     }
 }
 AWS.config.update(config);

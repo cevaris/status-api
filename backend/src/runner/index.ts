@@ -4,6 +4,7 @@ import { funcRunner } from "./reports/runner";
 import { reportFuncRunners } from "./runners";
 import { StatusReportStore } from "../common/storage/statusReport";
 import { StatusReportMetadata, StatusReportMetadataDB } from "../common/storage/statusReportMetadata";
+import { Config } from "../common/utils/config";
 
 
 const app = express();
@@ -12,7 +13,7 @@ app.use(require('./routes/index'));
 app.use(require('./routes/gae'));
 app.use(require('./routes/lastWritten'));
 
-const PORT = process.env.PORT || 9999;
+const PORT = Config.port(9999);
 app.listen(PORT, async () => {
     console.log(`server started at http://localhost:${PORT}`);
 
