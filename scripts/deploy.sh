@@ -10,7 +10,7 @@ case $TARGET in
 api)
     cd backend
     npm run build
-    echo 'y' | gcloud app deploy app.yaml
+    gcloud app deploy app.yaml
     break
     ;;
 app)
@@ -21,7 +21,7 @@ app)
 runner)
     cd backend
     npm run build
-    echo 'y' | gcloud app deploy runner.yaml
+    gcloud app deploy runner.yaml
     break
     ;;
 *)
