@@ -1,4 +1,4 @@
-import { StatusReport } from "../storage/statusReport";
+import { StatusReport } from "../../common/storage/statusReport";
 import { Report } from "./report";
 import { Stopwatch } from "./stopwatch";
 

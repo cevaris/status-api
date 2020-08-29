@@ -2,8 +2,8 @@ import express from "express";
 import schedule from 'node-schedule';
 import { funcRunner } from "./reports/runner";
 import { reportFuncRunners } from "./runners";
-import { StatusReportStore } from "./storage/statusReport";
-import { StatusReportMetadata, StatusReportMetadataStore } from "./storage/statusReportMetadata";
+import { StatusReportStore } from "../common/storage/statusReport";
+import { StatusReportMetadata, StatusReportMetadataDB } from "../common/storage/statusReportMetadata";
 
 
 const app = express();
@@ -31,7 +31,7 @@ app.listen(PORT, async () => {
         metadata.push(m);
 
     });
-    StatusReportMetadataStore.set(metadata);
+    StatusReportMetadataDB.set(metadata);
 
     reportFuncRunners.forEach((runner) => {
         const secondToRun = Math.floor(Math.random() * Math.floor(60));

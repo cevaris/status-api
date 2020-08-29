@@ -1,4 +1,4 @@
-import { Datastore, Query } from '@google-cloud/datastore';
+import { Datastore } from '@google-cloud/datastore';
 
 
 export interface StatusReport {

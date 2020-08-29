@@ -3,12 +3,13 @@ import { Datastore, Query } from '@google-cloud/datastore';
 
 export interface StatusReportMetadata {
     key: string
-    description: string,
-    tags: Array<string>,
-    service: string,
-    region: string,
+    description: string
+    tags: Array<string>
+    service: string
+    region: string
     version: string
     api: string
+    action: string
 }
 
 class StatusReportMetadataDatastore {
@@ -44,6 +45,18 @@ class StatusReportMetadataDatastore {
             .filter('tags', tag.trim());
         const [results, _] = await this.datastore.runQuery(query);
         return results;
+    }
+
+    async set(statusReports: Array<StatusReportMetadata>): Promise<void> {
+        const entities = statusReports.map(statusReportMetadata => {
+            const key = this.datastore.key([StatusReportMetadataDatastore.kind, statusReportMetadata.key]);
+            return {
+                key: key,
+                data: statusReportMetadata
+            }
+        });
+
+        await this.datastore.upsert(entities);
     }
 }
 
