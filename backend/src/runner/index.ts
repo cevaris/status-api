@@ -12,7 +12,7 @@ app.use(require('./routes/index'));
 app.use(require('./routes/gae'));
 app.use(require('./routes/lastWritten'));
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 9999;
 app.listen(PORT, async () => {
     console.log(`server started at http://localhost:${PORT}`);
 
