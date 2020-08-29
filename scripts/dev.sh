@@ -9,23 +9,21 @@ TARGET=$1
 case $TARGET in
 api)
     cd backend
-    npm run build
-    echo 'y' | gcloud app deploy app.yaml
+    npm run dev -- api
     break
     ;;
 app)
     cd app
-    npm run deploy
+    npm run dev
     break
     ;;
 runner)
     cd backend
-    npm run build
-    echo 'y' | gcloud app deploy runner.yaml
+    npm run dev -- runner
     break
     ;;
 *)
-    echo 'Invalid deploy target {api|app|runner}'
+    echo 'Invalid dev target {api|app|runner}'
     exit -1
     ;;
 esac
