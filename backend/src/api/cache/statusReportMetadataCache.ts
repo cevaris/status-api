@@ -1,5 +1,5 @@
 import elasticlunr from 'elasticlunr';
-import { StatusReportMetadata, StatusReportMetadataDB } from "../storage/statusReportMetadata";
+import { StatusReportMetadata, StatusReportMetadataDB } from "../../common/storage/statusReportMetadata";
 
 // http://elasticlunr.com/
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { renderJson } from '../renderer';
-import { ReportsDB, StatusReport } from '../storage/report';
+import { ReportsDB, StatusReport } from '../../common/storage/report';
 
 
 const router = express.Router();
