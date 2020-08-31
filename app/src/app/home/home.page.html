@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-img src="https://via.placeholder.com/1000x300"></ion-img>
+  <!-- <ion-img src="https://via.placeholder.com/1000x300"></ion-img> -->
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md>
@@ -18,20 +18,29 @@
           </ion-card-header>
 
           <ion-card-content>
-            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+            <!-- <ion-img src="https://via.placeholder.com/150x100"></ion-img> -->
+            <p>Status API data is collected outside the API's internal network,
+              providing
+              real-world metrics to drive your incident triaging or API
+              decisions.
+            </p>
+            <br />
+            <p>All Status API reports by crafted hand, using official open
+              source
+              clients.
+            </p>
           </ion-card-content>
         </ion-card>
 
-        <ion-card>
+        <!-- <ion-card>
           <ion-card-content>
             This is content, without any paragraph or header tags,
             within an ion-card-content element.
           </ion-card-content>
-        </ion-card>
+        </ion-card> -->
 
       </ion-col>
       <ion-col size="12" size-md>
-
 
         <ion-card>
           <ion-card-header>
@@ -39,16 +48,19 @@
           </ion-card-header>
 
           <ion-card-content>
-            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+            <!-- <ion-img src="https://via.placeholder.com/150x100"></ion-img> -->
+            <p>No more looking at high level, vague API statuses</p> <br />
+            <p>Status API provides granular data, down to the API service, and
+              region, including latency metrics.</p> <br />
           </ion-card-content>
         </ion-card>
 
-        <ion-card>
+        <!-- <ion-card>
           <ion-card-content>
             This is content, without any paragraph or header tags,
             within an ion-card-content element.
           </ion-card-content>
-        </ion-card>
+        </ion-card> -->
 
       </ion-col>
       <ion-col size="12" size-md>
@@ -60,16 +72,20 @@
           </ion-card-header>
 
           <ion-card-content>
-            <ion-img src="https://via.placeholder.com/150x100"></ion-img>
+            <!-- <ion-img src="https://via.placeholder.com/150x100"></ion-img> -->
+            <p>
+              Are you having API issues right now? Check out our minutely
+              real-time data, to triage your issues.
+            </p>
           </ion-card-content>
         </ion-card>
 
-        <ion-card>
+        <!-- <ion-card>
           <ion-card-content>
             This is content, without any paragraph or header tags,
             within an ion-card-content element.
           </ion-card-content>
-        </ion-card>
+        </ion-card> -->
 
       </ion-col>
     </ion-row>
@@ -82,17 +98,20 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'aws'}">
+          <ion-button color="dark" [routerLink]="['/search']"
+            [queryParams]="{q: 'aws'}">
             Amazon Web Services
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'dropbox'}">
+          <ion-button color="dark" [routerLink]="['/search']"
+            [queryParams]="{q: 'dropbox'}">
             Dropbox
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']" [queryParams]="{q: 'stripe'}">
+          <ion-button color="dark" [routerLink]="['/search']"
+            [queryParams]="{q: 'stripe'}">
             Stripe
           </ion-button>
         </ion-col>
