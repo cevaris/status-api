@@ -13,6 +13,8 @@ class ServerConfig {
     AWS_ACCESS_KEY_ID: string;
     AWS_SECRET_ACCESS_KEY: string;
     STRIPE_SECRET_KEY: string;
+    SLACK_CHANNEL: string;
+    SLACK_TOKEN: string;
 
     constructor() {
         this.HOST_URL = this.required('HOST_URL');
@@ -27,6 +29,8 @@ class ServerConfig {
         this.AWS_ACCESS_KEY_ID = this.required('AWS_ACCESS_KEY_ID');
         this.AWS_SECRET_ACCESS_KEY = this.required('AWS_SECRET_ACCESS_KEY');
         this.STRIPE_SECRET_KEY = this.required('STRIPE_SECRET_KEY');
+        this.SLACK_TOKEN = this.required('SLACK_TOKEN');
+        this.SLACK_CHANNEL = this.required('SLACK_CHANNEL');
     }
 
     private required(name: string): string {
