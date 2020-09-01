@@ -29,10 +29,17 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
         }
     } catch (error) {
         stopwatch.stop();
+
+        // avoid writing [object Object] objects
+        let message = error.toString();
+        if (typeof message === 'object') {
+            message = JSON.stringify(error);
+        }
+
         report = {
             name: reportRunner.key(),
             ok: false,
-            message: error.toString(),
+            message: message,
             ...stopwatch.results(),
         }
     }
