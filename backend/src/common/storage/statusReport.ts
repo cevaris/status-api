@@ -34,7 +34,6 @@ class StatusReportDatastore {
     }
 
     async set(statusReport: StatusReport): Promise<void> {
-        // console.log('writing', statusReport);
         const minuteEpoch = getMinuteEpoch(statusReport.startDate);
         const name: string = `${statusReport.name}:${minuteEpoch}`
         const recordKey = this.datastore.key([StatusReportDatastore.kind, name])
@@ -78,10 +77,17 @@ class StatusReportDatastore {
         return results;
     }
 
-    // http://localhost:8080/RandomLatencies.json
+    async getLastErrors(name: string, n: number): Promise<Array<StatusReport>> {
+        console.log('getLastErrors', name, n);
 
-    // Do a batch query on key, so we do not have to index
-    // https://cloud.google.com/datastore/docs/concepts/entities#datastore-datastore-batch-lookup-nodejs
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('name', '=', name)
+            .filter('ok', '=', false)
+            .limit(n);
+        const [results, _] = await this.datastore.runQuery(query);
+        return results;
+    }
 }
 
 export const StatusReportStore = new StatusReportDatastore();
