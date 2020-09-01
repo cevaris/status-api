@@ -1,8 +1,11 @@
 indexes:
-
-- kind: StatusReportMinute
-  properties:
-  - name: name
-    direction: asc
-  - name: startDate
-    direction: asc
+  - kind: StatusReportMinute
+    properties:
+      - name: name
+      - name: startDate
+  - kind: StatusReportMinute
+    properties:
+      - name: name
+      - name: ok
+      - name: startDate
+        direction: desc

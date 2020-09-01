@@ -78,16 +78,25 @@ class StatusReportDatastore {
     }
 
     async getLastErrors(name: string, n: number): Promise<Array<StatusReport>> {
-        console.log('getLastErrors', name, n);
-
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('name', '=', name)
             .filter('ok', '=', false)
+            .order('startDate', { descending: true })
             .limit(n);
-        const [results, _] = await this.datastore.runQuery(query);
+
+        const [results, errors] = await this.datastore.runQuery(query);
         return results;
     }
 }
 
 export const StatusReportStore = new StatusReportDatastore();
+
+// {"ok":false,"message":"9 FAILED_PRECONDITION: no matching index found. recommended index is:
+// - kind: StatusReportMinute
+//   properties:
+//   - name: name
+//   - name: ok
+//   - name: startDate
+//     direction: desc
+// "}

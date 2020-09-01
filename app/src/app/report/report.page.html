@@ -62,6 +62,27 @@
         </div>
       </ion-col>
     </ion-row>
+
+    <br />
+    <ion-row>
+      <ion-col>
+        <div *ngIf="metadata" class="ion-text-center">
+          Latest Failures
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-list inset="false" *ngFor="let failure of latestFailures">
+          <ion-list-header>{{ failure.startDate }}</ion-list-header>
+          <ion-item>
+            <ion-item>{{ failure.message }}</ion-item>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 
 </ion-content>

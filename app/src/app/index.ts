@@ -1,6 +1,7 @@
 export interface StatusReport {
     latencyMs: number
     startDate: Date
+    message: string
     ok: boolean
 }
 

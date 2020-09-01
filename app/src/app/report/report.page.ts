@@ -20,6 +20,7 @@ export class ReportPage implements OnInit {
   public lineChartOk: Chart;
   public metadata: StatusReportMetadata;
   public reportName: string;
+  public latestFailures: Array<StatusReport>;
 
   constructor(private route: ActivatedRoute) {
   }
@@ -113,8 +114,11 @@ export class ReportPage implements OnInit {
   }
 
   async fetchMetadata(): Promise<void> {
-    const response = await axios.get<StatusReportMetadata>(`${environment.apiHost}/report_metadata/${this.key}.json`);
-    this.metadata = response.data;
+    const metadataResponse = await axios.get<StatusReportMetadata>(`${environment.apiHost}/report_metadata/${this.key}.json`);
+    this.metadata = metadataResponse.data;
+
+    const latestFailuresResponse = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/${this.key}.json?latest_failures=10`);
+    this.latestFailures = latestFailuresResponse.data;
 
     const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
     this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
@@ -122,6 +126,9 @@ export class ReportPage implements OnInit {
 
   async updateGraph(ref: ReportPage): Promise<void> {
     try {
+      const latestFailuresResponse = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/${this.key}.json?latest_failures=10`);
+      this.latestFailures = latestFailuresResponse.data;
+
       const response = await axios.get<Array<StatusReport>>(`${environment.apiHost}/reports/${this.key}.json`);
 
       const latencyValues = response.data.map(sr => {
