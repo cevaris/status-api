@@ -143,7 +143,7 @@ export class ReportPage implements OnInit {
         return { x: sr.startDate, y: value };
       });
       ref.lineChartOk.data.datasets[0].data = okValues;
-      ref.lineChartOk.data.datasets[0].label = `${this.reportName} is healthy`;
+      ref.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
       ref.lineChartOk.update();
 
     } catch (error) {
