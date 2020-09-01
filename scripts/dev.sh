@@ -10,17 +10,14 @@ case $TARGET in
 api)
     cd backend
     npm run dev -- api
-    break
     ;;
 app)
     cd app
     npm run dev
-    break
     ;;
 runner)
     cd backend
     npm run dev -- runner
-    break
     ;;
 *)
     echo 'Invalid dev target {api|app|runner}'

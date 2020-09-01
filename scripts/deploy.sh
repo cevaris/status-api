@@ -11,18 +11,15 @@ api)
     cd backend
     npm run build
     gcloud app deploy app.yaml
-    break
     ;;
 app)
     cd app
     npm run deploy
-    break
     ;;
 runner)
     cd backend
     npm run build
     gcloud app deploy runner.yaml
-    break
     ;;
 *)
     echo 'Invalid deploy target {api|app|runner}'
