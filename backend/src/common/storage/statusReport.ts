@@ -47,7 +47,7 @@ class StatusReportDatastore {
 
     async getLatest(): Promise<StatusReport> {
         const query = this.datastore.createQuery(StatusReportDatastore.kind)
-            .order('endDate', { descending: true })
+            .order('startDate', { descending: true })
             .limit(1);
         const [results, _] = await this.datastore.runQuery(query);
 
