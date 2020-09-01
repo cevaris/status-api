@@ -91,12 +91,3 @@ class StatusReportDatastore {
 }
 
 export const StatusReportStore = new StatusReportDatastore();
-
-// {"ok":false,"message":"9 FAILED_PRECONDITION: no matching index found. recommended index is:
-// - kind: StatusReportMinute
-//   properties:
-//   - name: name
-//   - name: ok
-//   - name: startDate
-//     direction: desc
-// "}
