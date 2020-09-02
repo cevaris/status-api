@@ -1,5 +1,6 @@
 import { PagerdutyApi } from '.';
 import { ApiRegion } from '..';
+import { Config } from '../../../common/config';
 import { clients } from "../../clients";
 import { Report } from '../report';
 
@@ -24,17 +25,18 @@ class PagerdutyCreateIncident extends Report {
 
     async run(): Promise<boolean> {
         const nowTime = new Date().getTime();
-        const from = 'acardenas89+status-api@gmail.com';
-        const response: Response = await clients.pagerduty.incidents.createIncident(from, {
-            incident: {
-                type: 'incident',
-                title: `StatusAPI Incident ${nowTime}`,
-                service: {
-                    id: 'PWHSKWJ',
-                    type: 'service_reference'
-                },
-            }
-        });
+        const response: Response = await clients.pagerduty.incidents.createIncident(
+            Config.PAGERDUTY_FROM,
+            {
+                incident: {
+                    type: 'incident',
+                    title: `StatusAPI Incident ${nowTime}`,
+                    service: {
+                        id: Config.PAGERDUTY_SERVICE,
+                        type: 'service_reference'
+                    },
+                }
+            });
 
         if (response.body && response.body.incident && response.body.incident.title) {
             return response.body.incident.title.includes(nowTime.toString());

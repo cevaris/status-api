@@ -16,6 +16,8 @@ class ServerConfig {
     SLACK_CHANNEL: string;
     SLACK_TOKEN: string;
     PAGERDUTY_TOKEN: string;
+    PAGERDUTY_FROM: string
+    PAGERDUTY_SERVICE: string
 
     constructor() {
         this.HOST_URL = this.required('HOST_URL');
@@ -33,6 +35,8 @@ class ServerConfig {
         this.SLACK_TOKEN = this.required('SLACK_TOKEN');
         this.SLACK_CHANNEL = this.required('SLACK_CHANNEL');
         this.PAGERDUTY_TOKEN = this.required('PAGERDUTY_TOKEN');
+        this.PAGERDUTY_FROM = this.required('PAGERDUTY_FROM');
+        this.PAGERDUTY_SERVICE = this.required('PAGERDUTY_SERVICE');
     }
 
     private required(name: string): string {
