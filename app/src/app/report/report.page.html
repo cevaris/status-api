@@ -4,32 +4,32 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <div>
-              Service: {{metadata.service}}
+            <div class="ion-text-center">
+              <b>Service: </b>{{metadata.service}}
             </div>
           </ion-col>
 
           <ion-col>
-            <div>
-              Region: {{metadata.region}}
+            <div class="ion-text-center">
+              <b>Region: </b>{{metadata.region}}
             </div>
           </ion-col>
 
           <ion-col>
-            <div>
-              API: {{metadata.api}}
+            <div class="ion-text-center">
+              <b>API: </b>{{metadata.api}}
             </div>
           </ion-col>
 
           <ion-col>
-            <div>
-              Action: {{metadata.action}}
+            <div class="ion-text-center">
+              <b>Action: </b>{{metadata.action}}
             </div>
           </ion-col>
 
           <ion-col>
-            <div *ngIf="healthiness" class="ion-text-right">
-              State: {{healthiness}}
+            <div *ngIf="healthiness" class="ion-text-center">
+              <b>State: </b>{{healthiness}}
             </div>
           </ion-col>
         </ion-row>
