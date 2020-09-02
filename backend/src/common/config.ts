@@ -15,6 +15,7 @@ class ServerConfig {
     STRIPE_SECRET_KEY: string;
     SLACK_CHANNEL: string;
     SLACK_TOKEN: string;
+    PAGERDUTY_TOKEN: string;
 
     constructor() {
         this.HOST_URL = this.required('HOST_URL');
@@ -31,6 +32,7 @@ class ServerConfig {
         this.STRIPE_SECRET_KEY = this.required('STRIPE_SECRET_KEY');
         this.SLACK_TOKEN = this.required('SLACK_TOKEN');
         this.SLACK_CHANNEL = this.required('SLACK_CHANNEL');
+        this.PAGERDUTY_TOKEN = this.required('PAGERDUTY_TOKEN');
     }
 
     private required(name: string): string {

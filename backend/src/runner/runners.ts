@@ -5,6 +5,8 @@ import { DropboxV2UsersGetCurrentAccountRunners } from "./reports/dropboxV2/user
 import { ErrorRandomThrowRunner } from "./reports/error/randomThrow";
 import { ErrorThrowReportRunner } from "./reports/error/throw";
 import { ErrorTimeoutReportRunner } from "./reports/error/timeout";
+import { PagerdutyCreateIncidentRunners } from "./reports/pagerduty/createIncidents";
+import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents";
 import { Report } from "./reports/report";
 import { ChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
@@ -19,5 +21,7 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(ErrorRandomThrowRunner)
     .concat(ErrorThrowReportRunner)
     .concat(ErrorTimeoutReportRunner)
+    .concat(PagerdutyListIncidentsRunners)
+    .concat(PagerdutyCreateIncidentRunners)
     .concat(StripeCustomerCreateReportRunners)
     ;

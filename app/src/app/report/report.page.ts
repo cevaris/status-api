@@ -169,7 +169,6 @@ export class ReportPage implements OnInit {
       // all last N minutes need to be successful to be healthy
       return ApiStatus.Healthy;
     } else {
-      console.log(lastNMins)
       if (lastNMins[lastNMins.length - 1] === false) {
         // if last N minutes contains failures and last minute failed
         return ApiStatus.Failing;
