@@ -162,7 +162,8 @@ export class ReportPage implements OnInit {
 
   determineHealth(data: Array<Boolean>): ApiStatus {
     const N = 10;
-    const lastNMins = data.slice(data.length - N, -1);
+    // get last N minutes
+    const lastNMins = data.slice(-N);
     const successes = lastNMins.filter(x => x === true);
     if (successes.length === N) {
       // all last N minutes need to be successful to be healthy
