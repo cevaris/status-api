@@ -16,14 +16,20 @@
           </ion-col>
 
           <ion-col>
-            <div class="ion-text-right">
+            <div>
               API: {{metadata.api}}
             </div>
           </ion-col>
 
           <ion-col>
-            <div class="ion-text-right">
+            <div>
               Action: {{metadata.action}}
+            </div>
+          </ion-col>
+
+          <ion-col>
+            <div *ngIf="healthiness" class="ion-text-right">
+              State: {{healthiness}}
             </div>
           </ion-col>
         </ion-row>
@@ -38,8 +44,6 @@
 
 
 <ion-content>
-
-
 
   <ion-grid>
     <ion-row>
@@ -63,26 +67,23 @@
       </ion-col>
     </ion-row>
 
-    <br />
-    <ion-row>
-      <ion-col>
-        <ion-title *ngIf="metadata" class="ion-text-center">
-          Latest Failures
-        </ion-title>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-list inset="false" *ngFor="let failure of latestFailures">
-          <ion-list-header>{{ failure.startDate }}</ion-list-header>
-          <ion-item>
-            <ion-item>{{ failure.message }}</ion-item>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-
   </ion-grid>
+
+  <div>
+    <ion-title *ngIf="metadata" class="ion-text-center">
+      Latest Failures
+    </ion-title>
+
+    <ion-list inset="false" *ngFor="let failure of latestFailures">
+      <ion-list-header>
+        <ion-datetime displayFormat="YYYY-MM-DD HH:mm UTC" readonly="true"
+          value="{{ failure.startDate }}">
+        </ion-datetime>
+      </ion-list-header>
+      <ion-item>
+        <ion-item>{{ failure.message }}</ion-item>
+      </ion-item>
+    </ion-list>
+  </div>
 
 </ion-content>

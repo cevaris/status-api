@@ -5,6 +5,12 @@ import { Chart, ChartOptions } from "chart.js";
 import { StatusReport, StatusReportMetadata } from '..';
 import { environment } from '../../environments/environment';
 
+enum ApiStatus {
+  Healthy = 'Healthy',
+  Recovering = 'Recovering',
+  Failing = 'Failing',
+}
+
 @Component({
   selector: 'app-report',
   templateUrl: 'report.page.html',
@@ -21,6 +27,8 @@ export class ReportPage implements OnInit {
   public metadata: StatusReportMetadata;
   public reportName: string;
   public latestFailures: Array<StatusReport>;
+  public healthiness: ApiStatus;
+
 
   constructor(private route: ActivatedRoute) {
   }
@@ -146,8 +154,28 @@ export class ReportPage implements OnInit {
       ref.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
       ref.lineChartOk.update();
 
+      this.healthiness = this.determineHealth(response.data.map(sr => sr.ok));
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  determineHealth(data: Array<Boolean>): ApiStatus {
+    const N = 10;
+    const lastNMins = data.slice(data.length - N, -1);
+    const successes = lastNMins.filter(x => x === true);
+    if (successes.length === N) {
+      // all last N minutes need to be successful to be healthy
+      return ApiStatus.Healthy;
+    } else {
+      console.log(lastNMins)
+      if (lastNMins[lastNMins.length - 1] === false) {
+        // if last N minutes contains failures and last minute failed
+        return ApiStatus.Failing;
+      } else {
+        // if last N minutes contains failures and last minute succeeded
+        return ApiStatus.Recovering;
+      }
     }
   }
 
