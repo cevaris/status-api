@@ -1,4 +1,6 @@
 import { AwsS3Runners } from "./reports/aws/awsS3Upload";
+import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
+import { CloudflareZonesReadRunners } from "./reports/cloudflare/zonesList";
 import { DropboxV2FileUploadRunners } from "./reports/dropboxV2/filesUpload";
 import { DropboxV2UsersGetAccountRunners } from "./reports/dropboxV2/usersGetAccount";
 import { DropboxV2UsersGetCurrentAccountRunners } from "./reports/dropboxV2/usersGetCurrentAccount";
@@ -10,12 +12,12 @@ import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents
 import { Report } from "./reports/report";
 import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
-import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 
 
 export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(AwsS3Runners)
     .concat(CloudflareUserReadRunners)
+    .concat(CloudflareZonesReadRunners)
     .concat(DropboxV2FileUploadRunners)
     .concat(DropboxV2UsersGetAccountRunners)
     .concat(DropboxV2UsersGetCurrentAccountRunners)
