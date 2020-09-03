@@ -3,6 +3,7 @@ export module CloudflareApi {
     export enum Api {
         User = 'User',
         Zones = 'Zones',
+        IPs = 'IPs',
     }
     export const Version = '4'
 }

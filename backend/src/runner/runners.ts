@@ -1,4 +1,5 @@
 import { AwsS3Runners } from "./reports/aws/awsS3Upload";
+import { CloudflareIPsReadRunners } from "./reports/cloudflare/ipsRead";
 import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 import { CloudflareZonesReadRunners } from "./reports/cloudflare/zonesList";
 import { DropboxV2FileUploadRunners } from "./reports/dropboxV2/filesUpload";
@@ -18,6 +19,7 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(AwsS3Runners)
     .concat(CloudflareUserReadRunners)
     .concat(CloudflareZonesReadRunners)
+    .concat(CloudflareIPsReadRunners)
     .concat(DropboxV2FileUploadRunners)
     .concat(DropboxV2UsersGetAccountRunners)
     .concat(DropboxV2UsersGetCurrentAccountRunners)
