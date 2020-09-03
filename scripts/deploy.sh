@@ -21,6 +21,11 @@ runner)
     npm run build
     gcloud app deploy runner.yaml
     ;;
+all)
+    echo 'y' | ${0} api
+    echo 'y' | ${0} runner
+    ${0} app
+    ;;
 *)
     echo 'Invalid deploy target {api|app|runner}'
     exit -1
