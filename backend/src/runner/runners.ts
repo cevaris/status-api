@@ -8,20 +8,22 @@ import { ErrorTimeoutReportRunner } from "./reports/error/timeout";
 import { PagerdutyCreateIncidentRunners } from "./reports/pagerduty/createIncidents";
 import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents";
 import { Report } from "./reports/report";
-import { ChatPostMessageRunners } from "./reports/slack/chatPostMessage";
+import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
+import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 
 
 export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(AwsS3Runners)
-    .concat(ChatPostMessageRunners)
+    .concat(CloudflareUserReadRunners)
     .concat(DropboxV2FileUploadRunners)
     .concat(DropboxV2UsersGetAccountRunners)
     .concat(DropboxV2UsersGetCurrentAccountRunners)
     .concat(ErrorRandomThrowRunner)
     .concat(ErrorThrowReportRunner)
     .concat(ErrorTimeoutReportRunner)
-    .concat(PagerdutyListIncidentsRunners)
     .concat(PagerdutyCreateIncidentRunners)
+    .concat(PagerdutyListIncidentsRunners)
+    .concat(SlackChatPostMessageRunners)
     .concat(StripeCustomerCreateReportRunners)
     ;

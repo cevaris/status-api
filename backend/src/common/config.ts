@@ -18,6 +18,7 @@ class ServerConfig {
     PAGERDUTY_TOKEN: string;
     PAGERDUTY_FROM: string
     PAGERDUTY_SERVICE: string
+    CLOUDFLARE_API_TOKEN: string
 
     constructor() {
         this.HOST_URL = this.required('HOST_URL');
@@ -37,6 +38,7 @@ class ServerConfig {
         this.PAGERDUTY_TOKEN = this.required('PAGERDUTY_TOKEN');
         this.PAGERDUTY_FROM = this.required('PAGERDUTY_FROM');
         this.PAGERDUTY_SERVICE = this.required('PAGERDUTY_SERVICE');
+        this.CLOUDFLARE_API_TOKEN = this.required('CLOUDFLARE_API_TOKEN');
     }
 
     private required(name: string): string {
