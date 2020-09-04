@@ -27,7 +27,7 @@ class GithubUserGetAuthenticated extends Report {
             throw Error('undefined response');
         }
 
-        if (response?.data?.login === 'cevaris') {
+        if (response?.data?.login === 'acardenas') {
             return true;
         }
 
