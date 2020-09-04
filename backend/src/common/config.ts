@@ -20,6 +20,7 @@ class YamlConfig {
     PAGERDUTY_FROM: string
     PAGERDUTY_SERVICE: string
     CLOUDFLARE_API_TOKEN: string
+    GITHUB_PERSONAL_ACCESS_TOKEN: string
 
     constructor() {
 
@@ -53,6 +54,7 @@ class YamlConfig {
         this.PAGERDUTY_FROM = this.required(env, 'PAGERDUTY_FROM');
         this.PAGERDUTY_SERVICE = this.required(env, 'PAGERDUTY_SERVICE');
         this.CLOUDFLARE_API_TOKEN = this.required(env, 'CLOUDFLARE_API_TOKEN');
+        this.GITHUB_PERSONAL_ACCESS_TOKEN = this.required(env, 'GITHUB_PERSONAL_ACCESS_TOKEN');
     }
 
     private required(env: Map<string, any>, name: string): string {

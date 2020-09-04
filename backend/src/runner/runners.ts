@@ -8,6 +8,7 @@ import { DropboxV2UsersGetCurrentAccountRunners } from "./reports/dropboxV2/user
 import { ErrorRandomThrowRunner } from "./reports/error/randomThrow";
 import { ErrorThrowReportRunner } from "./reports/error/throw";
 import { ErrorTimeoutReportRunner } from "./reports/error/timeout";
+import { GithubUserGetAuthenticatedRunners } from "./reports/github/userGetAuthenticated";
 import { PagerdutyCreateIncidentRunners } from "./reports/pagerduty/createIncidents";
 import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents";
 import { Report } from "./reports/report";
@@ -26,6 +27,7 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(ErrorRandomThrowRunner)
     .concat(ErrorThrowReportRunner)
     .concat(ErrorTimeoutReportRunner)
+    .concat(GithubUserGetAuthenticatedRunners)
     .concat(PagerdutyCreateIncidentRunners)
     .concat(PagerdutyListIncidentsRunners)
     .concat(SlackChatPostMessageRunners)

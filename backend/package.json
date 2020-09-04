@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@google-cloud/datastore": "^6.0.0",
+    "@octokit/rest": "^18.0.4",
     "@slack/web-api": "^5.11.0",
     "@types/json-stable-stringify": "^1.0.32",
     "aws-sdk": "^2.705.0",
