@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 /**
  * This shared index is needed so Status API and Runner
  * can share a common package code easily without dealing 

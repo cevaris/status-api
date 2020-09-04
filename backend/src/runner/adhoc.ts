@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import { funcRunner } from "./reports/runner";
 import { reportFuncRunners } from "./runners";
 

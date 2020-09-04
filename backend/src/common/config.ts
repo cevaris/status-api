@@ -1,6 +1,7 @@
-require('dotenv').config();
+import fs from 'fs';
+import yaml from 'js-yaml';
 
-class ServerConfig {
+class YamlConfig {
     HOST_URL: string
 
     AUTH_SESSION_SECRET: string;
@@ -21,28 +22,41 @@ class ServerConfig {
     CLOUDFLARE_API_TOKEN: string
 
     constructor() {
-        this.HOST_URL = this.required('HOST_URL');
 
-        this.AUTH0_DOMAIN = this.required('AUTH0_DOMAIN');
-        this.AUTH0_CLIENT_ID = this.required('AUTH0_CLIENT_ID');
-        this.AUTH0_CLIENT_SECRET = this.required('AUTH0_CLIENT_SECRET');
+        const filename = '.env.yaml';
+        const yamlContents = fs.readFileSync(filename, 'utf-8');
+        const yamlObj = yaml.load(yamlContents);
 
-        this.AUTH_SESSION_SECRET = this.required('AUTH_SESSION_SECRET');
+        if (!yamlObj || !yamlObj.env_variables) {
+            const a: object = yamlObj.env_variables
+            throw Error(`could not parse ${filename}.`)
+        }
 
-        this.DROPBOX_ACCESS_TOKEN = this.required('DROPBOX_ACCESS_TOKEN');
-        this.AWS_ACCESS_KEY_ID = this.required('AWS_ACCESS_KEY_ID');
-        this.AWS_SECRET_ACCESS_KEY = this.required('AWS_SECRET_ACCESS_KEY');
-        this.STRIPE_SECRET_KEY = this.required('STRIPE_SECRET_KEY');
-        this.SLACK_TOKEN = this.required('SLACK_TOKEN');
-        this.SLACK_CHANNEL = this.required('SLACK_CHANNEL');
-        this.PAGERDUTY_TOKEN = this.required('PAGERDUTY_TOKEN');
-        this.PAGERDUTY_FROM = this.required('PAGERDUTY_FROM');
-        this.PAGERDUTY_SERVICE = this.required('PAGERDUTY_SERVICE');
-        this.CLOUDFLARE_API_TOKEN = this.required('CLOUDFLARE_API_TOKEN');
+        // https://stackoverflow.com/questions/36644438/how-to-convert-a-plain-object-into-an-es6-map
+        const env = new Map(Object.entries(yamlObj.env_variables));
+
+        this.HOST_URL = this.hostURL(this.required(env, 'NODE_ENV'));
+
+        this.AUTH0_DOMAIN = this.required(env, 'AUTH0_DOMAIN');
+        this.AUTH0_CLIENT_ID = this.required(env, 'AUTH0_CLIENT_ID');
+        this.AUTH0_CLIENT_SECRET = this.required(env, 'AUTH0_CLIENT_SECRET');
+
+        this.AUTH_SESSION_SECRET = this.required(env, 'AUTH_SESSION_SECRET');
+
+        this.DROPBOX_ACCESS_TOKEN = this.required(env, 'DROPBOX_ACCESS_TOKEN');
+        this.AWS_ACCESS_KEY_ID = this.required(env, 'AWS_ACCESS_KEY_ID');
+        this.AWS_SECRET_ACCESS_KEY = this.required(env, 'AWS_SECRET_ACCESS_KEY');
+        this.STRIPE_SECRET_KEY = this.required(env, 'STRIPE_SECRET_KEY');
+        this.SLACK_TOKEN = this.required(env, 'SLACK_TOKEN');
+        this.SLACK_CHANNEL = this.required(env, 'SLACK_CHANNEL');
+        this.PAGERDUTY_TOKEN = this.required(env, 'PAGERDUTY_TOKEN');
+        this.PAGERDUTY_FROM = this.required(env, 'PAGERDUTY_FROM');
+        this.PAGERDUTY_SERVICE = this.required(env, 'PAGERDUTY_SERVICE');
+        this.CLOUDFLARE_API_TOKEN = this.required(env, 'CLOUDFLARE_API_TOKEN');
     }
 
-    private required(name: string): string {
-        const value: string | undefined = process.env[name];
+    private required(env: Map<string, any>, name: string): string {
+        const value: string | undefined = env.get(name);
         if (value) {
             return value;
         } else {
@@ -53,6 +67,14 @@ class ServerConfig {
     public port(defaultValue: number): string {
         return process.env.PORT || defaultValue.toString();
     }
+
+    private hostURL(nodeEnv: string): string {
+        if (nodeEnv !== 'production') {
+            return 'http://localhost:8100'
+        } else {
+            return 'https://status-api.com';
+        }
+    }
 }
 
-export const Config = new ServerConfig();
+export const Config = new YamlConfig();
