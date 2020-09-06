@@ -105,19 +105,19 @@
       <ion-row>
         <ion-col>
           <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'aws'}">
+            [queryParams]="{q: 'aws'}" expand="block">
             Amazon Web Services
           </ion-button>
         </ion-col>
         <ion-col>
           <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'dropbox'}">
+            [queryParams]="{q: 'dropbox'}" expand="block">
             Dropbox
           </ion-button>
         </ion-col>
         <ion-col>
           <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'stripe'}">
+            [queryParams]="{q: 'stripe'}" expand="block">
             Stripe
           </ion-button>
         </ion-col>
@@ -130,14 +130,14 @@
 
     <ion-grid>
       <ion-row>
-        <ion-col size="4"></ion-col>
-        <ion-col>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
           <ion-button expand="block" [routerLink]="['/search']">
             <ion-icon slot="start" name="search"></ion-icon>
             Search for more APIs
           </ion-button>
         </ion-col>
-        <ion-col size="4"></ion-col>
+        <ion-col size="2"></ion-col>
       </ion-row>
     </ion-grid>
 
