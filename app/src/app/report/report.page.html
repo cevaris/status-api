@@ -1,5 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="search"></ion-back-button>
+    </ion-buttons>
+
     <ion-title *ngIf="metadata">
       <ion-grid>
         <ion-row>
@@ -35,7 +40,6 @@
         </ion-row>
 
       </ion-grid>
-
 
     </ion-title>
 
