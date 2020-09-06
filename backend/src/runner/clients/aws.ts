@@ -10,6 +10,9 @@ import { Report } from '../reports/report';
 // Regions
 // https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html
 
+// Permissions
+// https://console.aws.amazon.com/iam/home?#/users/acardenas?section=permissions
+
 const config = {
     credentials: {
         accessKeyId: Config.AWS_ACCESS_KEY_ID,
