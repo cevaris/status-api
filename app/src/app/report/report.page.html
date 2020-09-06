@@ -5,7 +5,10 @@
       <ion-back-button defaultHref="search"></ion-back-button>
     </ion-buttons>
 
+
+
     <ion-title *ngIf="metadata">
+      <ion-router-link href="/home">StatusAPI</ion-router-link> -
       {{metadata.action}}
     </ion-title>
 
