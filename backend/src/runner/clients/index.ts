@@ -1,5 +1,5 @@
 import util from 'util';
-import { s3 } from './aws';
+import { dynamoDb, s3 } from './aws';
 import { cf as cloudflare } from './cloudflare';
 import { dropbox } from './dropbox';
 import { github } from './github';
@@ -10,6 +10,7 @@ import { stripeClient } from './stripe';
 export const clients = {
     cloudflare: cloudflare,
     dropbox: util.promisify(dropbox),
+    dynamoDb: dynamoDb,
     github: github,
     pagerduty: pagerduty,
     s3: s3,

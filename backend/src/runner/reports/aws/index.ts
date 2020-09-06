@@ -1,3 +1,5 @@
+import { DynamoDB } from "aws-sdk";
+
 export module AwsApi {
     export const Service = 'AWS'
 
@@ -8,9 +10,16 @@ export module AwsApi {
         UsEast2 = 'us-east-2',
     }
 
+    export const Regions = Object.values(AwsApi.Region);
+
     export module S3 {
         export const Name = 'S3';
         export const Version = '2006-03-01';
+    }
+
+    export module DynamoDB {
+        export const Name = 'DynamoDB';
+        export const Version = '2012-08-10';
     }
 }
 

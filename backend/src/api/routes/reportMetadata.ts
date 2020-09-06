@@ -25,6 +25,7 @@ interface ReportMetadataQueryRequest extends express.Request {
 }
 
 router.get('/report_metadata.json', async function (req: ReportMetadataQueryRequest, res: express.Response) {
+    const maxResults = 30;
     // async + anonymously log query for insight into which API to onboard next
     if (req.query.q) {
         StatusApiReportQueryDB.save(req.query.q);
@@ -32,7 +33,7 @@ router.get('/report_metadata.json', async function (req: ReportMetadataQueryRequ
 
     try {
         const query = req.query.q ?
-            await StatusReportMetadataCache.get(req.query.q) : StatusReportMetadataDB.all();
+            StatusReportMetadataCache.get(req.query.q) : StatusReportMetadataDB.all();
         const entities: Array<StatusReportMetadata> = await query;
         entities.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
