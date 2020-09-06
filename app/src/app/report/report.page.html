@@ -6,41 +6,7 @@
     </ion-buttons>
 
     <ion-title *ngIf="metadata">
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <div class="ion-text-center">
-              <b>Service: </b>{{metadata.service}}
-            </div>
-          </ion-col>
-
-          <ion-col>
-            <div class="ion-text-center">
-              <b>Region: </b>{{metadata.region}}
-            </div>
-          </ion-col>
-
-          <ion-col>
-            <div class="ion-text-center">
-              <b>API: </b>{{metadata.api}}
-            </div>
-          </ion-col>
-
-          <ion-col>
-            <div class="ion-text-center">
-              <b>Action: </b>{{metadata.action}}
-            </div>
-          </ion-col>
-
-          <ion-col>
-            <div *ngIf="healthiness" class="ion-text-center">
-              <b>State: </b>{{healthiness}}
-            </div>
-          </ion-col>
-        </ion-row>
-
-      </ion-grid>
-
+      {{metadata.action}}
     </ion-title>
 
   </ion-toolbar>
@@ -50,6 +16,35 @@
 <ion-content>
 
   <ion-grid>
+
+    <ion-row *ngIf="metadata">
+      <ion-col>
+        <div class="ion-text-center">
+          <b>Service: </b>{{metadata.service}}
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div class="ion-text-center">
+          <b>Region: </b>{{metadata.region}}
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div class="ion-text-center">
+          <b>API: </b>{{metadata.api}}
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div *ngIf="healthiness" class="ion-text-center">
+          <b>State: </b>{{healthiness}}
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+
     <ion-row>
       <ion-col>
         <div *ngIf="metadata" class="ion-text-center">
