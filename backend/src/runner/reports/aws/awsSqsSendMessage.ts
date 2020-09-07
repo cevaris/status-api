@@ -20,8 +20,6 @@ class AwsSqsSendMessage extends Report {
         const client = clients.sqs(this);
         const nowTime = new Date().getTime();
 
-
-
         var sendParams = {
             MessageBody: `Ping ${nowTime}`,
             MessageGroupId: "Group1",
