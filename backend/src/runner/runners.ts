@@ -5,9 +5,10 @@ import { AwsSqsSendMessageRunners } from "./reports/aws/awsSqsSendMessage";
 import { CloudflareIPsReadRunners } from "./reports/cloudflare/ipsRead";
 import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 import { CloudflareZonesReadRunners } from "./reports/cloudflare/zonesList";
-import { DropboxV2FileUploadRunners } from "./reports/dropboxV2/filesUpload";
-import { DropboxV2UsersGetAccountRunners } from "./reports/dropboxV2/usersGetAccount";
-import { DropboxV2UsersGetCurrentAccountRunners } from "./reports/dropboxV2/usersGetCurrentAccount";
+import { DropboxFilesListRunners } from "./reports/dropboxV2/filesListFolder";
+import { DropboxV2FileUploadRunners as DropboxFileUploadRunners } from "./reports/dropboxV2/filesUpload";
+import { DropboxV2UsersGetAccountRunners as DropboxUsersGetAccountRunners } from "./reports/dropboxV2/usersGetAccount";
+import { DropboxV2UsersGetCurrentAccountRunners as DropboxUsersGetCurrentAccountRunners } from "./reports/dropboxV2/usersGetCurrentAccount";
 import { ErrorRandomThrowRunner } from "./reports/error/randomThrow";
 import { ErrorThrowReportRunner } from "./reports/error/throw";
 import { ErrorTimeoutReportRunner } from "./reports/error/timeout";
@@ -32,9 +33,10 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(CloudflareIPsReadRunners)
     .concat(CloudflareUserReadRunners)
     .concat(CloudflareZonesReadRunners)
-    .concat(DropboxV2FileUploadRunners)
-    .concat(DropboxV2UsersGetAccountRunners)
-    .concat(DropboxV2UsersGetCurrentAccountRunners)
+    .concat(DropboxFilesListRunners)
+    .concat(DropboxFileUploadRunners)
+    .concat(DropboxUsersGetAccountRunners)
+    .concat(DropboxUsersGetCurrentAccountRunners)
     .concat(ErrorRandomThrowRunner)
     .concat(ErrorThrowReportRunner)
     .concat(ErrorTimeoutReportRunner)
