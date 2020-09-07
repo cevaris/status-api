@@ -18,16 +18,17 @@ import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents
 import { Report } from "./reports/report";
 import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
+import { SlackConversationHistoryRunners } from "./reports/slack/conversationsHistory";
 
 
 export const reportFuncRunners: Array<Report> = new Array<Report>()
-    .concat(AwsS3Runners)
     .concat(AwsDynamoDBPutItemRunners)
-    .concat(AwsSqsSendMessageRunners)
+    .concat(AwsS3Runners)
     .concat(AwsSqsReceiveMessageRunners)
+    .concat(AwsSqsSendMessageRunners)
+    .concat(CloudflareIPsReadRunners)
     .concat(CloudflareUserReadRunners)
     .concat(CloudflareZonesReadRunners)
-    .concat(CloudflareIPsReadRunners)
     .concat(DropboxV2FileUploadRunners)
     .concat(DropboxV2UsersGetAccountRunners)
     .concat(DropboxV2UsersGetCurrentAccountRunners)
@@ -39,5 +40,6 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(PagerdutyCreateIncidentRunners)
     .concat(PagerdutyListIncidentsRunners)
     .concat(SlackChatPostMessageRunners)
+    .concat(SlackConversationHistoryRunners)
     .concat(StripeCustomerCreateReportRunners)
     ;

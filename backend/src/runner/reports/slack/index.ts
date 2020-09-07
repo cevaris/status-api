@@ -1,7 +1,8 @@
 export module SlackApi {
     export const Service = 'Slack'
     export enum Api {
-        Chat = 'Chat'
+        Chat = 'Chat',
+        Conversations = 'Conversations'
     }
     export const Version = 'N/A'
 }
