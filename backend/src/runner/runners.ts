@@ -17,8 +17,9 @@ import { PagerdutyCreateIncidentRunners } from "./reports/pagerduty/createIncide
 import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents";
 import { Report } from "./reports/report";
 import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
-import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
 import { SlackConversationHistoryRunners } from "./reports/slack/conversationsHistory";
+import { SlackConversationsSetTopicRunners } from "./reports/slack/conversationsSetTopic";
+import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
 
 
 export const reportFuncRunners: Array<Report> = new Array<Report>()
@@ -41,5 +42,6 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(PagerdutyListIncidentsRunners)
     .concat(SlackChatPostMessageRunners)
     .concat(SlackConversationHistoryRunners)
+    .concat(SlackConversationsSetTopicRunners)
     .concat(StripeCustomerCreateReportRunners)
     ;
