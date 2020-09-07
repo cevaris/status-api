@@ -16,6 +16,7 @@ import { GithubUserUpdateAuthenticatedRunners } from "./reports/github/userUpdat
 import { PagerdutyCreateIncidentRunners } from "./reports/pagerduty/createIncidents";
 import { PagerdutyListIncidentsRunners } from "./reports/pagerduty/listIncidents";
 import { Report } from "./reports/report";
+import { SlackCallsAddRunners } from "./reports/slack/callsAdd";
 import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { SlackConversationHistoryRunners } from "./reports/slack/conversationsHistory";
 import { SlackConversationsSetTopicRunners } from "./reports/slack/conversationsSetTopic";
@@ -40,6 +41,7 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(GithubUserUpdateAuthenticatedRunners)
     .concat(PagerdutyCreateIncidentRunners)
     .concat(PagerdutyListIncidentsRunners)
+    .concat(SlackCallsAddRunners)
     .concat(SlackChatPostMessageRunners)
     .concat(SlackConversationHistoryRunners)
     .concat(SlackConversationsSetTopicRunners)

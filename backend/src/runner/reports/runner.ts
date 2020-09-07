@@ -44,7 +44,7 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
         }
     } finally {
         try {
-            reportRunner.cleanup();
+            await reportRunner.cleanup();
         } catch (error) {
             console.log(error);
             // do nothing
