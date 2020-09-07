@@ -21,6 +21,11 @@ export module AwsApi {
         export const Name = 'DynamoDB';
         export const Version = '2012-08-10';
     }
+
+    export module SQS {
+        export const Name = 'SQS';
+        export const Version = '2012-11-05';
+    }
 }
 
 

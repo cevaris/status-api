@@ -1,5 +1,6 @@
 import { AwsDynamoDBPutItemRunners } from "./reports/aws/awsDynamoDbPutItem";
 import { AwsS3Runners } from "./reports/aws/awsS3Upload";
+import { AwsSqsSendMessageRunners } from "./reports/aws/awsSQSSendMessage";
 import { CloudflareIPsReadRunners } from "./reports/cloudflare/ipsRead";
 import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 import { CloudflareZonesReadRunners } from "./reports/cloudflare/zonesList";
@@ -21,6 +22,7 @@ import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustom
 export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(AwsS3Runners)
     .concat(AwsDynamoDBPutItemRunners)
+    .concat(AwsSqsSendMessageRunners)
     .concat(CloudflareUserReadRunners)
     .concat(CloudflareZonesReadRunners)
     .concat(CloudflareIPsReadRunners)

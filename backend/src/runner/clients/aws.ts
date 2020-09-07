@@ -28,3 +28,7 @@ export const s3 = (runnerConfig: Report): AWS.S3 => {
 export const dynamoDb = (runnerConfig: Report): AWS.DynamoDB.DocumentClient => {
     return new AWS.DynamoDB.DocumentClient({ apiVersion: runnerConfig.version, region: runnerConfig.region });
 }
+
+export const sqs = (runnerConfig: Report): AWS.SQS => {
+    return new AWS.SQS({ apiVersion: runnerConfig.version, region: runnerConfig.region });
+}
