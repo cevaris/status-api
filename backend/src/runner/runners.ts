@@ -1,7 +1,7 @@
 import { AwsDynamoDBPutItemRunners } from "./reports/aws/awsDynamoDbPutItem";
 import { AwsS3Runners } from "./reports/aws/awsS3Upload";
 import { AwsSqsReceiveMessageRunners } from "./reports/aws/awsSqsReceiveMessage";
-import { AwsSqsSendMessageRunners } from "./reports/aws/awsSQSSendMessage";
+import { AwsSqsSendMessageRunners } from "./reports/aws/awsSqsSendMessage";
 import { CloudflareIPsReadRunners } from "./reports/cloudflare/ipsRead";
 import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
 import { CloudflareZonesReadRunners } from "./reports/cloudflare/zonesList";
