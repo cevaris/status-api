@@ -20,6 +20,7 @@ import { SlackCallsAddRunners } from "./reports/slack/callsAdd";
 import { ChatPostMessageRunners as SlackChatPostMessageRunners } from "./reports/slack/chatPostMessage";
 import { SlackConversationHistoryRunners } from "./reports/slack/conversationsHistory";
 import { SlackConversationsSetTopicRunners } from "./reports/slack/conversationsSetTopic";
+import { SlackFilesUploadRunners } from "./reports/slack/filesUpload";
 import { StripeCustomerCreateReportRunners } from "./reports/stripe/stripeCustomersCreate";
 
 
@@ -45,5 +46,6 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(SlackChatPostMessageRunners)
     .concat(SlackConversationHistoryRunners)
     .concat(SlackConversationsSetTopicRunners)
+    .concat(SlackFilesUploadRunners)
     .concat(StripeCustomerCreateReportRunners)
     ;

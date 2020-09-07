@@ -10,6 +10,8 @@ interface Response {
 }
 
 class DropboxFilesUploadConfig extends Report {
+    localFilePath: string = ''
+
     constructor() {
         super(DropboxApi.Service, ApiRegion.Global, DropboxApi.Api.Files, DropboxApi.Version, 'Upload');
     }
@@ -27,25 +29,24 @@ class DropboxFilesUploadConfig extends Report {
             await fs.promises.mkdir(localFolderPath);
         }
 
-        const localFilePath = `${localFolderPath}/${fileName}.txt`;
-        await fs.promises.writeFile(localFilePath, 'example txt content');
+        this.localFilePath = `${localFolderPath}/${fileName}.txt`;
+        await fs.promises.writeFile(this.localFilePath, 'example txt content');
 
         const response: Response = await clients.dropbox({
             resource: 'files/upload',
             parameters: {
                 path: `/DropboxV2FilesUpload/${nowTime}.txt`
             },
-            readStream: fs.createReadStream(localFilePath)
+            readStream: fs.createReadStream(this.localFilePath)
         });
-
-        try {
-            await fs.promises.unlink(localFilePath);
-        } catch {
-            // ignore failures
-        }
 
         return response.name === fileName;
     }
+
+    async cleanup(): Promise<void> {
+        await fs.promises.unlink(this.localFilePath);
+    }
+
 }
 
 export const DropboxV2FileUploadRunners: Array<Report> = [
