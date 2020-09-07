@@ -6,8 +6,6 @@ import { Report } from '../report';
 
 // https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/sqs-examples-send-receive-messages.html
 class AwsSqsSendMessage extends Report {
-    static QueueURL: string = "https://sqs.us-east-1.amazonaws.com/755892755226/StatusAPI.fifo";
-
     constructor(region: AwsApi.Region) {
         super(AwsApi.Service, region, AwsApi.SQS.Name, AwsApi.SQS.Version, 'Send Message')
     }
@@ -23,7 +21,7 @@ class AwsSqsSendMessage extends Report {
         var sendParams = {
             MessageBody: `Ping ${nowTime}`,
             MessageGroupId: "Group1",
-            QueueUrl: AwsSqsSendMessage.QueueURL
+            QueueUrl: AwsApi.SQS.QueueURL
         };
 
         // Send message
@@ -32,37 +30,8 @@ class AwsSqsSendMessage extends Report {
             throw new Error('SQS send message response missing MessageId field');
         }
 
-        const receiveParams = {
-            MaxNumberOfMessages: 10,
-            QueueUrl: AwsSqsSendMessage.QueueURL,
-            WaitTimeSeconds: 0
-        };
-        const receiveResponse = await client.receiveMessage(receiveParams).promise();
-
-        // delete old and new messages
-        if (receiveResponse.Messages) {
-            await Promise.all(receiveResponse.Messages.flatMap(m => this.deleteMessage(client, m)));
-        }
-
         return true;
     }
-
-    private async deleteMessage(client: SQS, message: SQS.Message): Promise<void> {
-        if (!message.ReceiptHandle) return;
-
-        var deleteParams = {
-            QueueUrl: AwsSqsSendMessage.QueueURL,
-            ReceiptHandle: message.ReceiptHandle
-        };
-
-        try {
-            await client.deleteMessage(deleteParams).promise();
-        } catch (error) {
-            console.error(error);
-            // do nothing
-        }
-    }
-
 }
 
 export const AwsSqsSendMessageRunners: Array<Report> =

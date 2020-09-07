@@ -25,8 +25,6 @@ export module AwsApi {
     export module SQS {
         export const Name = 'SQS';
         export const Version = '2012-11-05';
+        export const QueueURL = "https://sqs.us-east-1.amazonaws.com/755892755226/StatusAPI.fifo";
     }
 }
-
-
-

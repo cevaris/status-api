@@ -38,7 +38,7 @@ router.get('/report_metadata.json', async function (req: ReportMetadataQueryRequ
         entities.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
         res.type('json')
-            .send(renderJson(entities));
+            .send(renderJson(entities.splice(0, maxResults)));
     } catch (error) {
         return res.status(401)
             .json({ ok: false, message: error.message });

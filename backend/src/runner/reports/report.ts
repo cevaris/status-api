@@ -18,6 +18,10 @@ export abstract class Report {
     abstract description(): string
     abstract run(): Promise<boolean>
 
+    // Hook to run clean up work post run() invocation
+    // Note this is used so we can cleanup "off-clock" or without affecting latency times.
+    cleanup(): Promise<void> { return Promise.resolve(); }
+
     key(): string {
         return `${this.service}:${this.region}:${this.api}:${normalize(this.action)}`.toLowerCase();
     }
@@ -29,5 +33,6 @@ export abstract class Report {
     tags(): Array<string> {
         return [this.service, this.region, this.api, this.version, this.action];
     }
+
 
 }

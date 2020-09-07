@@ -1,5 +1,6 @@
 import { AwsDynamoDBPutItemRunners } from "./reports/aws/awsDynamoDbPutItem";
 import { AwsS3Runners } from "./reports/aws/awsS3Upload";
+import { AwsSqsReceiveMessageRunners } from "./reports/aws/awsSqsReceiveMessage";
 import { AwsSqsSendMessageRunners } from "./reports/aws/awsSQSSendMessage";
 import { CloudflareIPsReadRunners } from "./reports/cloudflare/ipsRead";
 import { CloudflareUserReadRunners } from "./reports/cloudflare/userRead";
@@ -23,6 +24,7 @@ export const reportFuncRunners: Array<Report> = new Array<Report>()
     .concat(AwsS3Runners)
     .concat(AwsDynamoDBPutItemRunners)
     .concat(AwsSqsSendMessageRunners)
+    .concat(AwsSqsReceiveMessageRunners)
     .concat(CloudflareUserReadRunners)
     .concat(CloudflareZonesReadRunners)
     .concat(CloudflareIPsReadRunners)

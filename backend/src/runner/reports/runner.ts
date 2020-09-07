@@ -42,6 +42,13 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
             message: message,
             ...stopwatch.results(),
         }
+    } finally {
+        try {
+            reportRunner.cleanup();
+        } catch (error) {
+            console.log(error);
+            // do nothing
+        }
     }
 
     // console.log(report);
