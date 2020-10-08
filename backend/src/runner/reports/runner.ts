@@ -32,7 +32,7 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
 
         // avoid writing [object Object] objects
         let message = error.toString();
-        if (typeof error === 'object') {
+        if (message === '[object Object]') {
             message = JSON.stringify(error);
         }
 
