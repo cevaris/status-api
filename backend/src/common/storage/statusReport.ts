@@ -1,4 +1,5 @@
 import { Datastore, Query } from '@google-cloud/datastore';
+import { Transform } from 'stream';
 
 
 export interface StatusReport {
@@ -77,7 +78,7 @@ class StatusReportDatastore {
         return results;
     }
 
-    async getLastErrors(name: string, n: number): Promise<Array<StatusReport>> {
+    async getLastErrorsForReport(name: string, n: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('name', '=', name)
@@ -87,6 +88,27 @@ class StatusReportDatastore {
 
         const [results, errors] = await this.datastore.runQuery(query);
         return results;
+    }
+
+    async getLastErrorsAll(n: number): Promise<Array<StatusReport>> {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('ok', '=', false)
+            .order('startDate', { descending: true })
+            .limit(n);
+
+        const [results, errors] = await this.datastore.runQuery(query);
+        return results;
+    }
+
+    streamErrorsAll(fromStartDate: Date): Transform {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('ok', '=', false)
+            .filter('startDate', '>=', fromStartDate)
+            .order('startDate', { descending: true });
+
+        return this.datastore.runQueryStream(query);
     }
 }
 
