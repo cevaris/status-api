@@ -1,3 +1,4 @@
+import { renderJson } from "../common/renderer";
 import { funcRunner } from "./reports/runner";
 import { reportFuncRunners } from "./runners";
 
@@ -6,7 +7,7 @@ async function executeReportRunner(key: string): Promise<void> {
         const runner = reportFuncRunners.find(r => r.key() === key);
         if (runner) {
             const result = await funcRunner(runner);
-            console.log(result);
+            console.log(renderJson(result));
         } else {
             console.log(`report runner ${key} not found`);
         }
