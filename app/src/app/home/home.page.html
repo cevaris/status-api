@@ -139,13 +139,21 @@
       </ion-row>
       <ion-row>
         <ion-col class="ion-text-center">
-          <b>Latest Failures</b>
+
 
           <ion-list inset="false" *ngFor="let failure of latestFailures">
             <ion-list-header>
+
               <ion-datetime displayFormat="YYYY-MM-DD HH:mm UTC" readonly="true"
                 value="{{ failure.startDate }}">
               </ion-datetime>
+
+              &nbsp;
+              -
+              &nbsp;
+
+              <ion-label class="ion-text-left">{{failure.name}}</ion-label>
+
             </ion-list-header>
             <ion-item>
               <ion-item>{{ failure.message }}</ion-item>
