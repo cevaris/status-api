@@ -11,7 +11,7 @@ class AwsSqsReceiveMessage extends Report {
     }
 
     description(): string {
-        return `Using version ${this.version}, asserts no errors when calling receive message message.`;
+        return `Using version ${this.version}, asserts no errors after calling Receive Message.`;
     }
 
     async run(): Promise<boolean> {
