@@ -19,7 +19,6 @@ app.listen(PORT, async () => {
 
     const metadata: Array<StatusReportMetadata> = [];
     reportFuncRunners
-        .filter(reportRunner => !reportRunner.debug)
         .forEach(reportRunner => {
             const m: StatusReportMetadata = {
                 key: reportRunner.key(),
@@ -29,7 +28,8 @@ app.listen(PORT, async () => {
                 action: reportRunner.action,
                 region: reportRunner.region,
                 api: reportRunner.api,
-                version: reportRunner.version
+                version: reportRunner.version,
+                isDebug: reportRunner.isDebug
             };
             metadata.push(m);
         });
@@ -37,7 +37,6 @@ app.listen(PORT, async () => {
     StatusReportMetadataDB.set(metadata);
 
     reportFuncRunners
-        .filter(reportRunner => !reportRunner.debug)
         .forEach((runner) => {
             const secondToRun = Math.floor(Math.random() * Math.floor(60));
 

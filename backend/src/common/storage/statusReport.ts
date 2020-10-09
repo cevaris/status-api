@@ -9,6 +9,7 @@ export interface StatusReport {
     message?: string
     startDate: Date
     endDate: Date
+    isDebug: boolean
 }
 
 function getMinuteEpoch(date: Date): number {
@@ -29,6 +30,11 @@ function getDateMinute(date: Date): Date {
 class StatusReportDatastore {
     private static kind = 'StatusReportMinute';
     private datastore: Datastore;
+
+    /**
+     * Exclude isDebug=true reports if in production.
+     */
+    private includeDebugReports = process.env.NODE_ENV !== "production";
 
     constructor() {
         this.datastore = new Datastore();
@@ -59,7 +65,6 @@ class StatusReportDatastore {
         }
     }
 
-
     // Do a batch query on key, so we do not have to index
     // https://cloud.google.com/datastore/docs/concepts/entities#datastore-datastore-batch-lookup-nodejs
     async getLastHour(name: string): Promise<Array<StatusReport>> {
@@ -81,8 +86,8 @@ class StatusReportDatastore {
     async getLastErrorsForReport(name: string, n: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
-            .filter('name', '=', name)
             .filter('ok', '=', false)
+            .filter('name', '=', name)
             .order('startDate', { descending: true })
             .limit(n);
 
@@ -94,6 +99,7 @@ class StatusReportDatastore {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
+            .filter('isDebug', '=', this.includeDebugReports)
             .order('startDate', { descending: true })
             .limit(n);
 
@@ -105,7 +111,8 @@ class StatusReportDatastore {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
-            .filter('startDate', '>=', fromStartDate)
+            .filter('isDebug', '=', this.includeDebugReports)
+            .filter('startDate', '>', fromStartDate)
             .order('startDate', { descending: true });
 
         return this.datastore.runQueryStream(query);

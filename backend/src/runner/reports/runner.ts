@@ -26,7 +26,8 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
         report = {
             name: reportRunner.key(),
             ok: result,
-            ...stopwatch.results()
+            ...stopwatch.results(),
+            isDebug: reportRunner.isDebug
         }
     } catch (error) {
         stopwatch.stop();
@@ -48,6 +49,7 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
             ok: false,
             message: message,
             ...stopwatch.results(),
+            isDebug: reportRunner.isDebug
         }
     } finally {
         try {

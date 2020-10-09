@@ -1,6 +1,5 @@
 import { Datastore, Query } from '@google-cloud/datastore';
 
-
 export interface StatusReportMetadata {
     key: string
     description: string
@@ -10,6 +9,7 @@ export interface StatusReportMetadata {
     version: string
     api: string
     action: string
+    isDebug: boolean
 }
 
 class StatusReportMetadataDatastore {

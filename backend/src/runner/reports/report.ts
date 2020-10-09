@@ -10,7 +10,7 @@ export abstract class Report {
     /**
      * Report is for debugging purposes only.
      */
-    debug: boolean = false
+    isDebug: boolean = false
 
     constructor(service: string, region: string, api: string, version: string, action: string) {
         this.service = service;
@@ -38,6 +38,4 @@ export abstract class Report {
     tags(): Array<string> {
         return [this.service, this.region, this.api, this.version, this.action];
     }
-
-
 }

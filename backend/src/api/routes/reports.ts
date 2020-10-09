@@ -19,38 +19,71 @@ router.get('/reports/failures.json', async function (req: express.Request, res: 
     }
 });
 
-// TODO: Pass in date paramter to start off where left off
-router.get('/stream/reports/failures.json', async function (req: express.Request, res: express.Response) {
+interface StreamReportFailuresRequest extends express.Request {
+    query: { start_date?: string };
+}
+
+router.get('/stream/reports/failures.json', async function (req: StreamReportFailuresRequest, res: express.Response) {
     res.type('json');
 
     const connection = uuid4();
+    let isClientConnectionOpen = true;
+    let startDate: Date = new Date();
 
-    const startFromDate = new Date();
-    // start stream 26 hours from now
-    startFromDate.setHours(startFromDate.getHours() - 26);
-    console.log(connection, 'start', startFromDate);
+    if (req.query.start_date) {
+        const now = new Date();
+        const queryStartDate = new Date(Date.parse(req.query.start_date));
 
-    try {
+        const oldestStartDate = 1000 * 60 * 60 * 12;
+        if (now < queryStartDate) {
+            return res.status(400).json({ ok: false, message: `cannot use start_date value from the future, ${queryStartDate}` });
+        }
+        if ((now.getTime() - queryStartDate.getTime()) > oldestStartDate) {
+            return res.status(400).json({ ok: false, message: `cannot use start_date value older than ${oldestStartDate / (1000 * 60 * 60)} hours from now` });
+        }
 
-        StatusReportStore.streamErrorsAll(startFromDate)
-            .on('error', console.error)
-            .on('data', (entity) => {
+        // valid start date
+        startDate = queryStartDate;
+    }
+
+    // Listen for client closing their connection
+    req.connection.addListener('close', () => {
+        console.log(connection, 'client closed connection');
+        isClientConnectionOpen = false;
+    });
+
+    let highWaterMark = startDate;
+    function streamReportFailures() {
+        StatusReportStore.streamErrorsAll(highWaterMark)
+            .on('error', (error) => {
+                console.log(connection, 'end');
+                res.status(503).json({ ok: false, message: error.message });
+                res.end();
+            })
+            .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity);
+                highWaterMark = entity.startDate;
                 res.write(renderJson(entity) + '\n');
             })
             .on('info', (info) => {
                 console.log(connection, 'info', info);
             })
-            .on('end', () => {
-                console.log(connection, 'end');
-                res.end();
+            .on('end', async () => {
+                if (isClientConnectionOpen) {
+                    console.log(connection, 'restarting stream', highWaterMark);
+                    // when we reach to end of stream, sleep, then attempt to query for latest events
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    streamReportFailures();
+                } else {
+                    // close the connection successfully
+                    res.status(200).end();
+                }
             });
-    } catch (error) {
-        return res.status(503)
-            .json({ ok: false, message: error.message });
     }
-});
 
+    console.log(connection, 'start', startDate);
+    streamReportFailures();
+});
 
 interface ReportsNameRequest extends express.Request {
     params: {

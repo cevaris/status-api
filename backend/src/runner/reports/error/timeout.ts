@@ -8,7 +8,7 @@ const sleep = require('util').promisify(setTimeout)
 class ErrorTimeoutReport extends Report {
     constructor() {
         super(ErrorsApi.Service, ApiRegion.Global, ErrorsApi.Name, ErrorsApi.Version, 'Timeout');
-        this.debug = true;
+        this.isDebug = true;
     }
 
     description(): string {
