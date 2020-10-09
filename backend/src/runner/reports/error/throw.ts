@@ -5,6 +5,7 @@ import { Report } from "../report";
 class ErrorThrowReport extends Report {
     constructor() {
         super(ErrorsApi.Service, ApiRegion.Global, ErrorsApi.Name, ErrorsApi.Version, 'throw');
+        this.debug = true;
     }
 
     description(): string {

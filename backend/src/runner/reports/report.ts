@@ -7,6 +7,11 @@ export abstract class Report {
     readonly version: string
     readonly action: string
 
+    /**
+     * Report is for debugging purposes only.
+     */
+    debug: boolean = false
+
     constructor(service: string, region: string, api: string, version: string, action: string) {
         this.service = service;
         this.region = region;

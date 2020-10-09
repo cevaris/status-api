@@ -1,12 +1,13 @@
 import { StatusReport } from "../../common/storage/statusReport";
 import { Report } from "./report";
 import { Stopwatch } from "../../common/stopwatch";
+import { TimeoutError } from "../../common/errors";
 
 export const REPORT_TIMEOUT_MS = 10 * 1000;
 
-export type FuncRunner = (runnerConfig: Report) => Promise<boolean>
+export type FuncRunner = (runnerConfig: Report) => Promise<boolean>;
 
-const TIMEOUT_ERROR = new Error('Report runner timed-out');
+const TIMEOUT_ERROR = new TimeoutError('Report runner timed-out');
 const timeoutPromise = () => new Promise<boolean>(
     (_, reject) => setTimeout(() => reject(TIMEOUT_ERROR), REPORT_TIMEOUT_MS)
 )
@@ -30,8 +31,14 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
     } catch (error) {
         stopwatch.stop();
 
-        // avoid writing [object Object] objects
         let message = error.toString();
+
+        // append time to error message
+        if (error instanceof TimeoutError) {
+            message = `${message}, ${stopwatch.results().latencyMs}ms`;
+        }
+
+        // avoid writing [object Object] objects
         if (message === '[object Object]') {
             message = JSON.stringify(error);
         }

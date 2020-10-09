@@ -8,4 +8,4 @@ TARGET=$1
 
 # tsc -p backend/
 cd backend/
-ts-node ./dist/runner/adhoc.js $TARGET
+node ./dist/runner/adhoc.js $TARGET

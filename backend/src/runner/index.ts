@@ -18,32 +18,36 @@ app.listen(PORT, async () => {
     console.log(`server started at http://localhost:${PORT}`);
 
     const metadata: Array<StatusReportMetadata> = [];
-    reportFuncRunners.forEach((reportRunner) => {
-        const m: StatusReportMetadata = {
-            key: reportRunner.key(),
-            description: reportRunner.description(),
-            tags: reportRunner.tags(),
-            service: reportRunner.service,
-            action: reportRunner.action,
-            region: reportRunner.region,
-            api: reportRunner.api,
-            version: reportRunner.version
-        };
-        metadata.push(m);
-
-    });
-    StatusReportMetadataDB.set(metadata);
-
-    reportFuncRunners.forEach((runner) => {
-        const secondToRun = Math.floor(Math.random() * Math.floor(60));
-
-        schedule.scheduleJob(`${secondToRun} * * * * *`, function () {
-            setTimeout(async function () {
-                const result = await funcRunner(runner);
-                await StatusReportStore.set(result);
-            }, Math.floor(Math.random() * Math.floor(1000)));
+    reportFuncRunners
+        .filter(reportRunner => !reportRunner.debug)
+        .forEach(reportRunner => {
+            const m: StatusReportMetadata = {
+                key: reportRunner.key(),
+                description: reportRunner.description(),
+                tags: reportRunner.tags(),
+                service: reportRunner.service,
+                action: reportRunner.action,
+                region: reportRunner.region,
+                api: reportRunner.api,
+                version: reportRunner.version
+            };
+            metadata.push(m);
         });
 
-        console.log(`scheduled runner ${runner.key()} on the ${secondToRun} second`);
-    });
+    StatusReportMetadataDB.set(metadata);
+
+    reportFuncRunners
+        .filter(reportRunner => !reportRunner.debug)
+        .forEach((runner) => {
+            const secondToRun = Math.floor(Math.random() * Math.floor(60));
+
+            schedule.scheduleJob(`${secondToRun} * * * * *`, function () {
+                setTimeout(async function () {
+                    const result = await funcRunner(runner);
+                    await StatusReportStore.set(result);
+                }, Math.floor(Math.random() * Math.floor(1000)));
+            });
+
+            console.log(`scheduled runner ${runner.key()} on the ${secondToRun} second`);
+        });
 });
