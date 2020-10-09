@@ -9,7 +9,7 @@
     "dev": "./node_modules/.bin/nodemon ./dist/src/index.js",
     "gcp-build": "npm run build",
     "start": "node ./dist/src/index.js",
-    "test-integration": "jest -c jest.config.integration.js --detectOpenHandles --runInBand",
+    "test-integration": "jest -c jest.config.integration.js --detectOpenHandles",
     "test": "jest"
   },
   "author": "",
