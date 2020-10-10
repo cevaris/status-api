@@ -1,6 +1,6 @@
 import { renderJson } from "../common/renderer";
-import { funcRunner } from "./reports/runner";
-import { reportFuncRunners } from "./runners";
+import { funcRunner } from "../runner/reports/runner";
+import { reportFuncRunners } from "../runner/runners";
 
 async function executeReportRunner(key: string): Promise<void> {
     if (key) {

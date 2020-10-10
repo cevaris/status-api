@@ -66,3 +66,7 @@ Create index
 Remove indexes not in index.yaml
 
 `gcloud datastore indexes cleanup index.yaml`
+
+### Tests
+
+    npm run test-integration
