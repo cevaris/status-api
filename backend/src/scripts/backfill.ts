@@ -18,7 +18,7 @@ let totalBackfilled = 0;
 let backfillDone = false;
 
 async function main() {
-    while (endDate < currDate) {
+    while (currDate < endDate) {
         const results = await StatusReportStore.get(currDate, 500);
         const filtered = results.filter(sr => sr.isDebug === undefined);
         const updated = filtered.map(sr => {
@@ -42,7 +42,9 @@ async function main() {
             console.log(`nothing to see here`, currDate);
         }
 
-        currDate = results[results.length - 1].startDate;
+        if (results.length > 0) {
+            currDate = results[results.length - 1].startDate;
+        }
     }
 
     backfillDone = true;

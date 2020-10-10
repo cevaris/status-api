@@ -113,7 +113,7 @@ class StatusReportDatastore {
             .filter('ok', '=', false)
             .filter('isDebug', '=', this.includeDebugReports)
             .filter('startDate', '>', fromStartDate)
-            .order('startDate', { descending: true });
+            .order('startDate', { descending: false });
 
         return this.datastore.runQueryStream(query);
     }
@@ -121,19 +121,14 @@ class StatusReportDatastore {
     async get(fromStartDate: Date, limit: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
-            .filter('startDate', '<', fromStartDate)
-            .order('startDate', { descending: true })
+            .filter('startDate', '>', fromStartDate)
+            .order('startDate', { descending: false })
             .limit(limit);
 
         const [results, errors] = await this.datastore.runQuery(query);
-        console.error(errors);
+        // console.error(errors);
         return results;
     }
 }
 
 export const StatusReportStore = new StatusReportDatastore();
-
-
-// 33
-// 32
-// 31
