@@ -12,7 +12,7 @@ export interface StatusReport {
     isDebug: boolean
 }
 
-function getMinuteEpoch(date: Date): number {
+export function getMinuteEpoch(date: Date): number {
     const dateMinute = getDateMinute(date);
     const minuteEpoch = Math.round(dateMinute.getTime() / 1000)
     return minuteEpoch;
