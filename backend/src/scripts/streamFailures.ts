@@ -2,7 +2,7 @@ import { program } from 'commander';
 import http from 'http';
 
 program
-    .requiredOption('-u, --url <value>', 'target url');
+    .requiredOption('-u, --url <value>', 'target stream url');
 
 program.parse(process.argv);
 
