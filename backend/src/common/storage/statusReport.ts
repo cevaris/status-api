@@ -42,14 +42,44 @@ class StatusReportDatastore {
 
     async set(statusReport: StatusReport): Promise<void> {
         const minuteEpoch = getMinuteEpoch(statusReport.startDate);
-        const name: string = `${statusReport.name}:${minuteEpoch}`
-        const recordKey = this.datastore.key([StatusReportDatastore.kind, name])
+        const name: string = `${statusReport.name}:${minuteEpoch}`;
+        const recordKey = this.datastore.key([StatusReportDatastore.kind, name]);
 
         const record = {
             key: recordKey,
             data: statusReport
         }
         await this.datastore.save(record);
+    }
+
+    async batchUpsert(statusReports: Array<StatusReport>): Promise<void> {
+        const entities = statusReports.map((statusReport: StatusReport) => {
+            const minuteEpoch = getMinuteEpoch(statusReport.startDate);
+            const key: string = `${statusReport.name}:${minuteEpoch}`;
+            const recordKey = this.datastore.key([StatusReportDatastore.kind, key]);
+            return {
+                key: recordKey,
+                data: statusReport
+            };
+        })
+
+        // await this.datastore.update(entities);
+        await Promise.all(entities.map(sr => this.datastore.update(sr)));
+
+        // const transaction = this.datastore.transaction();
+        // try {
+        //     await transaction.run();
+        //     // console.log(entities);
+        //     // await transaction.upsert(entities);
+        //     await this.datastore.update(entities);
+        //     await transaction.commit();
+        // } catch (error) {
+        //     console.error(error);
+        //     throw error;
+        // } finally {
+        //     console.error('rolling back');
+        //     await transaction.rollback();
+        // }
     }
 
     async getLatest(): Promise<StatusReport> {
@@ -116,6 +146,27 @@ class StatusReportDatastore {
             .order('startDate', { descending: true });
 
         return this.datastore.runQueryStream(query);
+    }
+
+    fromTheBeginning(fromStartDate: Date): Transform {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('startDate', '>', fromStartDate)
+            .order('startDate', { descending: false });
+
+        return this.datastore.runQueryStream(query);
+    }
+
+    async get(fromStartDate: Date, limit: number): Promise<Array<StatusReport>> {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('startDate', '>', fromStartDate)
+            .order('startDate', { descending: false })
+            .limit(limit);
+
+        const [results, errors] = await this.datastore.runQuery(query);
+        // console.error(errors);
+        return results;
     }
 }
 
