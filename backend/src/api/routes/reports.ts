@@ -79,7 +79,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
                     console.log(connection, 'restarting stream', highWaterMark);
                     // when we reach to end of stream, sleep, then attempt to query for latest events
                     await new Promise(resolve => setTimeout(resolve, 5000));
-                    // streamReportFailures();
+                    streamReportFailures();
                 } else {
                     // close the connection successfully
                     res.status(200).end();
