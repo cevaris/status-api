@@ -28,7 +28,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
 
     const connection = uuid4();
     let isClientConnectionOpen = true;
-    let startDate: Date = new Date();
+    let highWaterMark: Date = new Date();
 
     if (req.query.start_date) {
         const now = new Date();
@@ -43,7 +43,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
         }
 
         // valid start date
-        startDate = queryStartDate;
+        highWaterMark = queryStartDate;
     }
 
     // Listen for client closing their connection
@@ -52,9 +52,10 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
         isClientConnectionOpen = false;
     });
 
-    let highWaterMark = startDate;
     function streamReportFailures() {
-        StatusReportStore.streamErrorsAll(highWaterMark)
+        const stream = StatusReportStore.streamErrors(highWaterMark);
+
+        stream
             .on('error', (error) => {
                 console.log(connection, 'end');
                 res.status(503).json({ ok: false, message: error.message });
@@ -63,7 +64,12 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                res.write(renderJson(entity) + '\n');
+                res.write(renderJson({ ok: true, report: entity }) + '\n');
+
+                if (!isClientConnectionOpen) {
+                    res.status(200).end();
+                    stream.end();
+                }
             })
             .on('info', (info) => {
                 console.log(connection, 'info', info);
@@ -73,7 +79,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
                     console.log(connection, 'restarting stream', highWaterMark);
                     // when we reach to end of stream, sleep, then attempt to query for latest events
                     await new Promise(resolve => setTimeout(resolve, 5000));
-                    streamReportFailures();
+                    // streamReportFailures();
                 } else {
                     // close the connection successfully
                     res.status(200).end();
@@ -81,7 +87,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
             });
     }
 
-    console.log(connection, 'start', startDate);
+    console.log(connection, 'start', highWaterMark);
     streamReportFailures();
 });
 

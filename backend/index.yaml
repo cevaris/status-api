@@ -19,3 +19,8 @@ indexes:
       - name: isDebug
       - name: startDate
         direction: desc
+  - kind: StatusReportMinute
+    properties:
+      - name: isDebug
+      - name: ok
+      - name: startDate

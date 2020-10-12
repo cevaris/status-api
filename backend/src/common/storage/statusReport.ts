@@ -1,4 +1,5 @@
 import { Datastore, Query } from '@google-cloud/datastore';
+import { RunQueryInfo } from '@google-cloud/datastore/build/src/query';
 import { Transform } from 'stream';
 
 
@@ -10,6 +11,11 @@ export interface StatusReport {
     startDate: Date
     endDate: Date
     isDebug: boolean
+
+
+    // tmp
+    endDateMs?: number
+    startDateMs?: number
 }
 
 export function getMinuteEpoch(date: Date): number {
@@ -79,7 +85,7 @@ class StatusReportDatastore {
             .filter('name', '=', name)
             .filter('startDate', '>', fromStartDate)
             .filter('startDate', '<=', toStartDate);
-        const [results, _] = await this.datastore.runQuery(query);
+        const [results, errors] = await this.datastore.runQuery(query);
         return results;
     }
 
@@ -107,17 +113,20 @@ class StatusReportDatastore {
         return results;
     }
 
-    streamErrorsAll(fromStartDate: Date): Transform {
+    streamErrors(fromStartDate: Date): Transform {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
             .filter('isDebug', '=', this.includeDebugReports)
             .filter('startDate', '>', fromStartDate)
-            .order('startDate', { descending: false });
+            .order('startDate', { descending: true });
 
         return this.datastore.runQueryStream(query);
     }
 
+    /**
+     * Used for backfill.
+     */
     async get(fromStartDate: Date, limit: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
@@ -128,6 +137,18 @@ class StatusReportDatastore {
         const [results, errors] = await this.datastore.runQuery(query);
         // console.error(errors);
         return results;
+    }
+
+    async scan(limit: number, cursor: string | undefined): Promise<[Array<StatusReport>, RunQueryInfo]> {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .limit(limit);
+
+        if (cursor) {
+            query.start(cursor);
+        }
+
+        return await this.datastore.runQuery(query);
     }
 }
 
