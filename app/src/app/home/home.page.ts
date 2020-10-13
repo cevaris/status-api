@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import axios from 'axios';
-import { environment } from 'src/environments/environment';
-import { StatusReport, StatusReportMetadata } from '..';
+import { StatusReport } from '..';
+import { getAllStatusReportFailures } from '../actions/reports';
 
 @Component({
   selector: 'app-home',
@@ -9,32 +8,22 @@ import { StatusReport, StatusReportMetadata } from '..';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  public latestFailures: Array<StatusReport>;
-  // public metadata: Map<String, StatusReportMetadata>;
+  public latestFailures: Array<StatusReport> = [];
 
   constructor() { }
 
   ngAfterViewInit(): void {
     // fire off update on load, then refresh every 25 seconds
-    setInterval((ref) => this.updateGraph(ref), 25 * 1000, this);
+    setInterval((ref) => this.update(ref), 25 * 1000, this);
     // kick off first run
-    this.updateGraph(this);
+    this.update(this);
   }
 
-  async updateGraph(ref: HomePage): Promise<void> {
+  async update(ref: HomePage): Promise<void> {
     try {
-      const latestFailuresResponse = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures.json`);
-      this.latestFailures = latestFailuresResponse.data;
-
-      // const metadataResponse = await axios.get<Array<StatusReportMetadata>>(`${environment.apiHost}/report_metadata.json`);
-      // if (metadataResponse.data?.length > 0) {
-      //   this.metadata = new Map(metadataResponse.data.map(m => [m.key, m]));
-      //   console.log(this.metadata);
-      // } else {
-      //   console.error('StatusReportMetadata query returned no result');
-      // }
-
+      this.latestFailures = await getAllStatusReportFailures();
     } catch (error) {
+      this.latestFailures = [];
       console.error(error);
     }
   }

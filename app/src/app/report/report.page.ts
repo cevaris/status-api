@@ -1,11 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import axios from 'axios';
 import { Chart, ChartOptions } from "chart.js";
 import { StatusReport, StatusReportMetadata } from '..';
-import { environment } from '../../environments/environment';
 import { getReportMetadata } from '../actions/reportMetadata';
-import { getStatusReports } from '../actions/reports';
+import { getStatusReportFailures, getStatusReports } from '../actions/reports';
 
 enum ApiStatus {
   Healthy = 'Healthy',
@@ -117,39 +115,31 @@ export class ReportPage implements OnInit {
 
     // fetch report metadata for labeling, then fetch report data
     this.fetchMetadata()
-      .then(() => this.updateGraph(this));
+      .then(() => this.update(this));
 
     // fire off update on load, then refresh every 25 seconds
-    setInterval((ref) => this.updateGraph(ref), 25 * 1000, this);
+    setInterval((ref) => this.update(ref), 25 * 1000, this);
   }
 
   async fetchMetadata(): Promise<void> {
-    // const metadataResponse = await axios.get<StatusReportMetadata>(`${environment.apiHost}/report_metadata/${this.key}.json`);
-    // this.metadata = metadataResponse.data;
     this.metadata = await getReportMetadata(this.key);
     const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
     this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
 
-    // const latestFailuresResponse = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures/${this.key}.json?latest_failures=10`);
-    // this.latestFailures = latestFailuresResponse.data;
-    this.latestFailures = await getStatusReports(this.key, 10);
+    this.latestFailures = await getStatusReportFailures(this.key, 10);
   }
 
-  async updateGraph(ref: ReportPage): Promise<void> {
+  async update(ref: ReportPage): Promise<void> {
     try {
-      const latestFailuresResponse = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures/${this.key}.json?latest_failures=10`);
-      this.latestFailures = latestFailuresResponse.data;
-
-      const response = await axios.get<Array<StatusReport>>(`${environment.apiHost}/reports/${this.key}.json`);
-
-      const latencyValues = response.data.map(sr => {
+      const statusReports: StatusReport[] = await getStatusReports(this.key);
+      const latencyValues = statusReports.map(sr => {
         return { x: sr.startDate, y: sr.latencyMs };
       });
       ref.lineChartLatency.data.datasets[0].data = latencyValues;
       ref.lineChartLatency.data.datasets[0].label = `${this.reportName} latency (ms)`;
       ref.lineChartLatency.update();
 
-      const okValues = response.data.map(sr => {
+      const okValues = statusReports.map(sr => {
         const value = sr.ok ? 1 : 0;
         return { x: sr.startDate, y: value };
       });
@@ -157,7 +147,8 @@ export class ReportPage implements OnInit {
       ref.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
       ref.lineChartOk.update();
 
-      this.healthiness = this.determineHealth(response.data.map(sr => sr.ok));
+      this.latestFailures = await getStatusReportFailures(this.key, 10);
+      this.healthiness = this.determineHealth(statusReports.map(sr => sr.ok));
     } catch (error) {
       console.error(error);
     }

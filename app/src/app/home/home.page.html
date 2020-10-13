@@ -142,7 +142,7 @@
     <br />
 
     <ion-grid>
-      <ion-row>
+      <ion-row *ngIf="latestFailures.length > 0">
         <ion-col class="ion-text-center">
           <h2>Recent API Failures</h2>
 
