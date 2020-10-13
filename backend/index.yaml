@@ -5,8 +5,8 @@ indexes:
       - name: startDate
   - kind: StatusReportMinute
     properties:
-      - name: name
       - name: ok
+      - name: name
       - name: startDate
         direction: desc
   - kind: StatusReportMinute

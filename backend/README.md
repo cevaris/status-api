@@ -19,14 +19,17 @@ Web
 
 - https://status-api-dev.wl.r.appspot.com
 - https://status-api-dev.wl.r.appspot.com/reports/aws:us-east-2:s3:upload.json
+- https://runner-dot-status-api-dev.wl.r.appspot.com/monitor/last_written.json
 
 
 API
 
-- http://localhost:8080/reports/aws:us-east-2:s3:upload.json
-- http://localhost:8080/report_metadata.json
 - http://localhost:8080/report_metadata.json?q=s3
 - http://localhost:8080/report_metadata/aws:us-east-2:s3:upload.json
+- http://localhost:8080/reports/aws:us-east-2:s3:upload.json
+- http://localhost:8080/reports/aws:us-east-2:s3:upload.json?latest_failures=10
+- http://localhost:8080/reports/failures.json
+- http://localhost:8080/stream/reports/failures.json?start_date=2020-10-13T13:59:50.762Z
 
 ---
 ## Status Runner

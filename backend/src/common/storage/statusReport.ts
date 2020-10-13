@@ -11,11 +11,6 @@ export interface StatusReport {
     startDate: Date
     endDate: Date
     isDebug: boolean
-
-
-    // tmp
-    endDateMs?: number
-    startDateMs?: number
 }
 
 export function getMinuteEpoch(date: Date): number {
@@ -67,6 +62,7 @@ class StatusReportDatastore {
         if (results.length == 1) {
             return results[0];
         } else {
+            // this should never happen
             throw new Error('Failed to find latest record');
         }
     }
@@ -85,7 +81,7 @@ class StatusReportDatastore {
             .filter('name', '=', name)
             .filter('startDate', '>', fromStartDate)
             .filter('startDate', '<=', toStartDate);
-        const [results, errors] = await this.datastore.runQuery(query);
+        const [results, _] = await this.datastore.runQuery(query);
         return results;
     }
 
@@ -97,7 +93,7 @@ class StatusReportDatastore {
             .order('startDate', { descending: true })
             .limit(n);
 
-        const [results, errors] = await this.datastore.runQuery(query);
+        const [results, _] = await this.datastore.runQuery(query);
         return results;
     }
 
@@ -105,11 +101,11 @@ class StatusReportDatastore {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
-            .filter('isDebug', '=', this.includeDebugReports)
+            .filter('isDebug', '=', false)
             .order('startDate', { descending: true })
             .limit(n);
 
-        const [results, errors] = await this.datastore.runQuery(query);
+        const [results, _] = await this.datastore.runQuery(query);
         return results;
     }
 
@@ -134,8 +130,7 @@ class StatusReportDatastore {
             .order('startDate', { descending: false })
             .limit(limit);
 
-        const [results, errors] = await this.datastore.runQuery(query);
-        // console.error(errors);
+        const [results, _] = await this.datastore.runQuery(query);
         return results;
     }
 

@@ -34,11 +34,11 @@ async function main() {
             }
 
             // kill older unused fields
-            if (sr.startDateMs) {
-                sr.startDateMs = undefined;
+            if ((sr as any).startDateMs) {
+                (sr as any).startDateMs = undefined;
             }
-            if (sr.endDateMs) {
-                sr.endDateMs = undefined;
+            if ((sr as any).endDateMs) {
+                (sr as any).endDateMs = undefined;
             }
 
             return sr;

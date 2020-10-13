@@ -27,7 +27,6 @@ router.get('/monitor/last_written.json', async function (req: express.Request, r
                 .status(500)
                 .send(renderJson(lastWritten));
         }
-
     } catch (error) {
         console.error(error);
         res.sendStatus(500);

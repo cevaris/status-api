@@ -95,37 +95,45 @@ interface ReportsNameRequest extends express.Request {
     params: {
         name: string;
     }
-    query: { latest_failures?: string };
 }
 
 router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
-
     try {
         let entities: Array<StatusReport> = [];
-        if (req.query.latest_failures) {
-            let latestFailures = parseInt(req.query.latest_failures);
-            if (isNaN(latestFailures)) {
-                return res.status(401)
-                    .json({ ok: false, message: `latest_failures value '${req.query.latest_failures}' is not a number` })
-            }
-            if (Number.isInteger(latestFailures) && latestFailures > MaxLatestFailures) {
-                return res.status(401)
-                    .json({ ok: false, message: `latest_failures value '${latestFailures}' cannot be larger than ${MaxLatestFailures}` })
-            }
-
-            entities = await StatusReportStore.getLastErrorsForReport(req.params.name, latestFailures)
-        } else {
-            entities = await StatusReportStore.getLastHour(req.params.name);
-            entities.sort((a, b) => (a.startDate > b.startDate) ? 1 : -1);
-        }
+        entities = await StatusReportStore.getLastHour(req.params.name);
 
         res.type('json')
-            .send(entities);
+            .send(renderJson(entities));
     } catch (error) {
         return res.status(503)
             .json({ ok: false, message: error.message });
     }
+});
 
+router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
+    let entities: Array<StatusReport> = [];
+    if (req.query.latest_failures) {
+        let latestFailures = parseInt(req.query.latest_failures as string);
+        if (isNaN(latestFailures)) {
+            return res.status(400)
+                .json({ ok: false, message: `latest_failures value '${req.query.latest_failures}' is not a number` })
+        }
+        if (latestFailures > MaxLatestFailures) {
+            return res.status(400)
+                .json({ ok: false, message: `latest_failures value '${latestFailures}' cannot be larger than ${MaxLatestFailures}` })
+        }
+
+        try {
+            entities = await StatusReportStore.getLastErrorsForReport(req.params.name, latestFailures)
+            res.type('json').send(entities);
+        } catch (error) {
+            res.status(503)
+                .json({ ok: false, message: error.message });
+        }
+    } else {
+        return res.status(400)
+            .json({ ok: false, message: 'latest_failures parameter is required' });
+    }
 });
 
 module.exports = router;
