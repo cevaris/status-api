@@ -64,7 +64,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                res.write(renderJson({ ok: true, report: entity }) + '\n');
+                res.write(renderJson({ report: entity }) + '\n');
 
                 if (!isClientConnectionOpen) {
                     res.status(200).end();
