@@ -44,7 +44,7 @@ export class ReportPage implements OnInit {
           type: 'time',
           time: {
             displayFormats: {
-              minute: 'h:mm a'
+              minute: 'HH:mm'
             }
           }
         }]
