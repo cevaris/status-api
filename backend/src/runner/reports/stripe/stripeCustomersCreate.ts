@@ -4,10 +4,13 @@ import { clients } from "../../clients";
 import { Report } from "../report";
 
 interface Response {
+    id: string
     name: string | null
 }
 
 class StripeCustomerCreateReport extends Report {
+    customerId: string = ''
+
     constructor() {
         super(StripApi.Service, ApiRegion.Global, StripApi.Api.Customers, StripApi.Version, 'Create')
     }
@@ -22,10 +25,13 @@ class StripeCustomerCreateReport extends Report {
         const customer: Response = await clients.stripe.customers.create({
             name: name,
         });
+        this.customerId = customer.id;
         return customer.name === name;
     }
-}
 
-const versions = Object.values(StripApi.Version);
+    async cleanup(): Promise<void> {
+        await clients.stripe.customers.del(this.customerId);
+    }
+}
 
 export const StripeCustomerCreateReportRunners = [new StripeCustomerCreateReport()];
