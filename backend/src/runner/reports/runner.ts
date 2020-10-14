@@ -33,12 +33,7 @@ export async function funcRunner(reportRunner: Report): Promise<StatusReport> {
         stopwatch.stop();
 
         let message = error.toString();
-
-        // append time to error message
-        if (error instanceof TimeoutError) {
-            message = `${message}, ${stopwatch.results().latencyMs}ms`;
-        }
-
+        
         // avoid writing [object Object] objects
         if (message === '[object Object]') {
             message = JSON.stringify(error);
