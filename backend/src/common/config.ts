@@ -20,8 +20,8 @@ class YamlConfig {
     PAGERDUTY_SERVICE: string
     CLOUDFLARE_API_TOKEN: string
     GITHUB_PERSONAL_ACCESS_TOKEN: string
-    
-    
+
+
     STRIPE_SECRET_KEY: string;
     STRIPE_WEBHOOK_SECRET: string
 
@@ -57,7 +57,7 @@ class YamlConfig {
         this.PAGERDUTY_SERVICE = this.required(env, 'PAGERDUTY_SERVICE');
         this.CLOUDFLARE_API_TOKEN = this.required(env, 'CLOUDFLARE_API_TOKEN');
         this.GITHUB_PERSONAL_ACCESS_TOKEN = this.required(env, 'GITHUB_PERSONAL_ACCESS_TOKEN');
-        
+
         this.STRIPE_SECRET_KEY = this.required(env, 'STRIPE_SECRET_KEY');
         this.STRIPE_WEBHOOK_SECRET = this.required(env, 'STRIPE_WEBHOOK_SECRET');
     }
