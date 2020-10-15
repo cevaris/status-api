@@ -32,7 +32,6 @@ class YamlConfig {
         const yamlObj = yaml.load(yamlContents);
 
         if (!yamlObj || !yamlObj.env_variables) {
-            const a: object = yamlObj.env_variables
             throw Error(`could not parse ${filename}.`)
         }
 
