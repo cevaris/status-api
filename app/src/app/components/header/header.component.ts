@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 export class HeaderComponent implements OnInit {
   @Input() displayBackArrow: boolean;
 
-  private isDesktop = new BehaviorSubject<boolean>(false);
+  isDesktop = new BehaviorSubject<boolean>(false);
 
   constructor(private platform: Platform) {
   }
