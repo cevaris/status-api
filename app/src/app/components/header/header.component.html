@@ -8,7 +8,18 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="!(isDesktop | async)"></ion-menu-button>
+      <div *ngIf="isDesktop | async" class="navbar" class="ion-text-right">
+        <ion-button fill="clear" routerLink="/">
+          Pricing
+        </ion-button>
+        <ion-button fill="clear" routerLink="/">
+          Docs
+        </ion-button>
+        <ion-button fill="clear" routerLink="/">
+          FAQ
+        </ion-button>
+      </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
