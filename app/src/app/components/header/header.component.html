@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button mode="md" *ngIf="displayBackArrow" defaultHref="search">
+      <ion-back-button *ngIf="displayBackArrow" defaultHref="search">
       </ion-back-button>
       <ion-button fill="clear" routerLink="/">
         StatusAPI
@@ -9,7 +9,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-menu-button *ngIf="!(isDesktop | async)"></ion-menu-button>
-      <div *ngIf="isDesktop | async" class="navbar" class="ion-text-right">
+      <div *ngIf="isDesktop | async" class="ion-text-right">
         <ion-button fill="clear" routerLink="/">
           Pricing
         </ion-button>
@@ -23,74 +23,3 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-row>
-
-      <ion-col *ngIf="displayBackArrow">
-        <ion-buttons>
-          <ion-back-button mode="md" *ngIf="displayBackArrow"
-            defaultHref="search">
-          </ion-back-button>
-        </ion-buttons>
-      </ion-col>
-
-      <ion-col size="1">
-        <ion-button fill="clear" routerLink="/">
-          StatusAPI
-        </ion-button>
-      </ion-col>
-
-      <ion-col>
-        <div class="navbar" class="ion-text-right">
-          <ion-button fill="clear" routerLink="/">
-            Pricing
-          </ion-button>
-          <ion-button fill="clear" routerLink="/">
-            Docs
-          </ion-button>
-          <ion-button fill="clear" routerLink="/">
-            FAQ
-          </ion-button>
-        </div>
-      </ion-col>
-
-    </ion-row>
-  </ion-toolbar>
-</ion-header> -->
-
-
-<!-- <ion-menu side="start" menuId="first" contentId="main">
-  <ion-header>
-    <ion-buttons *ngIf="displayBackArrow">
-      <ion-back-button mode="md" defaultHref="search">
-      </ion-back-button>
-    </ion-buttons>
-    <ion-toolbar color="primary">
-      <ion-button fill="clear" routerLink="/">
-        StatusAPI
-      </ion-button>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item>
-        <ion-button fill="clear" routerLink="/">
-          Pricing
-        </ion-button>
-      </ion-item>
-      <ion-item>
-        <ion-button fill="clear" routerLink="/">
-          Docs
-        </ion-button>
-      </ion-item>
-      <ion-item>
-        <ion-button fill="clear" routerLink="/">
-          FAQ
-        </ion-button>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu> -->

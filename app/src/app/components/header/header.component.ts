@@ -1,7 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { MenuController, Platform } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { Platform } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
 
 // https://devdactic.com/horizontal-navigation-ionic-desktop/
 
@@ -14,12 +13,10 @@ export class HeaderComponent implements OnInit {
 
   private isDesktop = new BehaviorSubject<boolean>(false);
 
-  constructor(private menu: MenuController, private platform: Platform) {
+  constructor(private platform: Platform) {
   }
-  ngOnInit(): void {
-    // this.menu.enable(true, 'first');
-    // this.menu.open('first');
 
+  ngOnInit(): void {
     this.resize(this.platform.width());
   }
 
@@ -34,17 +31,5 @@ export class HeaderComponent implements OnInit {
     } else {
       this.isDesktop.next(true);
     }
-
-    console.log(this.isDesktop.value);
   }
-
-  isDesktopView(): Observable<boolean> {
-    return this.isDesktop.asObservable().pipe(distinctUntilChanged());
-  }
-
-  openFirst() {
-    // this.menu.enable(true, 'first');
-    // this.menu.open('first');
-  }
-
 }
