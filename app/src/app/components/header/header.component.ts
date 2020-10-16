@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 // https://devdactic.com/horizontal-navigation-ionic-desktop/
 
@@ -9,8 +10,16 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Input() displayBackArrow: boolean;
 
-  constructor() {
+  constructor(private menu: MenuController) {
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.menu.enable(true, 'first');
+    // this.menu.open('first');
+  }
+
+  openFirst() {
+    // this.menu.enable(true, 'first');
+    // this.menu.open('first');
+  }
 
 }

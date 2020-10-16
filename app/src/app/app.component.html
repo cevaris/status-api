@@ -1,3 +1,29 @@
 <ion-app>
+  <ion-menu side="end" contentId="main-container">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Navigate</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <ion-button fill="clear" routerLink="/">
+            Pricing
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button fill="clear" routerLink="/">
+            Docs
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button fill="clear" routerLink="/">
+            FAQ
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
   <ion-router-outlet id="main-container"></ion-router-outlet>
 </ion-app>
