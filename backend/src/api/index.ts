@@ -13,6 +13,7 @@ app.use(sessionAuth.setUserAsLocal());
 app.use(require('./routes/me'));
 app.use(require('./routes/auth'));
 app.use(require('./routes/reports'));
+app.use(require('./routes/public/streamReports'));
 app.use(require('./routes/reportMetadata'));
 
 app.get("/", (req, res) => {
