@@ -1,10 +1,6 @@
 import express from 'express';
-import toJson from 'json-stable-stringify';
+import { renderJson } from '../../common/renderer';
 import { StatusReportStore } from '../../common/storage/statusReport';
-
-export function renderJson(x: any): string {
-    return toJson(x, { space: '  ' });
-}
 
 const router = express.Router();
 

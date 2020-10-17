@@ -10,8 +10,7 @@ cors.register(app);
 
 app.use(sessionAuth.setUserAsLocal());
 
-app.use(require('./routes/auth'));
-app.use(require('./routes/me'));
+app.use(require('./routes/private/auth'));
 app.use(require('./routes/private/reportFailures'));
 app.use(require('./routes/private/reportMetadata'));
 app.use(require('./routes/private/reports'));

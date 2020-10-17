@@ -3,7 +3,8 @@ import passport from 'passport';
 import querystring from 'querystring';
 import url from 'url';
 import util from 'util';
-import { Config } from '../../common/config';
+import { Config } from '../../../common/config';
+import { renderJson } from '../../../common/renderer';
 
 
 const router = express.Router();
@@ -45,6 +46,15 @@ router.get('/logout', (req, res) => {
     logoutURL.search = searchString;
 
     res.redirect(logoutURL.toString());
+});
+
+router.get('/me.json', (req: any, res) => {
+    if (req.user) {
+        res.type('json')
+            .send(renderJson(req.user));
+    } else {
+        res.status(401).json({ ok: false, message: 'user not logged in' });
+    }
 });
 
 module.exports = router;
