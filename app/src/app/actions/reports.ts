@@ -3,12 +3,12 @@ import { environment } from 'src/environments/environment';
 import { StatusReport } from '..';
 
 export async function getAllStatusReportFailures(): Promise<StatusReport[]> {
-    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures.json`);
+    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/private/reports/failures.json`);
     return results.data;
 }
 
 export async function getStatusReportFailures(key: string, limit: number): Promise<StatusReport[]> {
-    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures/${key}.json?limit=${limit}`);
+    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/private/reports/failures/${key}.json?limit=${limit}`);
     return results.data;
 }
 

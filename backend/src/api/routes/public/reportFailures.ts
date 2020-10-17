@@ -3,19 +3,21 @@ import { StatusReport, StatusReportStore } from '../../../common/storage/statusR
 
 const router = express.Router();
 const PublicMaxLatestFailures = 10;
+const reportEpoch = new Date(Date.parse('2020-10-01T00:00:00.000Z'));
 
 interface ReportsNameRequest extends express.Request {
     params: {
-        name: string;
+        name: string;      // string
     }
     query: {
-        limit: string
+        limit: string      // number
+        start_date: string // date
+        asc: string        // boolean
     }
 }
 
 /**
  * PUBLIC API
- * PRIVATE API
  */
 router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
@@ -27,6 +29,16 @@ router.get('/reports/failures/:name.json', async function (req: ReportsNameReque
     if (limit > PublicMaxLatestFailures) {
         return res.status(400)
             .json({ ok: false, message: `limit value '${limit}' cannot be larger than ${PublicMaxLatestFailures}` })
+    }
+
+    let startDate: Date;
+    if (req.query.start_date) {
+        startDate = new Date(Date.parse(req.query.start_date));
+
+        if (startDate.getTime() < reportEpoch.getTime()) {
+            return res.status(400)
+                .json({ ok: false, message: `start_date value cannot be before ${reportEpoch}` });
+        }
     }
 
     try {

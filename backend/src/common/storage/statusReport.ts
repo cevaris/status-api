@@ -1,5 +1,6 @@
 import { Datastore, Query } from '@google-cloud/datastore';
 import { RunQueryInfo } from '@google-cloud/datastore/build/src/query';
+import { access } from 'fs';
 import { Transform } from 'stream';
 
 
