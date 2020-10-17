@@ -44,12 +44,11 @@ Example StatusAPI report streaming response [see report json above to learn abou
     "endDate": "2020-10-17T05:04:15.116Z",
     "ok": false,
     "name": "cloudflare:global:user:read"
-    }
+  }
 }
 ```
 
-###
-Example Clients
+### Example Clients
 
 **Python 3**
 ```
@@ -75,7 +74,7 @@ import https from 'https';
 const StreamURL = 'https://api.status-api.com/stream/reports/failures.json';
 
 https.get(StreamURL, function (res) {
-    res.on('data', function (chunk: Buffer) {
+    res.on('data', function (chunk) {
         process.stdout.write(chunk.toString());
     });
     res.on('end', function () {
