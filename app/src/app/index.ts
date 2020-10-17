@@ -15,3 +15,8 @@ export interface StatusReportMetadata {
     version: string
     api: string
 }
+
+export interface AppRoute {
+    name: string
+    route: string
+}

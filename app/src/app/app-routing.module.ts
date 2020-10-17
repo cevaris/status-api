@@ -19,6 +19,14 @@ const routes: Routes = [
     path: 'search',
     loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
   },
+  {
+    path: 'faq',
+    loadChildren: () => import('./faq/faq.module').then( m => m.FaqPageModule)
+  },
+  {
+    path: 'docs',
+    loadChildren: () => import('./docs/docs.module').then( m => m.DocsPageModule)
+  },
 ];
 
 @NgModule({

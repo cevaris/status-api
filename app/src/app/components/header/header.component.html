@@ -10,15 +10,13 @@
     <ion-buttons slot="end">
       <ion-menu-button *ngIf="!(isDesktop | async)"></ion-menu-button>
       <div *ngIf="isDesktop | async" class="ion-text-right">
-        <ion-button fill="clear" routerLink="/">
-          Pricing
-        </ion-button>
-        <ion-button fill="clear" routerLink="/">
-          Docs
-        </ion-button>
-        <ion-button fill="clear" routerLink="/">
-          FAQ
-        </ion-button>
+
+        <span *ngFor="let route of routes">
+          <ion-button fill="clear" routerLink="{{route.route}}">
+            {{route.name}}
+          </ion-button>
+        </span>
+
       </div>
     </ion-buttons>
   </ion-toolbar>

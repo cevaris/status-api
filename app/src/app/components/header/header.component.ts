@@ -1,6 +1,8 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { AppRoute } from 'src/app';
+import { appRoutes } from './routes';
 
 // https://devdactic.com/horizontal-navigation-ionic-desktop/
 
@@ -10,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
   @Input() displayBackArrow: boolean;
+  routes: Array<AppRoute> = appRoutes
 
   isDesktop = new BehaviorSubject<boolean>(false);
 
