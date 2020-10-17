@@ -15,7 +15,7 @@ describe('errors', () => {
 
     it('errors:global:debug:timeout', async () => {
         const key = 'errors:global:debug:timeout';
-        execute(key, /Error: Report runner timed-out, \d+ms/);
+        execute(key, /Error: Report runner timed-out/);
     }, 11000);
 });
 
