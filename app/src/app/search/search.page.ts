@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSearchbar } from '@ionic/angular';
-import axios from 'axios';
-import { environment } from 'src/environments/environment';
-import { StatusReportMetadata } from '..';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IonSearchbar } from '@ionic/angular';
+import { StatusReportMetadata } from '..';
+import { queryReportMetadata } from '../actions/reportMetadata';
 
 interface InputTextEvent {
   srcElement: {
@@ -49,19 +48,11 @@ export class SearchPage implements OnInit {
     await this.filter($event.srcElement.value);
   }
 
-  async search(q?: string): Promise<Array<StatusReportMetadata>> {
-    const promise = q === undefined ?
-      axios.get<Array<StatusReportMetadata>>(`${environment.apiHost}/report_metadata.json`) :
-      axios.get<Array<StatusReportMetadata>>(`${environment.apiHost}/report_metadata.json?q=${q}`);
-    const response = await promise;
-    return response.data;
-  }
-
   async filter(q?: string): Promise<void> {
     // update url with new query so back button works
     this.router.navigate([], { queryParams: { q: q } });
 
-    const results = await this.search(q);
+    const results = await queryReportMetadata(q);
     results.sort((a, b) => (a.key > b.key) ? 1 : -1);
     this.reportMetadata = results;
   }

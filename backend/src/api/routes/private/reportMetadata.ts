@@ -1,13 +1,13 @@
 import express from 'express';
-import { StatusReportMetadataCache } from '../cache/statusReportMetadataCache';
-import { renderJson } from '../../common/renderer';
-import { StatusReportMetadata, StatusReportMetadataDB } from '../../common/storage/statusReportMetadata';
-import { StatusApiReportQueryDB } from '../storage/searchQueries';
+import { StatusReportMetadataCache } from '../../cache/statusReportMetadataCache';
+import { renderJson } from '../../../common/renderer';
+import { StatusReportMetadata, StatusReportMetadataDB } from '../../../common/storage/statusReportMetadata';
+import { StatusApiReportQueryDB } from '../../storage/searchQueries';
 
 
 const router = express.Router();
 
-router.get('/report_metadata/:key.json', async function (req: express.Request, res: express.Response) {
+router.get('/private/report_metadata/:key.json', async function (req: express.Request, res: express.Response) {
     try {
         const statusReportMetadata = await StatusReportMetadataDB.get(req.params.key);
         res.type('json')
@@ -24,7 +24,7 @@ interface ReportMetadataQueryRequest extends express.Request {
     }
 }
 
-router.get('/report_metadata.json', async function (req: ReportMetadataQueryRequest, res: express.Response) {
+router.get('/private/report_metadata.json', async function (req: ReportMetadataQueryRequest, res: express.Response) {
     const maxResults = 30;
     // async + anonymously log query for insight into which API to onboard next
     if (req.query.q) {

@@ -1,6 +1,6 @@
 import express from 'express';
-import { renderJson } from '../../common/renderer';
-import { StatusReport, StatusReportStore } from '../../common/storage/statusReport';
+import { renderJson } from '../../../common/renderer';
+import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ interface ReportsNameRequest extends express.Request {
     }
 }
 
-router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
+router.get('/private/reports/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     try {
         let entities: Array<StatusReport> = [];
         entities = await StatusReportStore.getLastHour(req.params.name);

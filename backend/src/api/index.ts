@@ -12,12 +12,11 @@ app.use(sessionAuth.setUserAsLocal());
 
 app.use(require('./routes/auth'));
 app.use(require('./routes/me'));
+app.use(require('./routes/private/reportFailures'));
+app.use(require('./routes/private/reportMetadata'));
+app.use(require('./routes/private/reports'));
 app.use(require('./routes/public/reportFailures'));
 app.use(require('./routes/public/streamReports'));
-app.use(require('./routes/private/reportFailures'));
-app.use(require('./routes/reportFailures'));
-app.use(require('./routes/reportMetadata'));
-app.use(require('./routes/reports'));
 app.use(require('./routes/root'));
 
 const PORT = Config.port(8080);

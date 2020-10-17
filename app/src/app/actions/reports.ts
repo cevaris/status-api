@@ -13,6 +13,6 @@ export async function getStatusReportFailures(key: string, limit: number): Promi
 }
 
 export async function getStatusReports(key: string): Promise<StatusReport[]> {
-    const results = await axios.get<Array<StatusReport>>(`${environment.apiHost}/reports/${key}.json`);
+    const results = await axios.get<Array<StatusReport>>(`${environment.apiHost}/private/reports/${key}.json`);
     return results.data;
 }
