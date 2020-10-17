@@ -85,13 +85,13 @@ class StatusReportDatastore {
         return results;
     }
 
-    async getLastErrorsForReport(name: string, n: number): Promise<Array<StatusReport>> {
+    async getLastErrorsForReport(name: string, limit: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
             .filter('name', '=', name)
             .order('startDate', { descending: true })
-            .limit(n);
+            .limit(limit);
 
         const [results, _] = await this.datastore.runQuery(query);
         return results;
@@ -134,6 +134,9 @@ class StatusReportDatastore {
         return results;
     }
 
+    /**
+     * Used for backfill.
+     */
     async scan(limit: number, cursor: string | undefined): Promise<[Array<StatusReport>, RunQueryInfo]> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)

@@ -2,35 +2,39 @@ import express from 'express';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 
 const router = express.Router();
+const PublicMaxLatestFailures = 10;
 
 interface ReportsNameRequest extends express.Request {
+    params: {
+        name: string;
+    }
     query: {
-        start_date: string;
+        limit: string
     }
 }
 
 /**
  * PUBLIC API
+ * PRIVATE API
  */
 router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
-    if (req.query.start_date) {
-        let latestFailures = parseInt(req.query.start_date as string);
-        if (isNaN(latestFailures)) {
-            return res.status(400)
-                .json({ ok: false, message: `start_date value '${req.query.start_date}' is not a number` })
-        }
-
-        try {
-            entities = await StatusReportStore.getLastErrorsForReport(req.params.name, latestFailures)
-            res.type('json').send(entities);
-        } catch (error) {
-            res.status(503)
-                .json({ ok: false, message: error.message });
-        }
-    } else {
+    let limit = parseInt(req.query.limit) || PublicMaxLatestFailures;
+    if (isNaN(limit)) {
         return res.status(400)
-            .json({ ok: false, message: 'start_date parameter is required' });
+            .json({ ok: false, message: `limit value '${req.query.limit}' is not a number` })
+    }
+    if (limit > PublicMaxLatestFailures) {
+        return res.status(400)
+            .json({ ok: false, message: `limit value '${limit}' cannot be larger than ${PublicMaxLatestFailures}` })
+    }
+
+    try {
+        entities = await StatusReportStore.getLastErrorsForReport(req.params.name, limit)
+        res.type('json').send(entities);
+    } catch (error) {
+        res.status(503)
+            .json({ ok: false, message: error.message });
     }
 });
 

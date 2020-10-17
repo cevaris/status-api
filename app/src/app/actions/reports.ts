@@ -8,7 +8,7 @@ export async function getAllStatusReportFailures(): Promise<StatusReport[]> {
 }
 
 export async function getStatusReportFailures(key: string, limit: number): Promise<StatusReport[]> {
-    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures/${key}.json?latest_failures=${limit}`);
+    const results = await axios.get<StatusReport[]>(`${environment.apiHost}/reports/failures/${key}.json?limit=${limit}`);
     return results.data;
 }
 
