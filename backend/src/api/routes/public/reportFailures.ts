@@ -1,9 +1,11 @@
 import express from 'express';
+import { isValidDate } from '../../../common/date';
+import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 
 const router = express.Router();
-const PublicMaxLatestFailures = 10;
-const reportEpoch = new Date(Date.parse('2020-10-01T00:00:00.000Z'));
+const PublicMaxLatestFailures = 60;
+const reportEpoch = new Date(Date.parse('2020-09-01T00:00:00.000Z'));
 
 interface ReportsNameRequest extends express.Request {
     params: {
@@ -12,7 +14,6 @@ interface ReportsNameRequest extends express.Request {
     query: {
         limit: string      // number
         start_date: string // date
-        asc: string        // boolean
     }
 }
 
@@ -21,20 +22,27 @@ interface ReportsNameRequest extends express.Request {
  */
 router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
-    let limit = parseInt(req.query.limit) || PublicMaxLatestFailures;
-    if (isNaN(limit)) {
-        return res.status(400)
-            .json({ ok: false, message: `limit value '${req.query.limit}' is not a number` })
-    }
-    if (limit > PublicMaxLatestFailures) {
-        return res.status(400)
-            .json({ ok: false, message: `limit value '${limit}' cannot be larger than ${PublicMaxLatestFailures}` })
+
+    let limit = PublicMaxLatestFailures;
+    if (req.query.limit) {
+        limit = parseInt(req.query.limit);
+        if (isNaN(limit)) {
+            return res.status(400)
+                .json({ ok: false, message: `limit value '${req.query.limit}' is not a number` })
+        }
+        if (limit > PublicMaxLatestFailures) {
+            return res.status(400)
+                .json({ ok: false, message: `limit value '${limit}' cannot be larger than ${PublicMaxLatestFailures}` })
+        }
     }
 
-    let startDate: Date;
+    let startDate = undefined;
     if (req.query.start_date) {
         startDate = new Date(Date.parse(req.query.start_date));
-
+        if (!isValidDate(startDate)) {
+            return res.status(400)
+                .json({ ok: false, message: `start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.` });
+        }
         if (startDate.getTime() < reportEpoch.getTime()) {
             return res.status(400)
                 .json({ ok: false, message: `start_date value cannot be before ${reportEpoch}` });
@@ -42,8 +50,8 @@ router.get('/reports/failures/:name.json', async function (req: ReportsNameReque
     }
 
     try {
-        entities = await StatusReportStore.getLastErrorsForReport(req.params.name, limit)
-        res.type('json').send(entities);
+        entities = await StatusReportStore.getErrorsForReport(req.params.name, limit, startDate);
+        res.type('json').send(renderJson({ ok: true, reports: entities }));
     } catch (error) {
         res.status(503)
             .json({ ok: false, message: error.message });

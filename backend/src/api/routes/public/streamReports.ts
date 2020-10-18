@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuid4 } from 'uuid';
+import { isValidDate } from '../../../common/date';
 import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 
@@ -22,6 +23,11 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
     if (req.query.start_date) {
         const now = new Date();
         const queryStartDate = new Date(Date.parse(req.query.start_date));
+
+        if (!isValidDate(queryStartDate)) {
+            return res.status(400)
+                .json({ ok: false, message: `start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.` });
+        }
 
         const oldestStartDate = 1000 * 60 * 60 * 12;
         if (now < queryStartDate) {
@@ -53,7 +59,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                res.write(renderJson({ report: entity }) + '\n');
+                res.write(renderJson({ ok: true, report: entity }) + '\n');
 
                 if (!isClientConnectionOpen) {
                     res.status(200).end();

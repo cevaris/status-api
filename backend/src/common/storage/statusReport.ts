@@ -1,6 +1,7 @@
 import { Datastore, Query } from '@google-cloud/datastore';
 import { RunQueryInfo } from '@google-cloud/datastore/build/src/query';
 import { access } from 'fs';
+import { start } from 'repl';
 import { Transform } from 'stream';
 
 
@@ -36,7 +37,7 @@ class StatusReportDatastore {
     /**
      * Exclude isDebug=true reports if in production.
      */
-    private includeDebugReports = process.env.NODE_ENV !== "production";
+    private includeDebug = process.env.NODE_ENV !== "production";
 
     constructor() {
         this.datastore = new Datastore();
@@ -98,6 +99,22 @@ class StatusReportDatastore {
         return results;
     }
 
+    async getErrorsForReport(name: string, limit: number, startDate?: Date): Promise<Array<StatusReport>> {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('ok', '=', false)
+            .filter('name', '=', name)
+            .order('startDate', { descending: false })
+            .limit(limit);
+
+        if (startDate) {
+            query.filter('startDate', '>', startDate);
+        }
+
+        const [results, _] = await this.datastore.runQuery(query);
+        return results;
+    }
+
     async getLastErrorsAll(n: number): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
@@ -114,7 +131,7 @@ class StatusReportDatastore {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('ok', '=', false)
-            .filter('isDebug', '=', this.includeDebugReports)
+            .filter('isDebug', '=', this.includeDebug)
             .filter('startDate', '>', fromStartDate)
             .order('startDate', { descending: true });
 
