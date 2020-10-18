@@ -3,6 +3,7 @@ import { v4 as uuid4 } from 'uuid';
 import { isValidDate } from '../../../common/date';
 import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
+import { Presenter } from '../../presenter';
 
 interface StreamReportFailuresRequest extends express.Request {
     query: { start_date?: string };
@@ -26,15 +27,18 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
 
         if (!isValidDate(queryStartDate)) {
             return res.status(400)
-                .json({ ok: false, message: `start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.` });
+                .json(Presenter.badRequest(`start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.`));
+        }
+
+        if (now < queryStartDate) {
+            return res.status(400)
+                .json(Presenter.badRequest(`cannot use start_date value from the future, ${queryStartDate}`));
         }
 
         const oldestStartDate = 1000 * 60 * 60 * 12;
-        if (now < queryStartDate) {
-            return res.status(400).json({ ok: false, message: `cannot use start_date value from the future, ${queryStartDate}` });
-        }
         if ((now.getTime() - queryStartDate.getTime()) > oldestStartDate) {
-            return res.status(400).json({ ok: false, message: `cannot use start_date value older than ${oldestStartDate / (1000 * 60 * 60)} hours from now` });
+            return res.status(400)
+                .json(Presenter.badRequest(`cannot use start_date value older than ${oldestStartDate / (1000 * 60 * 60)} hours from now`));
         }
 
         // valid start date
@@ -53,13 +57,13 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
         stream
             .on('error', (error) => {
                 console.log(connection, 'end');
-                res.status(503).json({ ok: false, message: error.message });
+                res.status(503).json(Presenter.serverUnavailable(error));
                 res.end();
             })
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                res.write(renderJson({ ok: true, report: entity }) + '\n');
+                res.write(renderJson(Presenter.statusReports([entity])) + '\n');
 
                 if (!isClientConnectionOpen) {
                     res.status(200).end();

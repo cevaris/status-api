@@ -1,7 +1,5 @@
 import { Datastore, Query } from '@google-cloud/datastore';
 import { RunQueryInfo } from '@google-cloud/datastore/build/src/query';
-import { access } from 'fs';
-import { start } from 'repl';
 import { Transform } from 'stream';
 
 
@@ -139,7 +137,7 @@ class StatusReportDatastore {
             .filter('ok', '=', false)
             .filter('isDebug', '=', this.includeDebug)
             .filter('startDate', '>', fromStartDate)
-            .order('startDate', { descending: true });
+            .order('startDate', { descending: false });
 
         return this.datastore.runQueryStream(query);
     }
