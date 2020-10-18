@@ -13,7 +13,6 @@ export class HomePage {
   constructor() { }
 
   ngAfterViewInit(): void {
-    // fire off update on load
     this.fetch();
   }
 
