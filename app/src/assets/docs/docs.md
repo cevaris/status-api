@@ -1,28 +1,43 @@
 # StatusAPI Docs
 
-## Report JSON 
+## API JSON Schema
+
+**Report JSON Schema**
 ```
 {
-  "latencyMs": 10002,
-  "isDebug": false,
-  "message": "Error: Report runner timed-out.",
-  "startDate": "2020-10-17T05:04:05.114Z",
-  "endDate": "2020-10-17T05:04:15.116Z",
-  "ok": false,
-  "name": "cloudflare:global:user:read"
+  "failure_message": "Error: Report runner timed-out.",
+  "latency_ms": 10002,
+  "start_date": "2020-10-17T05:04:05.114Z",
+  "end_date": "2020-10-17T05:04:15.116Z",
+  "success": false,
+  "key": "cloudflare:global:user:read",
+  "type": "status_report"
 }
 ```
 
-- startDate: (ISO 8601 UTC format) date time the report started.
-- endDate: (ISO 8601 UTC format) date time the report was complete.
-- isDebug: (boolean) marks whether this report is used for development only (true) or production (false).
-- latencyMS: (number) number of milliseconds it took to execute this report; endDate - startDate.
-- name: (string) identifier of this report in the following format `service:region:api:action`.
-- ok: (boolean) whether he report successfully completed (true) or failed to complete with an error (false).
+- failure_message: (string) empty if successful, shows API error details.
+- latency_ms: (number) number of milliseconds it took to execute this report; end_date - start_date.
+- start_date: (ISO 8601 UTC format) date time the report started.
+- end_date: (ISO 8601 UTC format) date time the report was complete.
+- success: (boolean) whether he report successfully completed (true) or failed to complete with an error (false).
+- key: (string) identifier of this report in the following format `service:region:api:action`.
+- type: (string) the type of this json object.
+
+**Error JSON Schema**
+```
+{
+  "error": {
+    "code": 400,
+    "message": "start_date '2020-10-18T15:50:01.dd' is invalid. Provide a valid ISO 8601 UTC format."
+  }
+}
+```
+- code: (number) error code categorizing this error.
+- message: (string) human readable description of error.
 
 ## Streaming API 
 
-Stream latest StatusAPI report failures.
+Stream latest StatusAPI report failures; successful reports are not included.
 ```
 curl -s 'https://api.status-api.com/stream/reports/failures.json'
 ```
@@ -33,18 +48,19 @@ Note you can only replay up to 12 hours of data.
 curl -s 'https://api.status-api.com/stream/reports/failures.json?start_date=2020-10-17T21:10:40.184Z'
 ```
 
-Example StatusAPI report streaming response [see report json above to learn about the fields](/docs#report-json).
+Example Streaming StatusAPI report response [see report json above to learn about the fields](/docs#api-json-schema).
 ```
 {
-  "report": {
-    "latencyMs": 10002,
-    "isDebug": false,
-    "message": "Error: Report runner timed-out.",
-    "startDate": "2020-10-17T05:04:05.114Z",
-    "endDate": "2020-10-17T05:04:15.116Z",
-    "ok": false,
-    "name": "cloudflare:global:user:read"
-  }
+  "data": [
+    {
+      "failure_message": "Error: Report runner timed-out.",
+      "latency_ms": 10002,
+      "start_date": "2020-10-17T05:04:05.114Z",
+      "end_date": "2020-10-17T05:04:15.116Z",
+      "success": false,
+      "key": "cloudflare:global:user:read"
+    }
+  ]
 }
 ```
 
@@ -69,7 +85,7 @@ except (requests.exceptions.ConnectionError, requests.exceptions.ConnectionError
 
 **Node/Javascript**
 ```
-import https from 'https';
+const https = require('https');
 
 const StreamURL = 'https://api.status-api.com/stream/reports/failures.json';
 
@@ -85,3 +101,4 @@ https.get(StreamURL, function (res) {
 
 
 ## Historical API 
+

@@ -5,7 +5,7 @@ import { StatusReport, StatusReportStore } from '../../../common/storage/statusR
 import { Presenter } from '../../presenter';
 
 const router = express.Router();
-const PublicMaxLatestFailures = 60;
+const MaxLatestFailures = 60;
 const reportEpoch = new Date(Date.parse('2020-09-01T00:00:00.000Z'));
 
 interface ReportsNameRequest extends express.Request {
@@ -13,7 +13,6 @@ interface ReportsNameRequest extends express.Request {
         name: string;      // string
     }
     query: {
-        limit: string      // number
         start_date: string // date
     }
 }
@@ -23,19 +22,6 @@ interface ReportsNameRequest extends express.Request {
  */
 router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
-
-    let limit = PublicMaxLatestFailures;
-    if (req.query.limit) {
-        limit = parseInt(req.query.limit);
-        if (isNaN(limit)) {
-            return res.status(400)
-                .json(Presenter.badRequest(`limit value '${req.query.limit}' is not a number`));
-        }
-        if (limit > PublicMaxLatestFailures) {
-            return res.status(400)
-                .json(Presenter.badRequest(`limit value '${limit}' cannot be larger than ${PublicMaxLatestFailures}`));
-        }
-    }
 
     let startDate = undefined;
     if (req.query.start_date) {
@@ -51,7 +37,7 @@ router.get('/reports/failures/:name.json', async function (req: ReportsNameReque
     }
 
     try {
-        entities = await StatusReportStore.getErrorsForReport(req.params.name, limit, startDate);
+        entities = await StatusReportStore.getErrorsForReport(req.params.name, MaxLatestFailures, startDate);
         res.type('json')
             .send(renderJson(Presenter.statusReports(entities)));
     } catch (error) {

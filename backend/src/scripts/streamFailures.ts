@@ -17,12 +17,12 @@ http.get(program.url, function (res) {
 });
 
 
-// import https from 'https';
+// const https = require('https');
 
 // const StreamURL = 'https://api.status-api.com/stream/reports/failures.json';
 
 // https.get(StreamURL, function (res) {
-//     res.on('data', function (chunk: Buffer) {
+//     res.on('data', function (chunk) {
 //         process.stdout.write(chunk.toString());
 //     });
 //     res.on('end', function () {
