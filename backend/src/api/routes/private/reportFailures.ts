@@ -1,6 +1,7 @@
 import express from 'express';
 import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
+import { Presenter } from '../../presenter';
 
 const router = express.Router();
 
@@ -11,10 +12,11 @@ router.get('/private/reports/failures.json', async function (req: express.Reques
         const entities: Array<StatusReport> =
             await StatusReportStore.getLastErrorsAll(MaxLatestFailures);
 
-        return res.type('json').send(renderJson(entities));
+        return res.type('json')
+            .send(renderJson(Presenter.statusReports(entities)));
     } catch (error) {
         return res.status(503)
-            .json({ ok: false, message: error.message });
+            .json(Presenter.serverUnavailable(error));
     }
 });
 
@@ -33,19 +35,20 @@ router.get('/private/reports/failures/:name.json', async function (req: ReportsN
     let limit = parseInt(req.query.limit) || MaxLatestFailures;
     if (isNaN(limit)) {
         return res.status(400)
-            .json({ ok: false, message: `limit value '${req.query.limit}' is not a number` })
+            .json(Presenter.badRequest(`limit value '${req.query.limit}' is not a number`));
     }
     if (limit > MaxLatestFailures) {
         return res.status(400)
-            .json({ ok: false, message: `limit value '${limit}' cannot be larger than ${MaxLatestFailures}` })
+            .json(Presenter.badRequest(`limit value '${limit}' cannot be larger than ${MaxLatestFailures}`));
     }
 
     try {
         entities = await StatusReportStore.getLastErrorsForReport(req.params.name, limit)
-        res.type('json').send(entities);
+        res.type('json')
+            .send(renderJson(Presenter.statusReports(entities)));
     } catch (error) {
         res.status(503)
-            .json({ ok: false, message: error.message });
+            .json(Presenter.serverUnavailable(error));
     }
 });
 

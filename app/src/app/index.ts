@@ -1,8 +1,17 @@
-export interface StatusReport {
-    latencyMs: number
-    startDate: Date
+export interface ApiError {
+    code: number
     message: string
-    ok: boolean
+}
+export interface ApiEntities<T> {
+    data?: T[]
+    error?: ApiError
+}
+
+export interface ApiStatusReport {
+    success: boolean
+    start_date: Date
+    latency_ms: number
+    failure_message?: string
 }
 
 export interface StatusReportMetadata {
@@ -20,3 +29,4 @@ export interface AppRoute {
     name: string
     route: string
 }
+

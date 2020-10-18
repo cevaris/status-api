@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, ChartOptions } from "chart.js";
-import { StatusReport, StatusReportMetadata } from '..';
+import { ApiStatusReport, StatusReportMetadata } from '..';
 import { getReportMetadata } from '../actions/reportMetadata';
 import { getStatusReportFailures, getStatusReports } from '../actions/reports';
 
@@ -26,7 +26,7 @@ export class ReportPage implements OnInit {
   public lineChartOk: Chart;
   public metadata: StatusReportMetadata;
   public reportName: string;
-  public latestFailures: Array<StatusReport>;
+  public latestFailures: Array<ApiStatusReport>;
   public healthiness: ApiStatus;
 
 
@@ -131,24 +131,24 @@ export class ReportPage implements OnInit {
 
   async update(ref: ReportPage): Promise<void> {
     try {
-      const statusReports: StatusReport[] = await getStatusReports(this.key);
+      const statusReports: ApiStatusReport[] = await getStatusReports(this.key);
       const latencyValues = statusReports.map(sr => {
-        return { x: sr.startDate, y: sr.latencyMs };
+        return { x: sr.start_date, y: sr.latency_ms };
       });
       ref.lineChartLatency.data.datasets[0].data = latencyValues;
       ref.lineChartLatency.data.datasets[0].label = `${this.reportName} latency (ms)`;
       ref.lineChartLatency.update();
 
       const okValues = statusReports.map(sr => {
-        const value = sr.ok ? 1 : 0;
-        return { x: sr.startDate, y: value };
+        const value = sr.success ? 1 : 0;
+        return { x: sr.start_date, y: value };
       });
       ref.lineChartOk.data.datasets[0].data = okValues;
       ref.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
       ref.lineChartOk.update();
 
       this.latestFailures = await getStatusReportFailures(this.key, 10);
-      this.healthiness = this.determineHealth(statusReports.map(sr => sr.ok));
+      this.healthiness = this.determineHealth(statusReports.map(sr => sr.success));
     } catch (error) {
       console.error(error);
     }

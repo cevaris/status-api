@@ -150,14 +150,14 @@
               <ion-row>
                 <ion-col size-sm="3" size-xs="9">
                   <ion-datetime displayFormat="YYYY-MM-DD HH:mm UTC"
-                    readonly="true" value="{{ failure.startDate }}"
+                    readonly="true" value="{{ failure.start_date }}"
                     style="padding-top: 0px; padding-left: 0px;">
                   </ion-datetime>
                 </ion-col>
 
                 <ion-col size-sm="1" size-xs="3">
                   <ion-label>
-                    {{failure.latencyMs}}ms
+                    {{failure.latency_ms}}ms
                   </ion-label>
                 </ion-col>
 
@@ -172,7 +172,7 @@
             </ion-grid>
 
             <ion-item>
-              <ion-item>{{ failure.message }}</ion-item>
+              <ion-item>{{ failure.failure_message }}</ion-item>
             </ion-item>
           </ion-list>
         </ion-col>

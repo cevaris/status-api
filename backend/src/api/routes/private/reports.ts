@@ -1,6 +1,7 @@
 import express from 'express';
 import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
+import { Presenter } from '../../presenter';
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get('/private/reports/:name.json', async function (req: ReportsNameReques
         entities = await StatusReportStore.getLastHour(req.params.name);
 
         res.type('json')
-            .send(renderJson(entities));
+            .send(renderJson(Presenter.statusReports(entities)));
     } catch (error) {
         return res.status(503)
             .json({ ok: false, message: error.message });

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StatusReport } from '..';
+import { ApiStatusReport } from '..';
 import { getAllStatusReportFailures } from '../actions/reports';
 
 @Component({
@@ -8,7 +8,7 @@ import { getAllStatusReportFailures } from '../actions/reports';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  public latestFailures: Array<StatusReport> = [];
+  public latestFailures: Array<ApiStatusReport> = [];
 
   constructor() { }
 
