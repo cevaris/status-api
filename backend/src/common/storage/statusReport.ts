@@ -99,6 +99,21 @@ class StatusReportDatastore {
         return results;
     }
 
+    async getLastErrorsAll(n: number): Promise<Array<StatusReport>> {
+        const query: Query = this.datastore
+            .createQuery(StatusReportDatastore.kind)
+            .filter('ok', '=', false)
+            .filter('isDebug', '=', false)
+            .order('startDate', { descending: true })
+            .limit(n);
+
+        const [results, _] = await this.datastore.runQuery(query);
+        return results;
+    }
+
+    /**
+     * PUBLIC API
+     */
     async getErrorsForReport(name: string, limit: number, startDate?: Date): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
@@ -115,18 +130,9 @@ class StatusReportDatastore {
         return results;
     }
 
-    async getLastErrorsAll(n: number): Promise<Array<StatusReport>> {
-        const query: Query = this.datastore
-            .createQuery(StatusReportDatastore.kind)
-            .filter('ok', '=', false)
-            .filter('isDebug', '=', false)
-            .order('startDate', { descending: true })
-            .limit(n);
-
-        const [results, _] = await this.datastore.runQuery(query);
-        return results;
-    }
-
+    /**
+     * PUBLIC API
+     */
     streamErrors(fromStartDate: Date): Transform {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
