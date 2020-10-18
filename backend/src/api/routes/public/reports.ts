@@ -5,7 +5,7 @@ import { StatusReport, StatusReportStore } from '../../../common/storage/statusR
 import { Presenter } from '../../presenter';
 
 const router = express.Router();
-const MaxLatestFailures = 60;
+const PageSize = 60;
 const reportEpoch = new Date(Date.parse('2020-09-01T00:00:00.000Z'));
 
 interface ReportsNameRequest extends express.Request {
@@ -20,7 +20,7 @@ interface ReportsNameRequest extends express.Request {
 /**
  * PUBLIC API
  */
-router.get('/reports/failures/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
+router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
 
     let startDate = undefined;
@@ -37,7 +37,7 @@ router.get('/reports/failures/:name.json', async function (req: ReportsNameReque
     }
 
     try {
-        entities = await StatusReportStore.getErrorsForReport(req.params.name, MaxLatestFailures, startDate);
+        entities = await StatusReportStore.getReports(req.params.name, PageSize, startDate);
         res.type('json')
             .send(renderJson(Presenter.statusReports(entities)));
     } catch (error) {

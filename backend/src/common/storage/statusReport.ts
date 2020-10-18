@@ -35,7 +35,7 @@ class StatusReportDatastore {
     /**
      * Exclude isDebug=true reports if in production.
      */
-    private includeDebug = process.env.NODE_ENV !== "production";
+    private productionDataOnly = process.env.NODE_ENV === "production";
 
     constructor() {
         this.datastore = new Datastore();
@@ -112,10 +112,9 @@ class StatusReportDatastore {
     /**
      * PUBLIC API
      */
-    async getErrorsForReport(name: string, limit: number, startDate?: Date): Promise<Array<StatusReport>> {
+    async getReports(name: string, limit: number, startDate?: Date): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
-            .filter('ok', '=', false)
             .filter('name', '=', name)
             .order('startDate', { descending: false })
             .limit(limit);
@@ -131,13 +130,15 @@ class StatusReportDatastore {
     /**
      * PUBLIC API
      */
-    streamErrors(fromStartDate: Date): Transform {
+    streamReports(fromStartDate: Date): Transform {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
-            .filter('ok', '=', false)
-            .filter('isDebug', '=', this.includeDebug)
             .filter('startDate', '>', fromStartDate)
             .order('startDate', { descending: false });
+
+        if (this.productionDataOnly) {
+            query.filter('isDebug', '=', false);
+        }
 
         return this.datastore.runQueryStream(query);
     }

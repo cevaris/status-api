@@ -1,5 +1,4 @@
 import express from 'express';
-import { v4 as uuid4 } from 'uuid';
 import { isValidDate } from '../../../common/date';
 import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
@@ -14,10 +13,10 @@ const router = express.Router();
 /**
  * PUBLIC API
  */
-router.get('/stream/reports/failures.json', async function (req: StreamReportFailuresRequest, res: express.Response) {
+router.get('/reports/firehose.json', async function (req: StreamReportFailuresRequest, res: express.Response) {
     res.type('json');
 
-    const connection = uuid4();
+    const connection = `${new Date().toISOString()}-${req.clientIp}`;
     let isClientConnectionOpen = true;
     let highWaterMark: Date = new Date();
 
@@ -51,8 +50,8 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
         isClientConnectionOpen = false;
     });
 
-    function streamReportFailures() {
-        const stream = StatusReportStore.streamErrors(highWaterMark);
+    function streamReports() {
+        const stream = StatusReportStore.streamReports(highWaterMark);
 
         stream
             .on('error', (error) => {
@@ -70,15 +69,12 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
                     stream.end();
                 }
             })
-            .on('info', (info) => {
-                console.log(connection, 'info', info);
-            })
             .on('end', async () => {
                 if (isClientConnectionOpen) {
-                    console.log(connection, 'restarting stream', highWaterMark);
                     // when we reach to end of stream, sleep, then attempt to query for latest events
                     await new Promise(resolve => setTimeout(resolve, 5000));
-                    streamReportFailures();
+                    console.log(connection, 'checking for new reports', highWaterMark);
+                    streamReports();
                 } else {
                     // close the connection successfully
                     res.status(200).end();
@@ -87,7 +83,7 @@ router.get('/stream/reports/failures.json', async function (req: StreamReportFai
     }
 
     console.log(connection, 'start', highWaterMark);
-    streamReportFailures();
+    streamReports();
 });
 
 module.exports = router;
