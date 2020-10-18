@@ -13,7 +13,7 @@ const router = express.Router();
 /**
  * PUBLIC API
  */
-router.get('/reports/firehose.json', async function (req: StreamReportFailuresRequest, res: express.Response) {
+router.get('/reports/firehose.json', function (req: StreamReportFailuresRequest, res: express.Response) {
     res.type('json');
 
     const connection = `${new Date().toISOString()}-${req.clientIp}`;
@@ -46,6 +46,9 @@ router.get('/reports/firehose.json', async function (req: StreamReportFailuresRe
 
     // Listen for client closing their connection
     req.connection.addListener('close', () => {
+        isClientConnectionOpen = false;
+    });
+    req.connection.addListener('end', () => {
         console.log(connection, 'client closed connection');
         isClientConnectionOpen = false;
     });
