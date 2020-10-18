@@ -8,21 +8,21 @@ export interface ApiEntities<T> {
 }
 
 export interface ApiStatusReport {
+    key: string
     success: boolean
     start_date: Date
     latency_ms: number
     failure_message?: string
 }
 
-export interface StatusReportMetadata {
+export interface ApiStatusReportMetadata {
     key: string
-    description: string,
-    tags: Array<string>,
-    service: string,
-    action: string,
-    region: string,
+    description: string
+    service: string
+    region: string
     version: string
     api: string
+    action: string
 }
 
 export interface AppRoute {

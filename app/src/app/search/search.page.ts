@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonSearchbar } from '@ionic/angular';
-import { StatusReportMetadata } from '..';
+import { ApiStatusReportMetadata } from '..';
 import { queryReportMetadata } from '../actions/reportMetadata';
 
 interface InputTextEvent {
@@ -19,7 +19,7 @@ export class SearchPage implements OnInit {
 
   @ViewChild('searchbar', { static: false }) searchbar: IonSearchbar;
 
-  reportMetadata: Array<StatusReportMetadata>
+  reportMetadata: Array<ApiStatusReportMetadata>
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -40,7 +40,7 @@ export class SearchPage implements OnInit {
       });
   }
 
-  navigate(item: StatusReportMetadata) {
+  navigate(item: ApiStatusReportMetadata) {
     this.router.navigate([`/reports/${item.key}`]);
   }
 

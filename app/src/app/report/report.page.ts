@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, ChartOptions } from "chart.js";
-import { ApiStatusReport, StatusReportMetadata } from '..';
+import { ApiStatusReport, ApiStatusReportMetadata } from '..';
 import { getReportMetadata } from '../actions/reportMetadata';
 import { getStatusReportFailures, getStatusReports } from '../actions/reports';
 
@@ -24,7 +24,7 @@ export class ReportPage implements OnInit {
 
   public lineChartLatency: Chart;
   public lineChartOk: Chart;
-  public metadata: StatusReportMetadata;
+  public metadata: ApiStatusReportMetadata;
   public reportName: string;
   public latestFailures: Array<ApiStatusReport>;
   public healthiness: ApiStatus;
@@ -113,64 +113,65 @@ export class ReportPage implements OnInit {
       options: lineOptions
     });
 
-    // fetch report metadata for labeling, then fetch report data
-    this.fetchMetadata()
-      .then(() => this.update(this));
-
-    // fire off update on load, then refresh every 25 seconds
-    setInterval((ref) => this.update(ref), 25 * 1000, this);
+    this.fetchMetadata();
+    this.fetch();
   }
 
   async fetchMetadata(): Promise<void> {
     this.metadata = await getReportMetadata(this.key);
     const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
     this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
-
-    this.latestFailures = await getStatusReportFailures(this.key, 10);
   }
 
-  async update(ref: ReportPage): Promise<void> {
+  async fetch(): Promise<void> {
     try {
       const statusReports: ApiStatusReport[] = await getStatusReports(this.key);
-      const latencyValues = statusReports.map(sr => {
-        return { x: sr.start_date, y: sr.latency_ms };
-      });
-      ref.lineChartLatency.data.datasets[0].data = latencyValues;
-      ref.lineChartLatency.data.datasets[0].label = `${this.reportName} latency (ms)`;
-      ref.lineChartLatency.update();
-
-      const okValues = statusReports.map(sr => {
-        const value = sr.success ? 1 : 0;
-        return { x: sr.start_date, y: value };
-      });
-      ref.lineChartOk.data.datasets[0].data = okValues;
-      ref.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
-      ref.lineChartOk.update();
-
-      this.latestFailures = await getStatusReportFailures(this.key, 10);
-      this.healthiness = this.determineHealth(statusReports.map(sr => sr.success));
+      const latestFailures: ApiStatusReport[] = await getStatusReportFailures(this.key, 10);
+      this.update(statusReports, latestFailures);
     } catch (error) {
       console.error(error);
+    } finally {
+      setTimeout(() => this.fetch(), 25 * 1000);
     }
   }
 
-  determineHealth(data: Array<Boolean>): ApiStatus {
-    const N = 10;
-    // get last N minutes
-    const lastNMins = data.slice(-N);
-    const successes = lastNMins.filter(x => x === true);
-    if (successes.length === N) {
-      // all last N minutes need to be successful to be healthy
-      return ApiStatus.Healthy;
+  update(statusReports: ApiStatusReport[], latestFailures: ApiStatusReport[]): void {
+    const latencyValues = statusReports.map(sr => {
+      return { x: sr.start_date, y: sr.latency_ms };
+    });
+    this.lineChartLatency.data.datasets[0].data = latencyValues;
+    this.lineChartLatency.data.datasets[0].label = `${this.reportName} latency (ms)`;
+    this.lineChartLatency.update();
+
+    const okValues = statusReports.map(sr => {
+      const value = sr.success ? 1 : 0;
+      return { x: sr.start_date, y: value };
+    });
+    this.lineChartOk.data.datasets[0].data = okValues;
+    this.lineChartOk.data.datasets[0].label = `0 = not healthy; 1 = is healthy`;
+    this.lineChartOk.update();
+
+    this.latestFailures = latestFailures;
+    this.healthiness = determineHealth(statusReports.map(sr => sr.success));
+  }
+
+}
+
+function determineHealth(data: Array<Boolean>): ApiStatus {
+  const N = 10;
+  // get last N minutes
+  const lastNMins = data.slice(-N);
+  const successes = lastNMins.filter(x => x === true);
+  if (successes.length === N) {
+    // all last N minutes need to be successful to be healthy
+    return ApiStatus.Healthy;
+  } else {
+    if (lastNMins[lastNMins.length - 1] === false) {
+      // if last N minutes contains failures and last minute failed
+      return ApiStatus.Failing;
     } else {
-      if (lastNMins[lastNMins.length - 1] === false) {
-        // if last N minutes contains failures and last minute failed
-        return ApiStatus.Failing;
-      } else {
-        // if last N minutes contains failures and last minute succeeded
-        return ApiStatus.Recovering;
-      }
+      // if last N minutes contains failures and last minute succeeded
+      return ApiStatus.Recovering;
     }
   }
-
 }

@@ -3,6 +3,7 @@ import { StatusReportMetadataCache } from '../../cache/statusReportMetadataCache
 import { renderJson } from '../../../common/renderer';
 import { StatusReportMetadata, StatusReportMetadataDB } from '../../../common/storage/statusReportMetadata';
 import { StatusApiReportQueryDB } from '../../storage/searchQueries';
+import { Presenter } from '../../presenter';
 
 
 const router = express.Router();
@@ -11,7 +12,7 @@ router.get('/private/report_metadata/:key.json', async function (req: express.Re
     try {
         const statusReportMetadata = await StatusReportMetadataDB.get(req.params.key);
         res.type('json')
-            .send(renderJson(statusReportMetadata));
+            .send(renderJson(Presenter.statusReportMetadatas([statusReportMetadata])));
     } catch (error) {
         return res.status(401)
             .json({ ok: false, message: error.message });
@@ -25,7 +26,6 @@ interface ReportMetadataQueryRequest extends express.Request {
 }
 
 router.get('/private/report_metadata.json', async function (req: ReportMetadataQueryRequest, res: express.Response) {
-    const maxResults = 30;
     // async + anonymously log query for insight into which API to onboard next
     if (req.query.q) {
         StatusApiReportQueryDB.save(req.query.q);
@@ -35,10 +35,9 @@ router.get('/private/report_metadata.json', async function (req: ReportMetadataQ
         const query = req.query.q ?
             StatusReportMetadataCache.get(req.query.q) : StatusReportMetadataDB.all();
         const entities: Array<StatusReportMetadata> = await query;
-        entities.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
         res.type('json')
-            .send(renderJson(entities.splice(0, maxResults)));
+            .send(renderJson(Presenter.statusReportMetadatas(entities)));
     } catch (error) {
         return res.status(401)
             .json({ ok: false, message: error.message });

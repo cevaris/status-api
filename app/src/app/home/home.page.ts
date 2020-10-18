@@ -13,18 +13,18 @@ export class HomePage {
   constructor() { }
 
   ngAfterViewInit(): void {
-    // fire off update on load, then refresh every 25 seconds
-    setInterval((ref) => this.update(ref), 25 * 1000, this);
-    // kick off first run
-    this.update(this);
+    // fire off update on load
+    this.fetch();
   }
 
-  async update(ref: HomePage): Promise<void> {
+  async fetch(): Promise<void> {
     try {
       this.latestFailures = await getAllStatusReportFailures();
     } catch (error) {
       this.latestFailures = [];
       console.error(error);
+    } finally {
+      setTimeout(() => this.fetch(), 25 * 1000);
     }
   }
 }

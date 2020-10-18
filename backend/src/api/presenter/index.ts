@@ -1,5 +1,6 @@
 import { StatusReport } from "../../common/storage/statusReport";
-import { ApiEntities, ApiStatusReport } from "./api";
+import { StatusReportMetadata } from "../../common/storage/statusReportMetadata";
+import { ApiEntities, ApiStatusReport, ApiStatusReportMetadata } from "./api";
 
 
 export module Presenter {
@@ -21,6 +22,16 @@ export module Presenter {
         };
     }
 
+    export function statusReportMetadatas(xs: Array<StatusReportMetadata>): ApiEntities<ApiStatusReportMetadata> {
+        const apiStatusReports: Array<ApiStatusReportMetadata> = xs.map(x => {
+            return statusReportMetadata(x);
+        });
+
+        return {
+            data: apiStatusReports
+        };
+    }
+
     function error(status: number, error: Error): ApiEntities<null> {
         const apiError = {
             code: status,
@@ -35,12 +46,25 @@ export module Presenter {
     function statusReport(report: StatusReport): ApiStatusReport {
         return {
             type: 'status_report',
-            name: report.name,
+            key: report.name,
             success: report.ok,
             latency_ms: report.latencyMs,
             failure_message: report.message,
             start_date: report.startDate,
             end_date: report.endDate,
+        };
+    }
+
+    function statusReportMetadata(x: StatusReportMetadata): ApiStatusReportMetadata {
+        return {
+            type: 'status_report_metadata',
+            key: x.key,
+            description: x.description,
+            service: x.service,
+            region: x.region,
+            version: x.version,
+            api: x.api,
+            action: x.action
         };
     }
 }
