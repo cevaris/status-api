@@ -19,7 +19,7 @@
 
         console.log(window.location.href, 'query', queryParams);
 
-        const socket = io("http://localhost:8080", { path: '/reports/firehose', query: queryParams });
+        const socket = io("http://localhost:8080/reports", { path: '/firehose', query: queryParams });
         socket.on("status_report", function (data) {
             console.log(data);
         });

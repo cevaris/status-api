@@ -12,7 +12,14 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
     <script>
-        const socket = io("https://api.status-api.com");
+        const url = new URL(window.location.href);
+        const startDate = url.searchParams.get('start_date');
+
+        const queryParams = startDate ? { start_date: startDate } : {};
+
+        console.log(window.location.href, 'query', queryParams);
+
+        const socket = io("https://api.status-api.com/reports", { path: '/firehose', query: queryParams });
         socket.on("status_report", function (data) {
             console.log(data);
         });
