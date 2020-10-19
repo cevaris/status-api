@@ -5,7 +5,7 @@ import { Presenter } from '../../presenter';
 /**
  * DEV API
  */
-export function statusReportFirehose(io: socketIO.Socket) {
+export function firehoseStatusReport(io: socketIO.Socket) {
     const connection = `${new Date().toISOString()}-${io.client.id}`;
     let isClientConnectionOpen = true;
     let highWaterMark: Date = new Date();
@@ -54,7 +54,7 @@ export function statusReportFirehose(io: socketIO.Socket) {
             })
             .on('end', async () => {
                 if (isClientConnectionOpen) {
-                    const sleepTimeMs = Math.floor(Math.random() * (5000 - 1000));
+                    const sleepTimeMs = Math.floor(Math.random() * (10000 - 5000));
                     await new Promise(resolve => setTimeout(resolve, sleepTimeMs));
                     console.log(connection, 'stream new reports', highWaterMark);
                     streamReports();

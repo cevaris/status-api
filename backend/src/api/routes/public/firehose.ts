@@ -16,7 +16,7 @@ const router = express.Router();
 router.get('/development/reports/firehose.json', function (req: StreamReportFailuresRequest, res: express.Response) {
     res.type('json');
 
-    const connection = `${new Date().toISOString()}-${req.clientIp}`;
+    const connection = `${new Date().toISOString()}-${req.sessionID}`;
     let isClientConnectionOpen = true;
     let highWaterMark: Date = new Date();
 
@@ -92,7 +92,7 @@ router.get('/development/reports/firehose.json', function (req: StreamReportFail
                 }
             });
     }
-    
+
     console.log(connection, 'start', highWaterMark);
     streamReports();
 });
