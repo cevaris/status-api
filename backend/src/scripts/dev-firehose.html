@@ -12,7 +12,14 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
     <script>
-        const socket = io("http://localhost:8080");
+        const url = new URL(window.location.href);
+        const startDate = url.searchParams.get('start_date');
+
+        const queryParams = startDate ? { start_date: startDate } : {};
+
+        console.log(window.location.href, 'query', queryParams);
+
+        const socket = io("http://localhost:8080", { path: '/reports/firehose', query: queryParams });
         socket.on("status_report", function (data) {
             console.log(data);
         });
