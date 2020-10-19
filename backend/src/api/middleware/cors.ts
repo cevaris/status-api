@@ -12,7 +12,7 @@ export const register = (app: express.Application) => {
         res.setHeader('Access-Control-Allow-Credentials', true);
 
         var origin = req.headers.origin;
-        if (allowedOrigins.indexOf(origin) >= 0 || origin === null) {
+        if (allowedOrigins.indexOf(origin) >= 0) {
             res.setHeader('Access-Control-Allow-Origin', origin);
         }
 
