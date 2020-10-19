@@ -11,6 +11,13 @@ api)
     cd backend
     npm run build
     gcloud app deploy app.yaml
+
+    # https://cloud.google.com/run/docs/quickstarts/build-and-deploy
+    # gcloud builds submit --tag gcr.io/status-api-dev/backend-api
+    # gcloud run deploy backend-api --image gcr.io/status-api-dev/backend-api --platform gke --region us-west1 --timeout=200
+
+    # https://cloud.google.com/kubernetes-engine/docs/quickstarts/deploying-a-language-specific-app#node.js
+
     ;;
 app)
     cd app

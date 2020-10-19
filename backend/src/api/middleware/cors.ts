@@ -6,13 +6,13 @@ const allowedOrigins = [
     'https://status-api.com',
 ];
 
-export const register = (app: express.Express) => {
+export const register = (app: express.Application) => {
     function allowCrossDomain(req: any, res: any, next: any) {
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         res.setHeader('Access-Control-Allow-Credentials', true);
 
         var origin = req.headers.origin;
-        if (allowedOrigins.indexOf(origin) >= 0) {
+        if (allowedOrigins.indexOf(origin) >= 0 || origin === null) {
             res.setHeader('Access-Control-Allow-Origin', origin);
         }
 

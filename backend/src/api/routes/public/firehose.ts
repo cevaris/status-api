@@ -11,9 +11,9 @@ interface StreamReportFailuresRequest extends express.Request {
 const router = express.Router();
 
 /**
- * PUBLIC API
+ * DEV API
  */
-router.get('/reports/firehose.json', function (req: StreamReportFailuresRequest, res: express.Response) {
+router.get('/development/reports/firehose.json', function (req: StreamReportFailuresRequest, res: express.Response) {
     res.type('json');
 
     const connection = `${new Date().toISOString()}-${req.clientIp}`;
@@ -45,13 +45,19 @@ router.get('/reports/firehose.json', function (req: StreamReportFailuresRequest,
     }
 
     // Listen for client closing their connection
-    req.connection.addListener('close', () => {
-        isClientConnectionOpen = false;
-    });
-    req.connection.addListener('end', () => {
-        console.log(connection, 'client closed connection');
-        isClientConnectionOpen = false;
-    });
+    // req.connection.addListener('close', () => {
+    //     isClientConnectionOpen = false;
+    // });
+    // req.connection.addListener('end', () => {
+    //     console.log(connection, 'client closed connection');
+    //     isClientConnectionOpen = false;
+    // });
+    // req.on('close', () => {
+    //     isClientConnectionOpen = false;
+    // });
+    // req.on('end', () => {
+    //     isClientConnectionOpen = false;
+    // });
 
     function streamReports() {
         const stream = StatusReportStore.streamReports(highWaterMark);
@@ -65,9 +71,10 @@ router.get('/reports/firehose.json', function (req: StreamReportFailuresRequest,
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                res.write(renderJson(Presenter.statusReports([entity])) + '\n');
+                isClientConnectionOpen = res.write(renderJson(Presenter.statusReports([entity])) + '\n');
 
                 if (!isClientConnectionOpen) {
+                    console.log('failed to write to client');
                     res.status(200).end();
                     stream.end();
                 }
@@ -80,11 +87,12 @@ router.get('/reports/firehose.json', function (req: StreamReportFailuresRequest,
                     streamReports();
                 } else {
                     // close the connection successfully
+                    console.log(connection, 'closed connection');
                     res.status(200).end();
                 }
             });
     }
-
+    
     console.log(connection, 'start', highWaterMark);
     streamReports();
 });

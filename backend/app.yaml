@@ -6,3 +6,5 @@ includes:
 instance_class: B1
 runtime: nodejs12
 entrypoint: node ./dist/src/index.js api
+network:
+  session_affinity: true
