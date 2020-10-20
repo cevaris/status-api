@@ -23,17 +23,28 @@ interface ReportsNameRequest extends express.Request {
 router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: express.Response) {
     let entities: Array<StatusReport> = [];
 
-    let startDate = undefined;
-    if (req.query.start_date) {
-        startDate = new Date(Date.parse(req.query.start_date));
-        if (!isValidDate(startDate)) {
-            return res.status(400)
-                .json(Presenter.badRequest(`start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.`));
-        }
-        if (startDate.getTime() < reportEpoch.getTime()) {
-            return res.status(400)
-                .json(Presenter.badRequest(`start_date value cannot be before ${reportEpoch}`));
-        }
+    const startDate = new Date(Date.parse(req.query.start_date));
+    if (!isValidDate(startDate)) {
+        return res.status(400)
+            .json(Presenter.badRequest(`start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.`));
+    }
+
+    // const minsFromNow = new Date();
+    // minsFromNow.setMinutes(minsFromNow.getMinutes() - PageSize);
+    // if (startDate.getTime() > minsFromNow.getTime()) {
+    //     return res.status(400)
+    //         .json(Presenter.badRequest(`start_date value must be at least ${PageSize} minutes from now.`));
+    // }
+
+    const now = new Date();
+    if (startDate.getTime() > now.getTime()) {
+        return res.status(400)
+            .json(Presenter.badRequest(`start_date cannot be set in the future.`));
+    }
+
+    if (startDate.getTime() < reportEpoch.getTime()) {
+        return res.status(400)
+            .json(Presenter.badRequest(`start_date value cannot be before ${reportEpoch}`));
     }
 
     try {

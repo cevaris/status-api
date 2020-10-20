@@ -48,7 +48,7 @@ Note you can only replay up to 12 hours of data.
 curl -s 'https://api.status-api.com/reports/firehose.json?start_date=2020-10-17T21:10:40.184Z'
 ```
 
-Example Firehose StatusAPI report response [see report json above to learn about the fields](/docs#api-json-schema).
+Example Firehose StatusAPI report response [see above to learn about each of the fields](/docs#api-json-schema).
 ```
 {
   "data": [
@@ -102,3 +102,40 @@ https.get(FirehoseURL, function (res) {
 
 ## Historical API 
 
+Query for historical status reports.
+Use the [Status API search](status-api.com/search) to discover the keys of the desired API.
+
+**cURL Request**
+
+Fetch the Cloudfare User Read reports starting from 2020-10-08T08:13:53.427Z.
+```
+curl http://localhost:8080/reports/cloudflare:global:user:read.json?start_date=2020-10-08T08:13:53.427Z
+```
+- start_date: (date) required field. Returns 60 minutes of values starting at the provided start_date. To get the latest data submit a start_date that is from 1 hour ago.
+
+
+**Report JSON Schema**
+Example StatusAPI report response [see above to learn about each of the fields](/docs#api-json-schema).
+```
+{
+  "data": [
+    {
+      "end_date": "2020-10-08T08:14:53.137Z",
+      "key": "cloudflare:global:user:read",
+      "latency_ms": 107,
+      "start_date": "2020-10-08T08:14:53.030Z",
+      "success": true,
+      "type": "status_report"
+    },
+    {
+      "end_date": "2020-10-08T08:15:53.724Z",
+      "key": "cloudflare:global:user:read",
+      "latency_ms": 117,
+      "start_date": "2020-10-08T08:15:53.607Z",
+      "success": true,
+      "type": "status_report"
+    },
+    ...
+  ]
+}
+```

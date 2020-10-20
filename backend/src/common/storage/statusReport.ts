@@ -112,16 +112,13 @@ class StatusReportDatastore {
     /**
      * PUBLIC API
      */
-    async getReports(name: string, limit: number, startDate?: Date): Promise<Array<StatusReport>> {
+    async getReports(name: string, limit: number, startDate: Date): Promise<Array<StatusReport>> {
         const query: Query = this.datastore
             .createQuery(StatusReportDatastore.kind)
             .filter('name', '=', name)
+            .filter('startDate', '>', startDate)
             .order('startDate', { descending: false })
             .limit(limit);
-
-        if (startDate) {
-            query.filter('startDate', '>', startDate);
-        }
 
         const [results, _] = await this.datastore.runQuery(query);
         return results;
