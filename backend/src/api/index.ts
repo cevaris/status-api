@@ -13,7 +13,6 @@ app.use(require('./routes/private/auth'));
 app.use(require('./routes/private/reportFailures'));
 app.use(require('./routes/private/reportMetadata'));
 app.use(require('./routes/private/reports'));
-app.use(require('./routes/public/firehose'));
 app.use(require('./routes/public/reports'));
 app.use(require('./routes/root'));
 

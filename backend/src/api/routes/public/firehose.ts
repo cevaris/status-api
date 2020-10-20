@@ -1,100 +1,67 @@
-import express from 'express';
+import socketIO from 'socket.io';
 import { isValidDate } from '../../../common/date';
-import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 import { Presenter } from '../../presenter';
-
-interface StreamReportFailuresRequest extends express.Request {
-    query: { start_date?: string };
-}
-
-const router = express.Router();
 
 /**
  * DEV API
  */
-router.get('/development/reports/firehose.json', function (req: StreamReportFailuresRequest, res: express.Response) {
-    res.type('json');
-
-    const connection = `${new Date().toISOString()}-${req.sessionID}`;
-    let isClientConnectionOpen = true;
+export function firehoseStatusReport(socket: socketIO.Socket) {
+    const eventType = 'status_report';
+    const connection = `${new Date().toISOString()}-${socket.client.id}`;
     let highWaterMark: Date = new Date();
 
-    if (req.query.start_date) {
+    const queryStartDate = socket.handshake.query.start_date;
+    if (queryStartDate) {
         const now = new Date();
-        const queryStartDate = new Date(Date.parse(req.query.start_date));
+        const startDate = new Date(Date.parse(queryStartDate));
 
-        if (!isValidDate(queryStartDate)) {
-            return res.status(400)
-                .json(Presenter.badRequest(`start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.`));
+        if (!isValidDate(startDate)) {
+            return socket.emit(eventType, Presenter.badRequest(`start_date '${queryStartDate}' is invalid. Provide a valid ISO 8601 UTC format.`));
         }
 
-        if (now < queryStartDate) {
-            return res.status(400)
-                .json(Presenter.badRequest(`cannot use start_date value from the future, ${queryStartDate}`));
+        if (now < startDate) {
+            return socket.emit(eventType, Presenter.badRequest(`cannot use start_date value from the future, ${startDate.toISOString()}`));
         }
 
-        const oldestStartDate = 1000 * 60 * 60 * 12;
-        if ((now.getTime() - queryStartDate.getTime()) > oldestStartDate) {
-            return res.status(400)
-                .json(Presenter.badRequest(`cannot use start_date value older than ${oldestStartDate / (1000 * 60 * 60)} hours from now`));
+        const hour = 1000 * 60 * 60;
+        const oldestStartDate = 12 * hour;
+        if ((now.getTime() - startDate.getTime()) > oldestStartDate) {
+            return socket.emit(eventType, Presenter.badRequest(`cannot use start_date value older than ${oldestStartDate / hour} hours from now`));
         }
 
         // valid start date
-        highWaterMark = queryStartDate;
+        highWaterMark = startDate;
     }
-
-    // Listen for client closing their connection
-    // req.connection.addListener('close', () => {
-    //     isClientConnectionOpen = false;
-    // });
-    // req.connection.addListener('end', () => {
-    //     console.log(connection, 'client closed connection');
-    //     isClientConnectionOpen = false;
-    // });
-    // req.on('close', () => {
-    //     isClientConnectionOpen = false;
-    // });
-    // req.on('end', () => {
-    //     isClientConnectionOpen = false;
-    // });
 
     function streamReports() {
         const stream = StatusReportStore.streamReports(highWaterMark);
 
         stream
             .on('error', (error) => {
-                console.log(connection, 'end');
-                res.status(503).json(Presenter.serverUnavailable(error));
-                res.end();
+                console.error(connection, error);
+                stream.end();
             })
             .on('data', (entity: StatusReport) => {
                 console.log(connection, 'entity', entity.name, entity.startDate);
                 highWaterMark = entity.startDate;
-                isClientConnectionOpen = res.write(renderJson(Presenter.statusReports([entity])) + '\n');
 
-                if (!isClientConnectionOpen) {
-                    console.log('failed to write to client');
-                    res.status(200).end();
-                    stream.end();
-                }
+                socket.emit(eventType, Presenter.statusReports([entity]));
             })
             .on('end', async () => {
-                if (isClientConnectionOpen) {
-                    // when we reach to end of stream, sleep, then attempt to query for latest events
-                    await new Promise(resolve => setTimeout(resolve, 5000));
-                    console.log(connection, 'checking for new reports', highWaterMark);
+                if (socket.connected) {
+                    const sleepTimeMs = Math.floor(Math.random() * 5000) + 5000;
+                    await new Promise(resolve => setTimeout(resolve, sleepTimeMs));
+
+                    console.log(connection, 'stream new reports', highWaterMark);
                     streamReports();
                 } else {
-                    // close the connection successfully
-                    console.log(connection, 'closed connection');
-                    res.status(200).end();
+                    console.log(connection, 'client disconnected');
+                    stream.end();
                 }
             });
     }
 
-    console.log(connection, 'start', highWaterMark);
+    console.log(connection, 'client connected', highWaterMark);
     streamReports();
-});
-
-module.exports = router;
+};

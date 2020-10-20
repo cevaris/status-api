@@ -10,7 +10,8 @@
     "gcp-build": "npm run build",
     "start": "node ./dist/src/index.js",
     "test-integration": "jest -c jest.config.integration.js --detectOpenHandles",
-    "test": "jest"
+    "test": "jest",
+    "gcp-api": "node ./dist/src/index.js api"
   },
   "author": "",
   "license": "ISC",

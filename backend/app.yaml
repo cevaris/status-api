@@ -8,3 +8,11 @@ runtime: nodejs12
 entrypoint: node ./dist/src/index.js api
 network:
   session_affinity: true
+#######################################
+## flex
+# runtime: nodejs
+# env: flex
+# automatic_scaling:
+#   min_num_instances: 1
+#   max_num_instances: 1
+# entrypoint: npm run gcp-api
