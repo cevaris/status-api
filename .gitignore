@@ -118,3 +118,4 @@ dist
 
 dist/
 .env.yaml
+.vscode/

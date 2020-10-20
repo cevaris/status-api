@@ -38,9 +38,9 @@
 ## Firehose API 
 
 Stream the latest StatusAPI reports.
-[socket.io](https://socket.io/) client is required.
+A [socket.io](https://socket.io/) client is required.
 
-Stream via HTML/JS.
+Stream via HTML/JS; great for rendering realtime charts.
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -74,8 +74,8 @@ Stream via HTML/JS.
 If your stream gets disconnected, you can start streaming from a previous date by utilizing the `start_date` http parameter.
 Note you can only replay up to 1 hour of data.
 ```
-const query = { query: { start_date: '2020-10-08T09:13:53.724Z' } };
-const socket = io("https://api.status-api.com/reports/firehose", query);
+const options = { query: { start_date: '2020-10-08T09:13:53.724Z' } };
+const socket = io("https://api.status-api.com/reports/firehose", options);
 
 socket.on("status_report", function (data) {
     console.log(data);
@@ -101,7 +101,7 @@ Example Firehose StatusAPI report response [see above to learn about each of the
 }
 ```
 
-### Example Clients
+### Example Firehose Clients
 
 **Python 3**
 ```
@@ -116,11 +116,9 @@ sio = socketio.Client()
 
 # sending optional start_date parameter
 now = datetime.datetime.utcnow()
+socket_URL = f'https://api.status-api.com?start_date={now}'
 
-sio.connect(
-    f'https://api.status-api.com?start_date=dd{now}',
-    namespaces=['/reports/firehose'],
-)
+sio.connect(socket_URL, namespaces=['/reports/firehose'])
 
 @sio.event(namespace='/reports/firehose')
 def status_report(data):
@@ -134,8 +132,8 @@ def exception(data):
 **Node/Javascript**
 ```
 // npm install socket.io-client
-const io = require('socket.io-client');
 // https://www.npmjs.com/package/socket.io-client
+const io = require('socket.io-client');
 
 // setting optional start_date parameter
 const now = new Date();
@@ -167,6 +165,7 @@ curl https://api.status-api.com/reports/cloudflare:global:user:read.json?start_d
 
 
 **Report JSON Schema**
+
 Example StatusAPI report response [see above to learn about each of the fields](/docs#api-json-schema).
 ```
 {
