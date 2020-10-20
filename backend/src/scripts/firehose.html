@@ -19,7 +19,7 @@
 
         console.log(window.location.href, 'query', queryParams);
 
-        const socket = io("https://api.status-api.com/reports", { path: '/firehose', query: queryParams });
+        const socket = io("https://api.status-api.com/reports/firehose", { , query: queryParams });
         socket.on("status_report", function (data) {
             console.log(data);
         });
