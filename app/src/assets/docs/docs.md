@@ -107,6 +107,7 @@ Example Firehose StatusAPI report response [see above to learn about each of the
 ```
 #!/usr/bin/env python
 # pip install python-socketio
+# https://python-socketio.readthedocs.io/en/latest/api.html
 
 import socketio
 import datetime
@@ -134,6 +135,7 @@ def exception(data):
 ```
 // npm install socket.io-client
 const io = require('socket.io-client');
+// https://www.npmjs.com/package/socket.io-client
 
 // setting optional start_date parameter
 const now = new Date();

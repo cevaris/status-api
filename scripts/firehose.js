@@ -5,7 +5,7 @@ const io = require('socket.io-client');
 const now = new Date();
 const options = { query: `start_date=${now.toISOString()}` };
 
-const socket = io('http://localhost:8080/reports/firehose', options);
+const socket = io('https://api.status-api.com/reports/firehose', options);
 
 socket.on('status_report', (data) => {
     console.log(data);
