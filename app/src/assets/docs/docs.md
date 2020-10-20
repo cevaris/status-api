@@ -37,15 +37,52 @@
 
 ## Firehose API 
 
-Stream latest StatusAPI reports.
+Stream the latest StatusAPI reports.
+[socket.io](https://socket.io/) client is required.
+
+Stream via HTML/JS.
 ```
-curl -s 'https://api.status-api.com/reports/firehose.json'
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Status Report Firehose</title>
+</head>
+
+<body>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+    <script>
+        const socket = io("https://api.status-api.com/reports/firehose");
+
+        // listen for "status_report" events;
+        socket.on("status_report", function (data) {
+            console.log(data);
+        });
+        socket.on("exception", function (data) {
+            console.error(data);
+        });
+    </script>
+</body>
+
+</html>
 ```
 
 If your stream gets disconnected, you can start streaming from a previous date by utilizing the `start_date` http parameter.
-Note you can only replay up to 12 hours of data.
+Note you can only replay up to 1 hour of data.
 ```
-curl -s 'https://api.status-api.com/reports/firehose.json?start_date=2020-10-17T21:10:40.184Z'
+const query = { query: { start_date: '2020-10-08T09:13:53.724Z' } };
+const socket = io("https://api.status-api.com/reports/firehose", query);
+
+socket.on("status_report", function (data) {
+    console.log(data);
+});
+socket.on("exception", function (data) {
+    console.error(data);
+});
 ```
 
 Example Firehose StatusAPI report response [see above to learn about each of the fields](/docs#api-json-schema).
@@ -68,50 +105,63 @@ Example Firehose StatusAPI report response [see above to learn about each of the
 
 **Python 3**
 ```
-import requests
+#!/usr/bin/env python
+# pip install python-socketio
 
-FIREHOSE_URL = 'https://api.status-api.com/reports/firehose.json'
+import socketio
+import datetime
 
-try:
-    r = requests.get(FIREHOSE_URL, stream=True)
-    r.encoding = 'utf-8'
+sio = socketio.Client()
 
-    for line in r.iter_lines(decode_unicode=True):
-        if line:
-            print(str(line))
-except (requests.exceptions.ConnectionError, requests.exceptions.ConnectionError, requests.exceptions.ChunkedEncodingError):
-    print('connection disconnected')
+# sending optional start_date parameter
+now = datetime.datetime.utcnow()
+
+sio.connect(
+    f'https://api.status-api.com?start_date=dd{now}',
+    namespaces=['/reports/firehose'],
+)
+
+@sio.event(namespace='/reports/firehose')
+def status_report(data):
+    print(data)
+
+@sio.event(namespace='/reports/firehose')
+def exception(data):
+    print(data)
 ```
 
 **Node/Javascript**
 ```
-const https = require('https');
+// npm install socket.io-client
+const io = require('socket.io-client');
 
-const FirehoseURL = 'https://api.status-api.com/reports/firehose.json';
+// setting optional start_date parameter
+const now = new Date();
+const options = { query: `start_date=${now.toISOString()}` };
 
-https.get(FirehoseURL, function (res) {
-    res.on('data', function (chunk) {
-        process.stdout.write(chunk.toString());
-    });
-    res.on('end', function () {
-        console.log('closed connection');
-    });
+const socket = io('https://api.status-api.com/reports/firehose', options);
+
+socket.on('status_report', (data) => {
+    console.log(data);
+});
+socket.on('exception', (data) => {
+    console.error(data);
 });
 ```
 
 
 ## Historical API 
 
-Query for historical status reports.
+Query for historical minutely status reports.
 Use the [Status API search](status-api.com/search) to discover the keys of the desired API.
 
 **cURL Request**
 
-Fetch the Cloudfare User Read reports starting from 2020-10-08T08:13:53.427Z.
+Fetch the Cloudfare User Read API reports starting from 2020-10-08T08:13:53.427Z.
 ```
-curl http://localhost:8080/reports/cloudflare:global:user:read.json?start_date=2020-10-08T08:13:53.427Z
+curl https://api.status-api.com/reports/cloudflare:global:user:read.json?start_date=2020-10-08T08:13:53.427Z
 ```
-- start_date: (date) required field. Returns 60 minutes of values starting at the provided start_date. To get the latest data submit a start_date that is from 1 hour ago.
+- start_date: (ISO 8601 date string) required. Returns 60 minutely reports starting at the provided start_date. To get the latest data, request with a start_date that is from 1 hour ago. start_date cannot be in the future.
 
 
 **Report JSON Schema**
@@ -136,6 +186,14 @@ Example StatusAPI report response [see above to learn about each of the fields](
       "type": "status_report"
     },
     ...
+    {
+      "end_date": "2020-10-08T09:13:53.724Z",
+      "key": "cloudflare:global:user:read",
+      "latency_ms": 122,
+      "start_date": "2020-10-08T09:13:53.133Z",
+      "success": true,
+      "type": "status_report"
+    }
   ]
 }
 ```
