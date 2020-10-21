@@ -1,9 +1,8 @@
-import fs from 'fs';
 import { SlackApi } from '.';
 import { ApiRegion } from '..';
+import { Config } from '../../../common/config';
 import { clients } from "../../clients";
 import { Report } from '../report';
-import { Config } from '../../../common/config';
 
 
 interface Response {

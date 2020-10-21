@@ -4,6 +4,7 @@ import { renderJson } from '../../../common/renderer';
 import { StatusReport, StatusReportStore } from '../../../common/storage/statusReport';
 import { Presenter } from '../../presenter';
 
+
 const router = express.Router();
 const PageSize = 60;
 const reportEpoch = new Date(Date.parse('2020-09-01T00:00:00.000Z'));
@@ -29,12 +30,12 @@ router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: 
             .json(Presenter.badRequest(`start_date '${req.query.start_date}' is invalid. Provide a valid ISO 8601 UTC format.`));
     }
 
-    // const minsFromNow = new Date();
-    // minsFromNow.setMinutes(minsFromNow.getMinutes() - PageSize);
-    // if (startDate.getTime() > minsFromNow.getTime()) {
-    //     return res.status(400)
-    //         .json(Presenter.badRequest(`start_date value must be at least ${PageSize} minutes from now.`));
-    // }
+    const minsFromNow = new Date();
+    minsFromNow.setMinutes(minsFromNow.getMinutes() - PageSize);
+    if (startDate.getTime() > minsFromNow.getTime()) {
+        return res.status(400)
+            .json(Presenter.badRequest(`start_date value must be at least ${PageSize} minutes from now.`));
+    }
 
     const now = new Date();
     if (startDate.getTime() > now.getTime()) {

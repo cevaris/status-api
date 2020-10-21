@@ -6,12 +6,11 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "deploy": "gcloud app deploy",
-    "dev": "./node_modules/.bin/nodemon ./dist/src/index.js",
+    "dev": "nodemon src/index.ts",
     "gcp-build": "npm run build",
-    "start": "node ./dist/src/index.js",
+    "start": "npm run build && node ./dist/src/index.js",
     "test-integration": "jest -c jest.config.integration.js --detectOpenHandles",
-    "test": "jest",
-    "gcp-api": "node ./dist/src/index.js api"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
