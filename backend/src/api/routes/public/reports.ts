@@ -37,11 +37,11 @@ router.get('/reports/:name.json', async function (req: ReportsNameRequest, res: 
             .json(Presenter.badRequest(`start_date value must be at least ${PageSize} minutes from now.`));
     }
 
-    const now = new Date();
-    if (startDate.getTime() > now.getTime()) {
-        return res.status(400)
-            .json(Presenter.badRequest(`start_date cannot be set in the future.`));
-    }
+    // const now = new Date();
+    // if (startDate.getTime() > now.getTime()) {
+    //     return res.status(400)
+    //         .json(Presenter.badRequest(`start_date cannot be set in the future.`));
+    // }
 
     if (startDate.getTime() < reportEpoch.getTime()) {
         return res.status(400)
