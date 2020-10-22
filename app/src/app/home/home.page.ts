@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
-import { ApiStatusReport } from '..';
-import { getAllStatusReportFailures } from '../actions/reports';
+import { Component } from "@angular/core";
+import { environment } from "src/environments/environment";
+import { ApiStatusReport } from "..";
+import { getAllStatusReportFailures } from "../actions/reports";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: "app-home",
+  templateUrl: "home.page.html",
+  styleUrls: ["home.page.scss"],
 })
 export class HomePage {
   public latestFailures: Array<ApiStatusReport> = [];
+  isProduction: boolean = environment.production;
 
-  constructor() { }
+  constructor() {}
 
   ngAfterViewInit(): void {
     this.fetch();
