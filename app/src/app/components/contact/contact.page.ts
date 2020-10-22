@@ -1,12 +1,7 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModalController } from "@ionic/angular";
-
-export interface ContactData {
-  email: string;
-  name: string;
-  message: string;
-}
+import { ContactUs, postContactUs } from "src/app/actions/contact";
 
 @Component({
   selector: "app-contact",
@@ -31,12 +26,18 @@ export class ContactPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  submitForm(form: any) {
+  async submitForm(form: any) {
     console.log(form);
     console.log(this.contactForm.value);
 
-    // do the axios call; wait for response
+    const contactUs = this.contactForm.value as ContactUs;
 
-    this.dismiss();
+    try {
+      await postContactUs(contactUs);
+      this.dismiss();
+      console.log("contact_us success");
+    } catch (error) {
+      console.log("contact_us failed", error);
+    }
   }
 }
