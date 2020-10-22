@@ -25,7 +25,7 @@ export class ContactPage implements OnInit {
   dismiss() {
     this.modalController.dismiss();
   }
-
+  
   async submitForm(form: any) {
     console.log(form);
     console.log(this.contactForm.value);

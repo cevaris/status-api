@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
-import { ContactData, ContactPage } from "../contact/contact.page";
+import { ContactPage } from "../contact/contact.page";
 
 @Component({
   selector: "app-footer",

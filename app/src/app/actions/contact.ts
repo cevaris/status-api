@@ -1,6 +1,6 @@
 import axios from "axios";
 import { environment } from "src/environments/environment";
-import { ApiContactUs } from '..';
+import { ApiContactUs } from "..";
 
 export interface ContactUs {
   email: string;
