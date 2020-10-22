@@ -26,8 +26,7 @@ export class ContactPage implements OnInit {
     this.modalController.dismiss();
   }
   
-  async submitForm(form: any) {
-    console.log(form);
+  async submitForm() {
     console.log(this.contactForm.value);
 
     const contactUs = this.contactForm.value as ContactUs;
