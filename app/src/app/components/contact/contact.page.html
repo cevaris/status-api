@@ -58,11 +58,20 @@
                 </div>
               </ion-item>
             </div>
+
+            <div class="text-center">
+              <re-captcha
+                class="g-recaptcha"
+                (resolved)="captchaResolved($event)"
+                siteKey="{{siteKey}}"
+              ></re-captcha>
+            </div>
+
             <div>
               <ion-button
                 size="large"
                 type="submit"
-                [disabled]="!contactForm.valid"
+                [disabled]="!contactForm.valid || !captchaPassed"
                 expand="block"
                 (click)="submitForm()"
               >

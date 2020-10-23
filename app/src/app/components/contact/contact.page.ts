@@ -1,42 +1,55 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ModalController } from "@ionic/angular";
-import { ContactUs, postContactUs } from "src/app/actions/contact";
+import { HttpClient } from '@angular/common/http';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
+import { ContactUs, postContactUs } from 'src/app/actions/contact';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-contact",
-  templateUrl: "./contact.page.html",
-  styleUrls: ["./contact.page.scss"],
+  selector: 'app-contact',
+  templateUrl: './contact.page.html',
+  styleUrls: ['./contact.page.scss'],
 })
 export class ContactPage implements OnInit {
-  contactForm: FormGroup = new FormGroup({
-    email: new FormControl("", [
+  private contactForm: FormGroup = new FormGroup({
+    email: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,4}$"),
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,4}$'),
     ]),
-    name: new FormControl("", [Validators.required]),
-    message: new FormControl("", [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    message: new FormControl('', [Validators.required]),
   });
 
-  constructor(private modalController: ModalController) {}
+  private siteKey = environment.reCaptchaSiteKey;
+  private captchaPassed: boolean = false;
+  private captchaResponse: string;
+
+  constructor(private modalController: ModalController, private zone: NgZone) {}
 
   ngOnInit() {}
 
   dismiss() {
     this.modalController.dismiss();
   }
-  
+
   async submitForm() {
-    console.log(this.contactForm.value);
+    console.log(this.contactForm.value, this.captchaResponse);
 
     const contactUs = this.contactForm.value as ContactUs;
 
     try {
       await postContactUs(contactUs);
       this.dismiss();
-      console.log("contact_us success");
+      console.log('contact_us success');
     } catch (error) {
-      console.log("contact_us failed", error);
+      console.log('contact_us failed', error);
     }
+  }
+
+  captchaResolved(response: string): void {
+    this.zone.run(() => {
+      this.captchaPassed = true;
+      this.captchaResponse = response;
+    });
   }
 }
