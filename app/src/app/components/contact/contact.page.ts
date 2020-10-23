@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./contact.page.scss'],
 })
 export class ContactPage implements OnInit {
-  private contactForm: FormGroup = new FormGroup({
+  contactForm: FormGroup = new FormGroup({
     email: new FormControl('', [
       Validators.required,
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,4}$'),
@@ -19,8 +19,8 @@ export class ContactPage implements OnInit {
     name: new FormControl('', [Validators.required]),
     message: new FormControl('', [Validators.required]),
   });
-  private siteKey = environment.reCaptchaSiteKey;
-  private captchaPassed: boolean = false;
+  siteKey = environment.reCaptchaSiteKey;
+  captchaPassed: boolean = false;
 
   private captchaResponse: string;
 

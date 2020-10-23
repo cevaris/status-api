@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    RecaptchaModule.forRoot(),
+    RecaptchaModule,
   ],
   providers: [
     StatusBar,
