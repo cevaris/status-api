@@ -6,24 +6,33 @@ import util from 'util';
 import { Config } from '../../../common/config';
 import { renderJson } from '../../../common/renderer';
 
-
 const router = express.Router();
 
 // Perform the login, after login Auth0 will redirect to callback
-router.get('/login', passport.authenticate('auth0', {
-    scope: 'openid email profile'
-}), function (req, res) {
-    res.redirect('/');
-});
+router.get(
+    '/login',
+    passport.authenticate('auth0', {
+        scope: 'openid email profile',
+    }),
+    function (req, res) {
+        res.redirect('/');
+    }
+);
 
 // Perform the final stage of authentication and redirect to previously requested URL or '/user'
 router.get('/auth/callback', function (req: any, res, next) {
     passport.authenticate('auth0', function (err, user, info) {
         console.log(err, user, info);
-        if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.redirect('/login');
+        }
         req.logIn(user, function (err: any) {
-            if (err) { return next(err); }
+            if (err) {
+                return next(err);
+            }
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
             res.redirect(returnTo || '/');
@@ -41,7 +50,7 @@ router.get('/logout', (req, res) => {
     );
     var searchString = querystring.stringify({
         client_id: process.env.AUTH0_CLIENT_ID,
-        returnTo: returnTo
+        returnTo: returnTo,
     });
     logoutURL.search = searchString;
 
@@ -50,8 +59,7 @@ router.get('/logout', (req, res) => {
 
 router.get('/me.json', (req: any, res) => {
     if (req.user) {
-        res.type('json')
-            .send(renderJson(req.user));
+        res.type('json').send(renderJson(req.user));
     } else {
         res.status(401).json({ ok: false, message: 'user not logged in' });
     }
