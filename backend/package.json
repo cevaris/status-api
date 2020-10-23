@@ -39,6 +39,7 @@
     "@types/stripe": "^7.13.24",
     "@types/uuid": "^8.3.0",
     "aws-sdk": "^2.705.0",
+    "axios": "^0.20.0",
     "cloudflare": "^2.7.0",
     "commander": "^6.1.0",
     "dropbox-v2-api": "^2.4.17",

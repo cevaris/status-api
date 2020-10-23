@@ -19,9 +19,9 @@ export class ContactPage implements OnInit {
     name: new FormControl('', [Validators.required]),
     message: new FormControl('', [Validators.required]),
   });
-
   private siteKey = environment.reCaptchaSiteKey;
   private captchaPassed: boolean = false;
+
   private captchaResponse: string;
 
   constructor(private modalController: ModalController, private zone: NgZone) {}
@@ -33,9 +33,12 @@ export class ContactPage implements OnInit {
   }
 
   async submitForm() {
-    console.log(this.contactForm.value, this.captchaResponse);
+    const contactUs = {
+      ...this.contactForm.value,
+      captcha: this.captchaResponse,
+    } as ContactUs;
 
-    const contactUs = this.contactForm.value as ContactUs;
+    console.log(contactUs);
 
     try {
       await postContactUs(contactUs);
