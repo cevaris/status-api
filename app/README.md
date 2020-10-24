@@ -8,5 +8,6 @@ Deploy
 
 Website
 
-https://status-api-dev.web.app/
-https://status-api-dev.web.app/reports/aws:us-east-2:s3:v2006-03-01:upload
+https://status-api.com/
+https://status-api.com/reports/aws:us-east-1:s3:upload
+http://192.168.1.139:8100/home

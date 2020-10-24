@@ -31,10 +31,6 @@ const routes: Routes = [
     path: 'pricing',
     loadChildren: () => import('./pricing/pricing.module').then( m => m.PricingPageModule)
   },
-  {
-    path: 'contact',
-    loadChildren: () => import('./components/contact/contact.module').then( m => m.ContactPageModule)
-  },
 ];
 
 @NgModule({

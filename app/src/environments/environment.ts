@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiHost: 'http://localhost:8080',
-  reCaptchaSiteKey: '6LdBrdoZAAAAADHGMrNKT7c0ptHwTiHQ829kO24A',
+  contactUsEmail: 'adam@status-api.com',
 };
 
 /*

@@ -25,11 +25,6 @@ export interface ApiStatusReportMetadata {
   action: string;
 }
 
-export interface ApiContactUs {
-  data: never[];
-  error?: ApiError;
-}
-
 export interface AppRoute {
   name: string;
   route: string;

@@ -29,7 +29,6 @@ app.use(function (_, res, next) {
 });
 
 app.use(require('./routes/private/auth'));
-app.use(require('./routes/private/contactUs'));
 app.use(require('./routes/private/reportFailures'));
 app.use(require('./routes/private/reportMetadata'));
 app.use(require('./routes/private/reports'));
