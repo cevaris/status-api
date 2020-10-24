@@ -25,6 +25,9 @@ class YamlConfig {
   STRIPE_WEBHOOK_SECRET: string;
 
   RECAPTCHA_SECRET_KEY: string;
+  EMAIL: string;
+  EMAIL_STATUS_API: string;
+  EMAIL_PASSWORD: string;
 
   constructor() {
     const filename = '.env.yaml';
@@ -64,6 +67,10 @@ class YamlConfig {
     this.STRIPE_WEBHOOK_SECRET = this.required(env, 'STRIPE_WEBHOOK_SECRET');
 
     this.RECAPTCHA_SECRET_KEY = this.required(env, 'RECAPTCHA_SECRET_KEY');
+
+    this.EMAIL = this.required(env, 'EMAIL');
+    this.EMAIL_STATUS_API = this.required(env, 'EMAIL_STATUS_API');
+    this.EMAIL_PASSWORD = this.required(env, 'EMAIL_PASSWORD');
   }
 
   private required(env: Map<string, any>, name: string): string {

@@ -1,5 +1,8 @@
 import express from 'express';
+import { EmailRequest } from '../../email';
+import { sendContactUs } from '../../email/contact';
 import { captcha } from '../../middleware/captcha';
+import { Presenter } from '../../presenter';
 
 const router = express.Router();
 
@@ -11,21 +14,23 @@ interface ContactUsRequest extends express.Request {
   };
 }
 
-router.post('/private/contact_us.json', captcha, function (
+router.post('/private/contact_us.json', captcha, async function (
   req: ContactUsRequest,
   res: express.Response
 ) {
-  console.log(req.body);
+  try {
+    const emailRequest: EmailRequest = {
+      email: req.body.email,
+      message: req.body.message,
+      subject: `StatusAPI: Please contact ${req.body.name}`,
+    };
 
-  //   try {
-  //     const entities: Array<StatusReport> = await StatusReportStore.getLastErrorsAll(
-  //       MaxLatestFailures
-  //     );
-  //     return res.type("json").send(renderJson(Presenter.statusReports(entities)));
-  //   } catch (error) {
-  //     return res.status(503).json(Presenter.serverUnavailable(error));
-  //   }
-  res.json({});
+    await sendContactUs(emailRequest);
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(503).json(Presenter.serverUnavailable(error));
+  }
 });
 
 module.exports = router;
