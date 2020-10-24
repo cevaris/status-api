@@ -1,6 +1,5 @@
 import { SentMessageInfo } from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/json-transport';
-import { config } from 'process';
 import { EmailRequest, mailTransporter } from '.';
 import { Config } from '../../common/config';
 
@@ -11,7 +10,7 @@ Thank you for contacting us.
 We will respond back shortly.
 - Adam`;
 
-  const userDetails = {
+  const userDetails: MailOptions = {
     from: Config.EMAIL_STATUS_API,
     to: request.email,
     cc: Config.EMAIL_STATUS_API,
