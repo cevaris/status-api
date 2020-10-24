@@ -5,7 +5,6 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md>
-
         <ion-card>
           <ion-card-header>
             <ion-card-title>Trusted data</ion-card-title>
@@ -13,15 +12,14 @@
 
           <ion-card-content>
             <!-- <ion-img src="https://via.placeholder.com/150x100"></ion-img> -->
-            <p>Status API data is collected outside the API's internal
-              network,
-              providing
-              real-world metrics to drive your incident triaging or API
-              decisions.
+            <p>
+              Status API data is collected outside the API's internal network,
+              providing real-world metrics to drive your incident triaging or
+              API decisions.
             </p>
             <br />
-            <p>All Status API reports by crafted hand, using official open
-              source
+            <p>
+              All Status API reports by crafted hand, using official open source
               clients.
             </p>
           </ion-card-content>
@@ -33,10 +31,8 @@
             within an ion-card-content element.
           </ion-card-content>
         </ion-card> -->
-
       </ion-col>
       <ion-col size="12" size-md>
-
         <ion-card>
           <ion-card-header>
             <ion-card-title>Granular API Health</ion-card-title>
@@ -46,8 +42,10 @@
             <!-- <ion-img src="https://via.placeholder.com/150x100"></ion-img> -->
             <p>No more looking at high level, vague API statuses.</p>
             <br />
-            <p>Status API provides granular data, down to the API service, and
-              region, including latency metrics.</p>
+            <p>
+              Status API provides granular data, down to the API service, and
+              region, including latency metrics.
+            </p>
             <br />
           </ion-card-content>
         </ion-card>
@@ -58,11 +56,8 @@
             within an ion-card-content element.
           </ion-card-content>
         </ion-card> -->
-
       </ion-col>
       <ion-col size="12" size-md>
-
-
         <ion-card>
           <ion-card-header>
             <ion-card-title>Realtime data</ion-card-title>
@@ -76,8 +71,7 @@
             </p>
             <br />
             <p>
-              Status API reports show the last 60 minutes of each granular
-              API.
+              Status API reports show the last 60 minutes of each granular API.
             </p>
           </ion-card-content>
         </ion-card>
@@ -88,32 +82,43 @@
             within an ion-card-content element.
           </ion-card-content>
         </ion-card> -->
-
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <div style="text-align: center;">
+  <div style="text-align: center">
     <h2>Notable APIs</h2>
   </div>
-  <div style="text-align: center;">
+  <div style="text-align: center">
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'aws'}" expand="block">
+          <ion-button
+            color="dark"
+            [routerLink]="['/search']"
+            [queryParams]="{q: 'aws'}"
+            expand="block"
+          >
             Amazon Web Services
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'dropbox'}" expand="block">
+          <ion-button
+            color="dark"
+            [routerLink]="['/search']"
+            [queryParams]="{q: 'dropbox'}"
+            expand="block"
+          >
             Dropbox
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button color="dark" [routerLink]="['/search']"
-            [queryParams]="{q: 'stripe'}" expand="block">
+          <ion-button
+            color="dark"
+            [routerLink]="['/search']"
+            [queryParams]="{q: 'stripe'}"
+            expand="block"
+          >
             Stripe
           </ion-button>
         </ion-col>
@@ -140,25 +145,32 @@
     <br />
 
     <ion-grid>
+      <ion-row>
+        <ion-spinner
+          *ngIf="latestFailures.length == 0"
+          style="display: block; margin: auto"
+          padding
+        ></ion-spinner>
+      </ion-row>
       <ion-row *ngIf="latestFailures.length > 0">
         <ion-col>
           <h2 class="ion-text-center">Recent API Failures</h2>
 
           <ion-list inset="false" *ngFor="let failure of latestFailures">
-
             <ion-grid class="ion-text-left">
               <ion-row>
                 <ion-col size-sm="3" size-xs="9">
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm UTC"
-                    readonly="true" value="{{ failure.start_date }}"
-                    style="padding-top: 0px; padding-left: 0px;">
+                  <ion-datetime
+                    displayFormat="YYYY-MM-DD HH:mm UTC"
+                    readonly="true"
+                    value="{{ failure.start_date }}"
+                    style="padding-top: 0px; padding-left: 0px"
+                  >
                   </ion-datetime>
                 </ion-col>
 
                 <ion-col size-sm="1" size-xs="3">
-                  <ion-label>
-                    {{failure.latency_ms}}ms
-                  </ion-label>
+                  <ion-label> {{failure.latency_ms}}ms </ion-label>
                 </ion-col>
 
                 <ion-col size-sm="8" size-xs="12">
@@ -179,7 +191,6 @@
       </ion-row>
     </ion-grid>
   </div>
-
 </ion-content>
 
 <app-footer *ngIf="!isProduction"></app-footer>

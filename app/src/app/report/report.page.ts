@@ -118,9 +118,13 @@ export class ReportPage implements OnInit {
   }
 
   async fetchMetadata(): Promise<void> {
-    this.metadata = await getReportMetadata(this.key);
-    const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
-    this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
+    try {
+      this.metadata = await getReportMetadata(this.key);
+      const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
+      this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async fetch(): Promise<void> {
