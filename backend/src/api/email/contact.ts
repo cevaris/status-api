@@ -1,4 +1,5 @@
 import { SentMessageInfo } from 'nodemailer';
+import { MailOptions } from 'nodemailer/lib/json-transport';
 import { config } from 'process';
 import { EmailRequest, mailTransporter } from '.';
 import { Config } from '../../common/config';
@@ -8,8 +9,7 @@ export async function sendContactUs(request: EmailRequest): Promise<void> {
 
 Thank you for contacting us. 
 We will respond back shortly.
-- Adam
-`;
+- Adam`;
 
   const userDetails = {
     from: Config.EMAIL_STATUS_API,
@@ -18,6 +18,13 @@ We will respond back shortly.
     subject: request.subject,
     text: userMessage,
   };
+  // const userDetails: MailOptions = {
+  //   from: Config.EMAIL_STATUS_API,
+  //   to: request.email,
+  //   replyTo: request.email,
+  //   subject: request.subject,
+  //   text: userMessage,
+  // };
 
   const userPromise: SentMessageInfo = await mailTransporter.sendMail(
     userDetails
