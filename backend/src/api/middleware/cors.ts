@@ -2,6 +2,7 @@ import express from 'express';
 
 const allowedOrigins = [
   'http://localhost:8100',
+  'http://192.168.1.139:8100',
   'https://status-api-dev.web.app',
   'https://status-api.com',
 ];

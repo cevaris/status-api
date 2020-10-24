@@ -8,6 +8,10 @@ export module Presenter {
         return error(400, new Error(message));
     }
 
+    export function notFound(message: string): ApiEntities<null> {
+        return error(400, new Error(message));
+    }
+
     export function serverUnavailable(err: Error): ApiEntities<null> {
         return error(503, err);
     }

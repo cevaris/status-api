@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Chart, ChartOptions } from "chart.js";
+import { ToastController } from '@ionic/angular';
+import { Chart, ChartOptions } from 'chart.js';
 import { ApiStatusReport, ApiStatusReportMetadata } from '..';
 import { getReportMetadata } from '../actions/reportMetadata';
 import { getStatusReportFailures, getStatusReports } from '../actions/reports';
+import { newFailedToast } from '../utils/toast';
 
 enum ApiStatus {
   Healthy = 'Healthy',
@@ -19,8 +21,8 @@ enum ApiStatus {
 export class ReportPage implements OnInit {
   key: string = null;
 
-  @ViewChild("lineCanvasLatency") lineCanvasLatency: ElementRef;
-  @ViewChild("lineCanvasOk") lineCanvasOk: ElementRef;
+  @ViewChild('lineCanvasLatency') lineCanvasLatency: ElementRef;
+  @ViewChild('lineCanvasOk') lineCanvasOk: ElementRef;
 
   public lineChartLatency: Chart;
   public lineChartOk: Chart;
@@ -29,9 +31,10 @@ export class ReportPage implements OnInit {
   public latestFailures: Array<ApiStatusReport>;
   public healthiness: ApiStatus;
 
-
-  constructor(private route: ActivatedRoute) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit(): void {
     this.key = this.route.snapshot.paramMap.get('key');
@@ -40,97 +43,112 @@ export class ReportPage implements OnInit {
   ngAfterViewInit(): void {
     const lineOptions: ChartOptions = {
       scales: {
-        xAxes: [{
-          type: 'time',
-          time: {
-            displayFormats: {
-              minute: 'HH:mm'
-            }
-          }
-        }]
-      }
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              displayFormats: {
+                minute: 'HH:mm',
+              },
+            },
+          },
+        ],
+      },
     };
 
     this.lineChartLatency = new Chart(this.lineCanvasLatency.nativeElement, {
-      type: "line",
+      type: 'line',
       data: {
         datasets: [
           {
-            label: "",
+            label: '',
             fill: false,
             lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
-            borderCapStyle: "butt",
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
-            borderJoinStyle: "miter",
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "#fff",
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
             data: [],
-            spanGaps: false
-          }
-        ]
+            spanGaps: false,
+          },
+        ],
       },
-      options: lineOptions
+      options: lineOptions,
     });
 
     this.lineChartOk = new Chart(this.lineCanvasOk.nativeElement, {
-      type: "line",
+      type: 'line',
       data: {
         datasets: [
           {
-            label: "",
+            label: '',
             fill: false,
             lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
-            borderCapStyle: "butt",
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
-            borderJoinStyle: "miter",
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "#fff",
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
             data: [],
-            spanGaps: false
-          }
-        ]
+            spanGaps: false,
+          },
+        ],
       },
-      options: lineOptions
+      options: lineOptions,
     });
 
     this.fetchMetadata();
     this.fetch();
   }
 
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave');
+    this.toastController.dismiss();
+  }
+
   async fetchMetadata(): Promise<void> {
     try {
       this.metadata = await getReportMetadata(this.key);
-      const region = this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
+      const region =
+        this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
       this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
     } catch (error) {
       console.log(error);
+      const toast = await this.toastController.create(
+        newFailedToast(error.message)
+      );
+      toast.present();
     }
   }
 
   async fetch(): Promise<void> {
     try {
       const statusReports: ApiStatusReport[] = await getStatusReports(this.key);
-      const latestFailures: ApiStatusReport[] = await getStatusReportFailures(this.key, 10);
+      const latestFailures: ApiStatusReport[] = await getStatusReportFailures(
+        this.key,
+        10
+      );
       this.update(statusReports, latestFailures);
     } catch (error) {
       console.error(error);
@@ -139,15 +157,18 @@ export class ReportPage implements OnInit {
     }
   }
 
-  update(statusReports: ApiStatusReport[], latestFailures: ApiStatusReport[]): void {
-    const latencyValues = statusReports.map(sr => {
+  update(
+    statusReports: ApiStatusReport[],
+    latestFailures: ApiStatusReport[]
+  ): void {
+    const latencyValues = statusReports.map((sr) => {
       return { x: sr.start_date, y: sr.latency_ms };
     });
     this.lineChartLatency.data.datasets[0].data = latencyValues;
     this.lineChartLatency.data.datasets[0].label = `${this.reportName} latency (ms)`;
     this.lineChartLatency.update();
 
-    const okValues = statusReports.map(sr => {
+    const okValues = statusReports.map((sr) => {
       const value = sr.success ? 1 : 0;
       return { x: sr.start_date, y: value };
     });
@@ -156,16 +177,15 @@ export class ReportPage implements OnInit {
     this.lineChartOk.update();
 
     this.latestFailures = latestFailures;
-    this.healthiness = determineHealth(statusReports.map(sr => sr.success));
+    this.healthiness = determineHealth(statusReports.map((sr) => sr.success));
   }
-
 }
 
 function determineHealth(data: Array<Boolean>): ApiStatus {
   const N = 10;
   // get last N minutes
   const lastNMins = data.slice(-N);
-  const successes = lastNMins.filter(x => x === true);
+  const successes = lastNMins.filter((x) => x === true);
   if (successes.length === N) {
     // all last N minutes need to be successful to be healthy
     return ApiStatus.Healthy;
