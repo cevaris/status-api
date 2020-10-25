@@ -4,41 +4,24 @@ import socketIO from 'socket.io';
 import { Presenter } from '../presenter';
 import { EventException } from '../routes/public/firehose';
 
-export const NotReadyMessage =
-  'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a paid offering soon.';
-
-// restrict heavy traffic to private API
 export const privateApiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 60,
-  message: 'Too many API requests for this endpoint, try again later',
+  max: 60
 });
+
+const NotReadyMessage =
+  'This endpoint is currently rate-limited. StatusAPI will provide a paid offering soon.';
 
 export const publicApiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 3,
+  max: 10,
   message: NotReadyMessage,
 });
 
-export function socketIOConnection(socket: socketIO.Socket, next: Function) {
-  const connection = `${new Date().toISOString()}-${socket.client.id}`;
-  socket.request.connectionId = connection;
-  next();
-}
-
-// export const firehoseLimiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 1,
-//   message: NotReadyMessage
-// });
-
-// const MaxEmitCount = 10;
-// const emitCountMap = new Map<string, number>();
-// const ipRateLimiter = new Map<string, number>();
 const MaxStreamMs = 30 * 1000;
 const socketConnectionLimiter = new RateLimiterMemory({
   points: 1,
-  duration: MaxStreamMs * 2,
+  duration: (MaxStreamMs * 2) / 1000,
 });
 export async function socketIOLimiter(socket: socketIO.Socket, next: any) {
   setTimeout(() => {
@@ -54,20 +37,6 @@ export async function socketIOLimiter(socket: socketIO.Socket, next: any) {
     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
     socket.disconnect(true);
   }
-
-  // socket.request.mark = () => {
-  //   const currEmitCount = emitCountMap.get(socket.client.id) || 0;
-  //   if (currEmitCount > MaxEmitCount) {
-  //     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
-  //     socket.disconnect(true);
-  //   } else {
-  //     console.log('increment', socket.client.id, currEmitCount);
-  //     // increment emit count
-  //     emitCountMap.set(socket.client.id, currEmitCount + 1);
-  //   }
-  // };
-
-  // next();
 }
 
 function findIpAddress(socket: socketIO.Socket): string {

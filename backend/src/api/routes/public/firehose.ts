@@ -14,7 +14,7 @@ export const EventException = 'exception';
  * PUBLIC API
  */
 export function firehoseStatusReport(socket: socketIO.Socket) {
-  const connection = socket.request.connectionId; //`${new Date().toISOString()}-${socket.client.id}`;
+    const connection = `${new Date().toISOString()}-${socket.client.id}`;
   let highWaterMark: Date = new Date();
 
   socket.on('disconnect', () => {
@@ -22,7 +22,6 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
   });
 
   console.log(connection, 'client connected', highWaterMark);
-//   emitCountMap.set(connection, 0);
 
   const queryStartDate = socket.handshake.query.start_date;
   if (queryStartDate) {
@@ -84,22 +83,6 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
         highWaterMark = entity.startDate;
 
         socket.emit(EventStatusReport, Presenter.statusReports([entity]));
-        // socket.request.mark();
-
-        // const currEmitCount = emitCountMap.get(connection) || 0;
-        // if (currEmitCount > MaxEmitCount) {
-        //   socket.emit(
-        //     EventException,
-        //     Presenter.rateLimited(
-        //       'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.'
-        //     )
-        //   );
-        //   stream.end();
-        //   socket.disconnect(true);
-        // }
-
-        // increment emit map
-        // emitCountMap.set(connection, (emitCountMap.get(connection) || 0) + 1);
       })
       .on('end', async () => {
         if (socket.connected) {
