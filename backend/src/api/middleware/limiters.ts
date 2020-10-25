@@ -10,7 +10,7 @@ export const privateApiLimiter = rateLimit({
 });
 
 const NotReadyMessage =
-  'This endpoint is currently rate-limited. StatusAPI will provide a paid offering soon.';
+  'This endpoint is currently rate-limited. StatusAPI will provide a subscription offering soon.';
 
 export const publicApiLimiter = rateLimit({
   windowMs: 60 * 1000,
