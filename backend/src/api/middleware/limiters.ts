@@ -6,7 +6,7 @@ import { EventException } from '../routes/public/firehose';
 
 export const privateApiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 60
+  max: 60,
 });
 
 const NotReadyMessage =
@@ -31,7 +31,9 @@ export async function socketIOLimiter(socket: socketIO.Socket, next: any) {
 
   try {
     const ipAddress = findIpAddress(socket);
-    await socketConnectionLimiter.consume(ipAddress, 1);
+    if (ipAddress !== '::1') {
+      await socketConnectionLimiter.consume(ipAddress, 1);
+    }
     next();
   } catch (error) {
     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
