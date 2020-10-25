@@ -1,4 +1,4 @@
-# FAQ (Frequently Asked Question)
+# FAQ (Frequently Asked Questions)
 
 <img style="float: right; margin: 10px;" src="/assets/media/but-why.jpg" width="200"/>
 
