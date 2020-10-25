@@ -36,8 +36,8 @@ Soon!
 StatusAPI provides API access to both **historical** and a realtime **firehose**.
 These APIs are currently heavily rate limited and are for demo purposes only.
 For more info about these APIs, see <a href="/docs" target="_blank">/docs</a>.
-If you are really interested in access; please click the "Contact Us" link at the bottom of the page.
+If you are really interested alpha access, please <a href="mailto:adam@status-api.com?subject=StatusAPI: Contact us">Contact Us</a>.
 
-## Where are these gifs coming from
+## Where are these gifs coming from?
 
 Media is from&nbsp;<a href="https://giphy.com/" target="_blank">GIPHY</a>.
