@@ -17,8 +17,8 @@
 
       console.log(window.location.href, 'query', queryParams);
 
-      // const url = "https://api.status-api.com/reports/firehose";
-      const socketURL = 'http://localhost:8080/reports/firehose';
+      const socketURL = "https://api.status-api.com/reports/firehose";
+      // const socketURL = 'http://localhost:8080/reports/firehose';
       const socket = io(socketURL, { query: queryParams });
       socket.on('status_report', function (data) {
         if (data.data && data.data.length > 0) {

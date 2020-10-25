@@ -10,7 +10,8 @@ case $TARGET in
 api)
     cd backend
     npm run build
-    gcloud app deploy app.yaml
+    # need to use beta; https://stackoverflow.com/a/62580944/3538289
+    gcloud beta app deploy app.yaml
 
     # https://cloud.google.com/run/docs/quickstarts/build-and-deploy
     # gcloud builds submit --tag gcr.io/status-api-dev/backend-api
