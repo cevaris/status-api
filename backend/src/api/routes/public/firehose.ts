@@ -84,6 +84,7 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
         highWaterMark = entity.startDate;
 
         socket.emit(EventStatusReport, Presenter.statusReports([entity]));
+        // socket.request.mark();
 
         // const currEmitCount = emitCountMap.get(connection) || 0;
         // if (currEmitCount > MaxEmitCount) {

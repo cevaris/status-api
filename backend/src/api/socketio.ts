@@ -9,6 +9,11 @@ export function configureSocketIO(server: http.Server): void {
     .use(socketIOConnection)
     .use(socketIOLimiter)
     .on('connection', function (socket: socketIO.Socket) {
+      // function next() {
+      //   socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
+      //   socket.disconnect(true);
+      // }
+      // publicApiLimiter(socket.request, socket.request.res, next);
       firehoseStatusReport(socket);
     });
 }

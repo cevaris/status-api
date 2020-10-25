@@ -1,10 +1,11 @@
 import rateLimit from 'express-rate-limit';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 import socketIO from 'socket.io';
 import { Presenter } from '../presenter';
 import { EventException } from '../routes/public/firehose';
 
 export const NotReadyMessage =
-  'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.';
+  'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a paid offering soon.';
 
 // restrict heavy traffic to private API
 export const privateApiLimiter = rateLimit({
@@ -15,7 +16,7 @@ export const privateApiLimiter = rateLimit({
 
 export const publicApiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 1,
+  max: 3,
   message: NotReadyMessage,
 });
 
@@ -25,38 +26,56 @@ export function socketIOConnection(socket: socketIO.Socket, next: Function) {
   next();
 }
 
+// export const firehoseLimiter = rateLimit({
+//   windowMs: 60 * 1000,
+//   max: 1,
+//   message: NotReadyMessage
+// });
+
 // const MaxEmitCount = 10;
 // const emitCountMap = new Map<string, number>();
-export function socketIOLimiter(socket: socketIO.Socket, next: Function) {
-  // const limiter = rateLimit({
-  //   windowMs: 60 * 1000,
-  //   max: 1,
-  //   message: NotReadyMessage,
-  //   handler: (req: any, res: any, expressNext: any) => {
-  //     next(new Error(NotReadyMessage));
-  //     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
-  //     socket.disconnect(true);
-  //   },
-  // });
-
+// const ipRateLimiter = new Map<string, number>();
+const MaxStreamMs = 30 * 1000;
+const socketConnectionLimiter = new RateLimiterMemory({
+  points: 1,
+  duration: MaxStreamMs * 2,
+});
+export async function socketIOLimiter(socket: socketIO.Socket, next: any) {
   setTimeout(() => {
-    next(new Error(NotReadyMessage));
     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
     socket.disconnect(true);
-  }, 30 * 1000);
+  }, MaxStreamMs);
 
-  next();
+  try {
+    const ipAddress = findIpAddress(socket);
+    await socketConnectionLimiter.consume(ipAddress, 1);
+    next();
+  } catch (error) {
+    socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
+    socket.disconnect(true);
+  }
 
-  // // socket.request, socket.request.res, next;
-  // const currEmitCount = emitCountMap.get(socket.client.id) || 0;
-  // if (currEmitCount > MaxEmitCount) {
-  //   socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
-  //   // stream.end();
-  //   socket.disconnect(true);
-  // } else {
-  //   console.log('increment', socket.client.id, currEmitCount);
-  //   // increment emit count
-  //   emitCountMap.set(socket.client.id, currEmitCount + 1);
-  //   next();
-  // }
+  // socket.request.mark = () => {
+  //   const currEmitCount = emitCountMap.get(socket.client.id) || 0;
+  //   if (currEmitCount > MaxEmitCount) {
+  //     socket.emit(EventException, Presenter.rateLimited(NotReadyMessage));
+  //     socket.disconnect(true);
+  //   } else {
+  //     console.log('increment', socket.client.id, currEmitCount);
+  //     // increment emit count
+  //     emitCountMap.set(socket.client.id, currEmitCount + 1);
+  //   }
+  // };
+
+  // next();
+}
+
+function findIpAddress(socket: socketIO.Socket): string {
+  // https://cloud.google.com/appengine/docs/flexible/python/reference/request-headers
+  const googleAppEngineForwardedFor =
+    socket.handshake.headers['x-forwarded-for'];
+
+  return googleAppEngineForwardedFor
+    ? googleAppEngineForwardedFor.split(',')[0]
+    : socket.handshake.address;
 }
