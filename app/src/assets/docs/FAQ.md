@@ -1,6 +1,6 @@
 # FAQ (Frequently Asked Questions)
 
-<img style="float: right; margin: 10px;" src="/assets/media/but-why.jpg" width="200"/>
+<img style="float: right; margin: 10px;" src="/assets/media/but-why.jpg" alt="but why" width="200"/>
 
 ## Why?
 
@@ -11,7 +11,7 @@ Some transient issues may not even be reported at all, or the status web page is
 Futhermore, these generic status pages may not have the granularity needed to determine if there is really an issue or not.
 It is not helpful to know <a href="https://www.githubstatus.com" target="_blank">Github API Requests</a> are reported as healthy, even though Github's `/users/:username` API is experience transient issues.
 
-<img style="float: right; margin: 10px;" src="/assets/media/tell-me-how.jpg" width="200" height="170"/>
+<img style="float: right; margin: 10px;" src="/assets/media/tell-me-how.jpg" alt="tell me how" width="200" height="170"/>
 
 ## How?
 
@@ -28,7 +28,7 @@ Yes, you can. Though many companies outsource metrics gathering or require techn
 What if your metrics infrastructure is down, or what if you want to compare the reliability and/or performance between two API's?
 Having a centralized, trusted 3rd-Party source provides clear data to determine if a specific API is truly "down" or not.
 
-<img style="float: right; margin: 10px;" src="/assets/media/fire-hydrant.jpg" width="200"/>
+<img style="float: right; margin: 10px;" src="/assets/media/fire-hydrant.jpg" alt="fire hydrant" width="200"/>
 
 ## Can I have access to StatusAPI Report data?
 

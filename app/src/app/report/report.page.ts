@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Chart, ChartOptions } from 'chart.js';
@@ -33,7 +34,9 @@ export class ReportPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private meta: Meta,
+    private title: Title,
   ) {}
 
   ngOnInit(): void {
@@ -133,6 +136,13 @@ export class ReportPage implements OnInit {
       const region =
         this.metadata.region === 'global' ? '' : this.metadata.region + ' ';
       this.reportName = `${this.metadata.service} ${region}${this.metadata.api} ${this.metadata.action}`;
+
+      // update html header <title></title>
+      this.title.setTitle(`StatusAPI: ${this.reportName}`);
+      this.meta.updateTag({
+        name: 'description',
+        content: `Realtime status of the ${this.reportName} API, including historical charts and latest failures.`,
+      });
     } catch (error) {
       console.log(error);
       const toast = await this.toastController.create(
