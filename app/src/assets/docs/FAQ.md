@@ -15,7 +15,7 @@ It is not helpful to know <a href="https://www.githubstatus.com" target="_blank"
 
 ## How?
 
-Access to trusted 3rd-Party metrics is key. 
+Access to trusted 3rd-Party metrics is key.
 Currently, StatusAPI has a background process executing each API every minute and saving the results.
 Each API request is using the API's official, or recommended, open source client.
 All StatusAPI Reports are executed within Google App Engine's us-west2 region.
@@ -30,6 +30,14 @@ Having a centralized, trusted 3rd-Party source provides clear data to determine 
 
 <img style="float: right; margin: 10px;" src="/assets/media/fire-hydrant.jpg" width="200"/>
 
-## Can I have access to historical data?
+## Can I have access to StatusAPI Report data?
 
-Yes, StatusAPI provides API access to both historical and realtime data; see <a href="/docs" target="_blank">/docs</a>.
+Soon!
+StatusAPI provides API access to both **historical** and a realtime **firehose**.
+These APIs are currently heavily rate limited and are for demo purposes only.
+For more info about these APIs, see <a href="/docs" target="_blank">/docs</a>.
+If you are really interested in access; please click the "Contact Us" link at the bottom of the page.
+
+## Where are these gifs coming from
+
+Media is from&nbsp;<a href="https://giphy.com/" target="_blank">GIPHY</a>.
