@@ -11,7 +11,7 @@ api)
     cd backend
     npm run build
     # need to use beta; https://stackoverflow.com/a/62580944/3538289
-    gcloud beta app deploy app.yaml
+    echo 'y' | gcloud beta app deploy app.yaml
 
     # https://cloud.google.com/run/docs/quickstarts/build-and-deploy
     # gcloud builds submit --tag gcr.io/status-api-dev/backend-api
@@ -27,11 +27,11 @@ app)
 runner)
     cd backend
     npm run build
-    gcloud app deploy runner.yaml
+    echo 'y' | gcloud app deploy runner.yaml
     ;;
 all)
-    echo 'y' | ${0} api
-    echo 'y' | ${0} runner
+    ${0} api
+    ${0} runner
     ${0} app
     ;;
 *)
