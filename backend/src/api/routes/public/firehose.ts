@@ -1,4 +1,5 @@
 import socketIO from 'socket.io';
+import { Transform } from 'stream';
 import { isValidDate } from '../../../common/date';
 import {
   StatusReport,
@@ -7,17 +8,13 @@ import {
 import { Presenter } from '../../presenter';
 
 const EventStatusReport = 'status_report';
-const EventException = 'exception';
-
-//TODO: Move to limiters.ts, and craft a custom socket.io middleware
-const MaxEmitCount = 10;
-const emitCountMap = new Map<string, number>();
+export const EventException = 'exception';
 
 /**
  * PUBLIC API
  */
 export function firehoseStatusReport(socket: socketIO.Socket) {
-  const connection = `${new Date().toISOString()}-${socket.client.id}`;
+  const connection = socket.request.connectionId; //`${new Date().toISOString()}-${socket.client.id}`;
   let highWaterMark: Date = new Date();
 
   socket.on('disconnect', () => {
@@ -25,7 +22,7 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
   });
 
   console.log(connection, 'client connected', highWaterMark);
-  emitCountMap.set(connection, 0);
+//   emitCountMap.set(connection, 0);
 
   const queryStartDate = socket.handshake.query.start_date;
   if (queryStartDate) {
@@ -73,7 +70,7 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
   }
 
   function streamReports() {
-    const stream = StatusReportStore.streamReports(highWaterMark);
+    const stream: Transform = StatusReportStore.streamReports(highWaterMark);
 
     stream
       .on('error', (error) => {
@@ -88,20 +85,20 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
 
         socket.emit(EventStatusReport, Presenter.statusReports([entity]));
 
-        const currEmitCount = emitCountMap.get(connection) || 0;
-        if (currEmitCount > MaxEmitCount) {
-          socket.emit(
-            EventException,
-            Presenter.rateLimited(
-              'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.'
-            )
-          );
-          stream.end();
-          socket.disconnect(true);
-        }
+        // const currEmitCount = emitCountMap.get(connection) || 0;
+        // if (currEmitCount > MaxEmitCount) {
+        //   socket.emit(
+        //     EventException,
+        //     Presenter.rateLimited(
+        //       'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.'
+        //     )
+        //   );
+        //   stream.end();
+        //   socket.disconnect(true);
+        // }
 
         // increment emit map
-        emitCountMap.set(connection, (emitCountMap.get(connection) || 0) + 1);
+        // emitCountMap.set(connection, (emitCountMap.get(connection) || 0) + 1);
       })
       .on('end', async () => {
         if (socket.connected) {
