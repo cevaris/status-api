@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./contact-us.component.scss'],
 })
 export class ContactUsComponent implements OnInit {
-  mailto: string; 
+  mailto: string;
 
   constructor() {
     this.mailto = `mailto:${environment.contactUsEmail}?subject=StatusAPI: Contact us`;

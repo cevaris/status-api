@@ -28,4 +28,5 @@ export interface ApiStatusReportMetadata {
 export interface AppRoute {
   name: string;
   route: string;
+  external: boolean;
 }
