@@ -9,8 +9,16 @@
       <ion-list *ngFor="let route of routes">
         <ion-item>
           <ion-button
-            (click)="toggleMenu()"
+            *ngIf="route.external"
             fill="clear"
+            (click)="navigateTo(route)"
+          >
+            {{ route.name }}
+          </ion-button>
+          <ion-button
+            *ngIf="!route.external"
+            fill="clear"
+            (click)="toggleMenu()"
             routerLink="{{ route.route }}"
           >
             {{ route.name }}

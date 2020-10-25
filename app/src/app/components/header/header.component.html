@@ -10,20 +10,20 @@
     <ion-buttons slot="end">
       <ion-menu-button *ngIf="!(isDesktop | async)"></ion-menu-button>
       <div *ngIf="isDesktop | async" class="ion-text-right">
-        <span *ngFor="let route of routes">
+        <span *ngFor="let route of routes" style="margin-right: 20px">
           <ion-button
             *ngIf="route.external"
             fill="clear"
             (click)="navigateTo(route)"
           >
-          &#124;&nbsp; {{ route.name }}
+            {{ route.name }}
           </ion-button>
           <ion-button
             *ngIf="!route.external"
             fill="clear"
             routerLink="{{ route.route }}"
           >
-          &#124;&nbsp; {{ route.name }}
+            {{ route.name }}
           </ion-button>
         </span>
       </div>
