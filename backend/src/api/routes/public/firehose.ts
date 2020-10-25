@@ -92,7 +92,9 @@ export function firehoseStatusReport(socket: socketIO.Socket) {
         if (currEmitCount > MaxEmitCount) {
           socket.emit(
             EventException,
-            'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.'
+            Presenter.rateLimited(
+              'This endpoint is not production ready yet and is currently heavily rate-limited. StatusAPI will provide a public offering soon.'
+            )
           );
           stream.end();
           socket.disconnect(true);

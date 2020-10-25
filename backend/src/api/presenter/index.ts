@@ -8,6 +8,10 @@ export module Presenter {
         return error(400, new Error(message));
     }
 
+    export function rateLimited(message: string): ApiEntities<null> {
+        return error(429, new Error(message));
+    }
+
     export function notFound(message: string): ApiEntities<null> {
         return error(400, new Error(message));
     }
