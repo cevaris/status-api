@@ -43,7 +43,7 @@
     "axios": "^0.19.2",
     "cloudflare": "^2.7.0",
     "commander": "^6.1.0",
-    "dropbox-v2-api": "^2.4.17",
+    "dropbox-v2-api": "^2.4.28",
     "elasticlunr": "^0.9.5",
     "express": "^4.17.1",
     "express-rate-limit": "^5.1.3",
