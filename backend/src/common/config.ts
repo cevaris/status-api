@@ -11,6 +11,7 @@ class YamlConfig {
   AUTH0_CLIENT_SECRET: string;
 
   DROPBOX_ACCESS_TOKEN: string;
+  DIGITAL_OCEAN_ACCESS_TOKEN: string;
   AWS_ACCESS_KEY_ID: string;
   AWS_SECRET_ACCESS_KEY: string;
   SLACK_CHANNEL: string;
@@ -50,6 +51,7 @@ class YamlConfig {
     this.AUTH_SESSION_SECRET = this.required(env, 'AUTH_SESSION_SECRET');
 
     this.DROPBOX_ACCESS_TOKEN = this.required(env, 'DROPBOX_ACCESS_TOKEN');
+    this.DIGITAL_OCEAN_ACCESS_TOKEN = this.required(env, 'DIGITAL_OCEAN_ACCESS_TOKEN');
     this.AWS_ACCESS_KEY_ID = this.required(env, 'AWS_ACCESS_KEY_ID');
     this.AWS_SECRET_ACCESS_KEY = this.required(env, 'AWS_SECRET_ACCESS_KEY');
     this.SLACK_TOKEN = this.required(env, 'SLACK_TOKEN');
