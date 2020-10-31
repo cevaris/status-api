@@ -13,7 +13,7 @@ Some transient issues may not even be reported at all, or the status web page is
 Futhermore, these generic status pages may not have the granularity needed to determine if there is really an issue or not.
 Official incident reports are often too vague such as <a href="https://www.githubstatus.com/incidents/5t09j5cly2sk?utm_ts=1604091876">"Degraded performance for API Requests"</a>.
 
-StatusAPI provides realtime, API statuses, *down to the region and API version*, to help provide critical API status insight.
+StatusAPI provides realtime, API statuses, *including specific regions*, to help provide critical API status insight.
 
 <img style="float: right; margin: 10px;" src="/assets/media/tell-me-how.jpg" alt="tell me how" width="200" height="170"/>
 
