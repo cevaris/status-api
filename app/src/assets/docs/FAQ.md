@@ -6,10 +6,14 @@
 
 3rd-Party APIs are critical to a company's operations; ex. email, databases, payment API's, making access to trusted 3rd-Party metrics critical as well.
 During an incident, having access to 3rd-Party API is key to providing realtime communications to your customers.
+
+
 Most large API SaaS companies provide some high-level status page that is manually and/or slowly updated.
 Some transient issues may not even be reported at all, or the status web page is updated too slow.
 Futhermore, these generic status pages may not have the granularity needed to determine if there is really an issue or not.
-It is not helpful to know <a href="https://www.githubstatus.com" target="_blank">Github API Requests</a> are reported as healthy, even though Github's `/users/:username` API is experience transient issues.
+Official incident reports are often too vague such as <a href="https://www.githubstatus.com/incidents/5t09j5cly2sk?utm_ts=1604091876">"Degraded performance for API Requests"</a>.
+
+StatusAPI provides realtime, API statuses, *down to the region and API version*, to help provide critical API status insight.
 
 <img style="float: right; margin: 10px;" src="/assets/media/tell-me-how.jpg" alt="tell me how" width="200" height="170"/>
 
@@ -17,7 +21,6 @@ It is not helpful to know <a href="https://www.githubstatus.com" target="_blank"
 
 Access to trusted 3rd-Party metrics is key.
 Currently, StatusAPI has a background process executing each API every minute and saving the results.
-Each API request is using the API's official, or recommended, open source client.
 All StatusAPI Reports are executed within Google App Engine's us-west2 region.
 Not all API endpoints are collected, rather critical, well known APIs were chosen first.
 The number of monitored API's will continue to grow over time.
